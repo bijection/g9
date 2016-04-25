@@ -3,11 +3,14 @@ export function clamp(v, min, max){
 }
 
 export function makeDraggable(el, startDrag, drag){
-    var startpx, startpy,
-        startex, startey
+    var startex, startey,
+        startx, starty
 
     var onmove = function(e){
-        drag(e.clientX - startex, e.clientY - startey)
+        drag(
+            startx + e.clientX - startex,
+            starty + e.clientY - startey
+        )
     }
 
     var onend = function(e){
@@ -20,11 +23,15 @@ export function makeDraggable(el, startDrag, drag){
         e.preventDefault()
 
         startex = e.clientX
-        startey = e.clientY
+        startey = e.clientY;
 
-        startDrag()
+        [startx, starty] = startDrag()
+        startx = startx || 0
+        starty = starty || 0
 
         document.addEventListener('mousemove', onmove)
         document.addEventListener('mouseup', onend)
     })
 }
+
+

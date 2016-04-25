@@ -21,9 +21,6 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
         snapshot = _.cloneDeep(renderables)
     }
 
-    //TODO: move to separate file
-    
-
     function desire(id, x, y){
 
         var renderable = renderables[id]
@@ -87,7 +84,7 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
         _.forIn(renderables, function(renderable, id){
 
             if(!elements[id]){
-                elements[id] = elementCreators[renderable.type](id, env)
+                elements[id] = new elementCreators[renderable.type](id, env)
             }
 
             elements[id].render(renderable, renderables)

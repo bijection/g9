@@ -2,115 +2,103 @@ import hu from '../lib/hu'
 import {makeDraggable, clamp} from '../utils'
 
 export function Env(){
-	return hu('<svg>')
+    return hu('<svg>')
 }
 
+
 export function ElementCreators(snapshot, desire){
-	return {
-	    circle(id, env){
+    class draggable {
 
-	        var circle = hu('<circle>', env).attr({r:5, fill:'#000'})
+        constructor(id, env){
+            this.createEl(env)
+            this.el.id = id
+            makeDraggable(
+                this.el,
+            () => {
+                snapshot()
+                return this.startPos()
+            },
+            (x, y) => desire(id, x, y)
+            )
+        }
+    }
+    
+    class circle extends draggable {
 
-	        var startpx, startpy
+        createEl(env){
+            this.el = hu('<circle>', env).attr({r:5, fill:'#000'})
+        }
 
-	        makeDraggable(circle, () => {
-	            snapshot()
-	            startpx = Number(circle.attr('cx'))
-	            startpy = Number(circle.attr('cy'))
-	        }, (dx, dy) => {
-	            desire(id, startpx+dx, startpy+dy)
-	        })
+        startPos(){
+            return [Number(this.el.attr('cx')), Number(this.el.attr('cy'))]
+        }
 
-	        circle.id = id
+        render(c){
+            this.el.attr({
+                cx:clamp(c.x, c.xmin, c.xmax),
+                cy:clamp(c.y, c.ymin, c.ymax)
+            })
+        }
+    }
+    
+    class line {
 
-	        return {
-	            render(c){
+        constructor(id, env){
+            this.el = hu('<line>', env).attr({stroke: '#000'})
+            this.el.id = id
+        }
 
-	                circle.attr({
-	                    cx:clamp(c.x, c.xmin, c.xmax),
-	                    cy:clamp(c.y, c.ymin, c.ymax)
-	                });
-	            },
-	            el: circle,
-	        }
-	    },
-	    line(id, env){
+        render(c, renderables) {
 
-	        var line = hu('<line>', env).attr({stroke: '#000'})
+            var d1 = renderables[c.d1]
+            var d2 = renderables[c.d2]
 
-	        line.id = id
+            this.el.attr({
+                x1:clamp(d1.x, d1.xmin, d1.xmax),
+                y1:clamp(d1.y, d1.ymin, d1.ymax),
+                x2:clamp(d2.x, d2.xmin, d2.xmax),
+                y2:clamp(d2.y, d2.ymin, d2.ymax),
+            })
+        }
+    }
 
-	        return {
-	            render(c, renderables) {
+    class text extends draggable {
 
-	                var d1 = renderables[c.d1]
-	                var d2 = renderables[c.d2]
+        createEl(env){
+            this.el = hu('<text>', env)
+        }
 
-	                line.attr({
-	                    x1:clamp(d1.x, d1.xmin, d1.xmax),
-	                    y1:clamp(d1.y, d1.ymin, d1.ymax),
-	                    x2:clamp(d2.x, d2.xmin, d2.xmax),
-	                    y2:clamp(d2.y, d2.ymin, d2.ymax),
-	                })
-	            },
-	            el: line
-	        }
-	    },
-	    text(id, env){
+        startPos(){
+            return [Number(this.el.attr('x')),Number(this.el.attr('y'))]
+        }
 
-	        var text = hu('<text>', env)
+        render(c) {
+            this.el.attr({
+                x:clamp(c.x, c.xmin, c.xmax),
+                y:clamp(c.y, c.ymin, c.ymax),
+            }).text(c.text)
+        }
+    }
+    
+    class image extends draggable {
+        createEl(env){
+            this.el = hu('<image>', env)
+        }
 
-	        var startpx, startpy
+        startPos(){
+            return [Number(this.el.attr('x')),Number(this.el.attr('y'))]
+        }
 
-	        makeDraggable(text, function(){
-	            snapshot()
-	            startpx = Number(text.attr('x'))
-	            startpy = Number(text.attr('y'))
-	        }, function(dx, dy){
-	            desire(id, startpx+dx, startpy+dy)
-	        })
+        render(c) {
+            this.el.n.setAttributeNS("http://www.w3.org/1999/xlink",'href', c.href)
 
-	        text.id = id
-
-	        return {
-	            render(c) {
-
-	                text.attr({
-	                    x:clamp(c.x, c.xmin, c.xmax),
-	                    y:clamp(c.y, c.ymin, c.ymax),
-	                }).text(c.text)
-	            },
-	            el: text
-	        }
-	    },
-	    image(id, env){
-	        var image = hu('<image>', env)
-
-	        var startpx, startpy
-
-	        makeDraggable(image, function(){
-	            snapshot()
-	            startpx = Number(image.attr('x'))
-	            startpy = Number(image.attr('y'))
-	        }, function(dx, dy){
-	            desire(id, startpx+dx, startpy+dy)
-	        })
-
-	        image.id = id
-	        return {
-	            render(c) {
-
-	                image.n.setAttributeNS("http://www.w3.org/1999/xlink",'href', c.href)
-
-	                image.attr({
-	                    x:clamp(c.x, c.xmin, c.xmax),
-	                    y:clamp(c.y, c.ymin, c.ymax),
-	                    width:c.width,
-	                    height:c.height,
-	                })
-	            },
-	            el: image
-	        }
-	    }
-	}
+            this.el.attr({
+                x:clamp(c.x, c.xmin, c.xmax),
+                y:clamp(c.y, c.ymin, c.ymax),
+                width:c.width,
+                height:c.height,
+            })
+        }
+    }
+    return {circle, line, text, image}
 }
