@@ -24,7 +24,6 @@ export default class Renderer {
 
         _.forIn(elements, (element, id) => {
             if(!(id in renderables)){
-                console.log(element)
                 element.el.remove()
                 delete elements[id]
             }

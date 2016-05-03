@@ -46,7 +46,7 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
 
             var dx = c1.x - x
             var dy = c1.y - y
-            var d = dx*dx+dy*dy
+            var d = dx*dx + dy*dy
 
             if(sticky.length){
                 var staystill = sticky.reduce( (sum , rid) => {
@@ -72,13 +72,13 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
         })
 
         render()
-        onChange(curData, renderables)
     }
 
 
     function render(){
         renderables = data2renderables(curData)
         renderer.render(renderables)
+        onChange(curData, renderables)
     }
 
     function insertInto(selector){
@@ -92,5 +92,5 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
 
     render()
 
-    return { insertInto, setData }
+    return { insertInto, setData, desire }
 }

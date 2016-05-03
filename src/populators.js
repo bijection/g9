@@ -7,11 +7,6 @@ const defaultBounds = {
 
 const empty = {attr(){return empty}}
 
-function sticky(renderable){
-    renderable.sticky = true
-}
-
-
 export function Data2Renderables(populateRenderables){
     return function data2renderables(data){
 
@@ -118,21 +113,22 @@ export function Data2Renderables(populateRenderables){
 
 
 export function Data2Points(populatePoints){
+    var autoId = 0
+    function getId(opts={}){
+        if(typeof opts === 'string' || typeof opts === 'number'){
+            return opts
+        } else if ('id' in opts){
+            return opts.id
+        }
+        return autoId++
+    }
 
 
     return function data2points(data){
 
         var points = {}
+        autoId = 0
 
-        var autoId = 0
-        function getId(opts={}){
-            if(typeof opts === 'string' || typeof opts === 'number'){
-                return opts
-            } else if ('id' in opts){
-                return opts.id
-            }
-            return autoId++
-        }
 
         function point(x,y,opts={}){
             let id = getId(opts)

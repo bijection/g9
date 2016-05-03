@@ -24,14 +24,14 @@ var demo = g9({
 		draw.line(i+'high', i+'low', i+'line')
 			.attr({'class': 'bar'})
 		
-		draw.circle(x, bounds.ymax, bounds, i+'low')
+		draw.circle(x, bounds.ymax, {id: i+'low', bounds})
 			.attr({class: 'bar-end-bottom'})
-		draw.circle(x, Math.max(y, data.y), bounds, i+'high')
+		draw.circle(x, Math.max(y, data.y), {id:i+'high', bounds})
 			.attr({class: 'bar-end-top'})
 
 	}
 
-	draw.circle( data.x, data.y, bounds, 'handle')
+	draw.circle( data.x, data.y, {id:'handle', bounds})
 	.attr({fill: 'blue', r: 8})
 
 	
