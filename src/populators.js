@@ -8,7 +8,7 @@ const defaultBounds = {
 const empty = {attr(){return empty}}
 
 export function Data2Renderables(populateRenderables){
-    return function data2renderables(data){
+    return function data2renderables(data, desiredid){
 
         var renderables = {}//, stickyRenderables = {}
 
@@ -96,6 +96,10 @@ export function Data2Renderables(populateRenderables){
             }
             return ret
         }
+
+        // if(populateRenderables.constructor.name === 'GeneratorFunction'){
+
+        // }
 
         populateRenderables(data, {
             text,
