@@ -7,30 +7,32 @@ const defaultBounds = {
 
 const empty = {attr(){return empty}}
 
+var autoId = 0
+function getId(opts={}){
+    if(typeof opts === 'string' || typeof opts === 'number'){
+        return opts
+    } else if ('id' in opts){
+        return opts.id
+    }
+    return 'autoId'+autoId++
+}
+
+
 export function Data2Renderables(populateRenderables){
     return function data2renderables(data, desiredid){
 
         var renderables = {}//, stickyRenderables = {}
 
-        var autoId = 0
-        function getId(opts){
-            if(typeof opts === 'string' || typeof opts === 'number'){
-                return opts
-            } else if ('id' in opts){
-                return opts.id
-            }
-            return autoId++
-        }
-
+        autoId = 0
+        
         function handle(id){
-            var h = {
+            return {
                 data:renderables[id],
                 attr(attributes){
                     renderables[id].attributes = {...renderables[id].attributes, ...attributes}
-                    return h
+                    return this
                 }
             }
-            return h
         }
 
         function addRenderable(r){
@@ -115,29 +117,22 @@ export function Data2Renderables(populateRenderables){
 
 
 
-
 export function Data2Points(populatePoints){
-    var autoId = 0
-    function getId(opts={}){
-        if(typeof opts === 'string' || typeof opts === 'number'){
-            return opts
-        } else if ('id' in opts){
-            return opts.id
-        }
-        return autoId++
-    }
-
 
     return function data2points(data){
 
         var points = {}
         autoId = 0
 
-
         function point(x,y,opts={}){
             let id = getId(opts)
             points[id] = {...defaultBounds, ...opts.bounds, x, y, id}
-            return empty
+            return {
+                data:points[id],
+                attr(){
+                    return this
+                }
+            }
         }
 
         function line(d1,d2,opts){ getId(opts); return empty }

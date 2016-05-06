@@ -11,7 +11,7 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
     var renderer = new Renderer(makeSnapshot, desire)
     var renderables
     var data2renderables = Data2Renderables(populateRenderables)
-    var data2points = Data2Renderables(populateRenderables)
+    var data2points = Data2Points(populateRenderables)
     var stickyRenderables
     var snapshot
 
