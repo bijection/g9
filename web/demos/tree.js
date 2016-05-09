@@ -1,32 +1,32 @@
 var demo = g9({
     da:70,
     dl:.75,
-}, function({da,dl}, draw){
+    initl: 100,
     
-    // var id = 0
-
-    function drawTree(x1, y1, length, angle, n, oldid, id){
+}, function({da,dl,initl}, ctx){
+    
+    var drawTree = ctx.pure(function (x1, y1, length, angle, n, oldid, id){
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        // var a = id++
         if(!oldid){
             oldid = 'tree'
             id = 'trunk'
-            draw.circle(x1, y1, oldid);
+            ctx.circle(x1, y1, oldid);
+            ctx.circle(x2, y2, id).attr({r: 3})
+        } else {
+            ctx.circle(x2, y2, {id, cares:['da', 'dl']}).attr({r: 3})
         }
 
-        draw.circle(x2, y2, id)
-        
-        draw.line(oldid, id).attr({"stroke-width": 10})
-        
+        ctx.line(oldid, id)
+
         if(n > 0) {
             drawTree(x2, y2, length*dl, angle+da, n-1, id, id+'l');
             drawTree(x2, y2, length*dl, angle-da, n-1, id, id+'r');
         }
-    }
+    })
 
-    drawTree(350.5, 530, 100, -90, 7)
+    drawTree(0, 530, initl, -90, 10)
 
 }, function(newdata, renderees){
 

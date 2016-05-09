@@ -1,5 +1,5 @@
 var demo = g9({
-    l:.3,
+    l:1,
     startx1:200,
     starty1:200,
     startx2:400,
@@ -14,7 +14,7 @@ var demo = g9({
     alpha,
 }, draw){
     
-    function dragon(c1, c2, dir, level){
+    var dragon = draw.pure(function (c1, c2, dir, level){
         if(level){
 
             var {x: x1, y: y1} = c1.data
@@ -33,26 +33,27 @@ var demo = g9({
                 midy - l*dir*offset*dx,
                 {cares:['l']})
                 .attr({
-                    'stroke-width': 10,
+                    r:1,
+                    stroke:"rgba(0,0,0,.3)",
+                    'stroke-width': 3,
                 })
-                // .cares(['l'])
-
 
             dragon(c1, mid, -1,level-1)
             dragon(mid, c2,  1,level-1)
 
         } else {
             draw.line(c1,c2)
-                .attr({'stroke-width': 10})
+                .attr({'stroke-width': 1})
         }
-    }
+    })
 
     dragon(
         draw.circle(startx1,starty1),
-        draw.circle(startx2,starty2),-1,8)
+        draw.circle(startx2,starty2),-1,11)
 
 }, function(newdata, renderees){
 
-    console.log('changed data to', newdata)
+    console.log('data', newdata)
+    console.log('renderees', renderees)
 
 })

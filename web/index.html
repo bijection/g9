@@ -17,18 +17,41 @@
 	</style>
 </head>
 <body>
-<div class='fullbleed'></div>
+
+<div>
+	wolo cool smolo
+	<div class='fullbleed'></div>
+</div>
+
+<!-- <svg id='wolo' width="500" height="75"
+     preserveAspectRatio="xMinYMid meet"
+     style="border: 1px solid #cccccc;">
+
+    <rect x="1" y="1" width="50" height="50"
+          style="stroke: #000000; fill:none;"/>
+
+</svg>
+ -->
 <!-- <script type="text/javascript" src='./hu.js'></script>
 <script type="text/javascript" src='./numeric.js'></script>
 <script type="text/javascript" src='./lodash.js'></script> -->
 <script type="text/javascript" src='./build/g9.js'></script>
 
-<script type="text/javascript" src='./demos/dragon.js'></script>
+<script type="text/javascript" src='./demos/tree.js'></script>
 
 <script type="text/javascript">
 
-	demo.insertInto('.fullbleed')
+	var el = demo.getRenderer()
+	console.log(el)
+	el.center({x: true})
+	el.insertInto('.fullbleed')
+	// window.addEventListener('resize', e => {
+	// 	var {width, height} = wolo.getBoundingClientRect()
+	// 	console.log(width, height)
+	// 	wolo.setAttribute('viewBox',  "" + -width/2 + " 0 " + width + " " + height)
+	// })
 
 </script>
+
 </body>
 </html>

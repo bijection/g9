@@ -41,7 +41,7 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
                 tmpdata[k] = v[i]
             })
 
-            var points = data2points(tmpdata)
+            var points = data2points(tmpdata, renderable.stack)
             var c1 = points[id]
 
             var dx = c1.x - x
@@ -81,8 +81,12 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
         onChange(curData, renderables)
     }
 
-    function insertInto(selector){
-        renderer.insertInto(selector)
+    // function insertInto(selector){
+    //     renderer.insertInto(selector)
+    // }
+
+    function getRenderer(){
+        return renderer
     }
 
     function setData(newData){
@@ -92,5 +96,5 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
 
     render()
 
-    return { insertInto, setData, desire }
+    return { getRenderer, setData, desire }
 }

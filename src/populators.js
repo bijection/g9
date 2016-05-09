@@ -8,18 +8,18 @@ const defaultBounds = {
 const empty = {attr(){return empty}}
 
 var autoId = 0
-function getId(opts={}){
+var autoIdInfix = ''
+function getId(opts={}, stack){
     if(typeof opts === 'string' || typeof opts === 'number'){
         return opts
     } else if ('id' in opts){
         return opts.id
     }
-    return 'autoId'+autoId++
+    return 'auto' + autoIdInfix + autoId++
 }
 
-
 export function Data2Renderables(populateRenderables){
-    return function data2renderables(data, desiredid){
+    return function data2renderables(data){
 
         var renderables = {}//, stickyRenderables = {}
 
@@ -35,7 +35,26 @@ export function Data2Renderables(populateRenderables){
             }
         }
 
+        var stack = [0]
+        autoIdInfix = stack.join('|')
+
+        function pure(fn){
+            return function(){
+                stack[stack.length - 1]++
+                stack.push(0)
+                var oldAutoId = autoId
+                autoId = 0
+                autoIdInfix = stack.join('|')
+                var value = fn.apply(this, arguments)
+                stack.pop()
+                autoId = oldAutoId
+                autoIdInfix = stack.join('|')
+                return value;
+            }
+        }
+
         function addRenderable(r){
+            r.stack = stack.join('|')
             renderables[r.id] = r
         }
 
@@ -99,17 +118,18 @@ export function Data2Renderables(populateRenderables){
             return ret
         }
 
-        // if(populateRenderables.constructor.name === 'GeneratorFunction'){
-
-        // }
-
-        populateRenderables(data, {
+        var it = populateRenderables(data, {
             text,
             circle,
             line,
             image,
             polyline, 
+            pure
         })
+
+        if(populateRenderables.constructor.name === 'GeneratorFunction'){
+            for(var val of it);    
+        }
 
         return renderables
     }
@@ -119,14 +139,44 @@ export function Data2Renderables(populateRenderables){
 
 export function Data2Points(populatePoints){
 
-    return function data2points(data){
+    return function data2points(data, target=null){
 
         var points = {}
+
         autoId = 0
+
+        var stack = [0]
+        autoIdInfix = stack.join('|')
+        
+        function pure(fn){
+            return function(){
+                stack[stack.length - 1]++
+                if(target === null || (target + '|').startsWith(stack.join('|'))){
+                    stack.push(0)
+
+                    var oldAutoId = autoId
+                    autoId = 0
+                    autoIdInfix = stack.join('|')
+                    
+                    var value = fn.apply(this, arguments)
+                    
+                    autoIdInfix = stack.join('|')                
+                    stack.pop()
+                    autoId = oldAutoId
+                }
+
+                return value;
+            }
+        }
 
         function point(x,y,opts={}){
             let id = getId(opts)
-            points[id] = {...defaultBounds, ...opts.bounds, x, y, id}
+            points[id] = {
+                ...defaultBounds,
+                ...opts.bounds,
+                x, y, id,
+                stack: stack.join('|'),
+            }
             return {
                 data:points[id],
                 attr(){
@@ -149,9 +199,18 @@ export function Data2Points(populatePoints){
             return ret
         }
 
-        populatePoints(data, {
-            text, circle, line, image, polyline,
+
+        var it = populatePoints(data, {
+            text, circle, line, image, polyline, pure
         })
+
+        if(populatePoints.constructor.name === 'GeneratorFunction'){
+
+            for(var val of it){
+                if(val.data && val.data.id === desiredid) break
+            }
+
+        }
 
         return points
     }
