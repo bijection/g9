@@ -1,26 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<style type="text/css">
-		body {
-			margin: 0;
-		}
-		.fullbleed svg {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-		}
-		line {
-			pointer-events: none;
-		}
-	</style>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
 
-<div>
-	wolo cool smolo
-	<div class='fullbleed'></div>
+<div class='page page-1'>
+    <div class='header'>
+        <span class='splash'>
+            g9.js
+    <!--            <p>data -> graphics</p>
+            <p>graphics -> data </p>
+    -->     
+        </span>
+        <span class='npm'>npm install g9</span>
+        <p>g9.js is a JavaScript library for creating <b>automatically interactive graphics</b>.
+
+    </div>
+    
+    <p><b>Example:</b> We can make an interactive dragon curve in about <a href=''>30 lines of code</a>. Try dragging the circles all along the curve to change its parameters.
+    <div class='demo'>
+        <div class='display'></div>
+    </div>
+    <p>Creating the above graphic takes 4 steps and about 30 lines of code:</p>
+    
+    <p><b>1.</b> Define some initial data:
+    <div class='code data'>var initdata = {
+    "l": 0,
+    "startx1": 200,
+    "starty1": 0,
+    "startx2": -200,
+    "starty2": 0,
+}</div>
+    </p>
+        
+    <p><b>2.</b> Create a function that takes your data and a drawing context as arguments, and creates a drawing. When you drag your drawing, the data changes.
+    <div class='code'>function data2graphics(data, ctx){
+    function dragon(c1, c2, dir, level){
+        if(level > 0){
+
+            var x1 = c1.data.x, y1 = c1.data.y, 
+                x2 = c2.data.x, y2 = c2.data.y
+
+            var mid = ctx.circle(
+                (x1 + x2 + data.l * dir * (y2 - y1))/2,
+                (y1 + y2 - data.l * dir * (x2 - x1))/2,
+                {cares:['l']})
+
+            dragon(c1, mid, -1, level-1)
+            dragon(mid, c2,  1, level-1)
+
+        } else {
+            ctx.line(c1,c2)
+        }
+    }
+
+    // ctx.pure tells g9 that this function doesn't use
+    // or modify global state
+    dragon = ctx.pure(dragon)
+
+    dragon(ctx.circle(data.startx1,data.starty1),
+           ctx.circle(data.startx2,data.starty2),-1,10)
+}</div>
+    </p>
+    <p><b>2.5.</b> (Optional) Define a callback that will get called when your data changes.
+    <div class='code'>function onUpdate(data){
+    document.querySelector('.data')
+            .innerText = "var initdata = " + JSON.stringify(data)
+}</div>
+    </p>
+    <p><b>3.</b> Add your graphics to the document!</p>
+    <div class='code'>var demo = g9(initdata, data2graphics, onUpdate)
+
+demo.getRenderer()
+    .xAlign('center')
+    .yAlign('center')
+    .insertInto('.demo .display')</div>
+
+    <div class='editor'></div>
+    <div class='lead'></div>
+</div>
+
+
+<div class='page'>
 </div>
 
 <!-- <svg id='wolo' width="500" height="75"
@@ -37,19 +100,19 @@
 <script type="text/javascript" src='./lodash.js'></script> -->
 <script type="text/javascript" src='./build/g9.js'></script>
 
-<script type="text/javascript" src='./demos/tree.js'></script>
+<script type="text/javascript" src='./demos/dragon.js'></script>
 
 <script type="text/javascript">
 
-	var el = demo.getRenderer()
-	console.log(el)
-	el.center({x: true})
-	el.insertInto('.fullbleed')
-	// window.addEventListener('resize', e => {
-	// 	var {width, height} = wolo.getBoundingClientRect()
-	// 	console.log(width, height)
-	// 	wolo.setAttribute('viewBox',  "" + -width/2 + " 0 " + width + " " + height)
-	// })
+    demo.getRenderer()
+        .xAlign('center')
+        .yAlign('center')
+        .insertInto('.demo .display')
+    // window.addEventListener('resize', e => {
+    //  var {width, height} = wolo.getBoundingClientRect()
+    //  console.log(width, height)
+    //  wolo.setAttribute('viewBox',  "" + -width/2 + " 0 " + width + " " + height)
+    // })
 
 </script>
 

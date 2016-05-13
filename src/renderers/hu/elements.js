@@ -4,7 +4,7 @@ import {makeDraggable, clamp} from '../../utils'
 class element {
     render(renderable, renderables){
         this.el.attr(renderable.attributes)
-        this.renderEl(renderable, renderables)
+        this.update(renderable, renderables)
     }
 }
 
@@ -12,13 +12,13 @@ class draggable extends element{
 
     constructor(id, env, snapshot, desire){
         super()
-        this.createEl(env)
+        this.create(env)
         this.el.id = id
         makeDraggable(
             this.el,
             () => {
                 snapshot()
-                return this.startPos()
+                return this.getPos()
             },
             (x, y) => desire(id, x, y)
         )
@@ -27,15 +27,15 @@ class draggable extends element{
 
 export class circle extends draggable {
 
-    createEl(env){
+    create(env){
         this.el = hu('<circle>', env).attr({r:5, fill:'#000'})
     }
 
-    startPos(){
+    getPos(){
         return [Number(this.el.attr('cx')), Number(this.el.attr('cy'))]
     }
 
-    renderEl(c){
+    update(c){
         this.el.attr({
             cx:clamp(c.x, c.xmin, c.xmax),
             cy:clamp(c.y, c.ymin, c.ymax)
@@ -51,7 +51,7 @@ export class line extends element {
         this.el.id = id
     }
 
-    renderEl(c, renderables) {
+    update(c, renderables) {
 
         var d1 = renderables[c.d1]
         var d2 = renderables[c.d2]
@@ -67,15 +67,15 @@ export class line extends element {
 
 export class text extends draggable {
 
-    createEl(env){
+    create(env){
         this.el = hu('<text>', env)
     }
 
-    startPos(){
+    getPos(){
         return [Number(this.el.attr('x')),Number(this.el.attr('y'))]
     }
 
-    renderEl(c) {
+    update(c) {
         this.el.attr({
             x:clamp(c.x, c.xmin, c.xmax),
             y:clamp(c.y, c.ymin, c.ymax),
@@ -84,15 +84,15 @@ export class text extends draggable {
 }
 
 export class image extends draggable {
-    createEl(env){
+    create(env){
         this.el = hu('<image>', env)
     }
 
-    startPos(){
+    getPos(){
         return [Number(this.el.attr('x')),Number(this.el.attr('y'))]
     }
 
-    renderEl(c) {
+    update(c) {
         this.el.n.setAttributeNS("http://www.w3.org/1999/xlink",'href', c.href)
 
         this.el.attr({

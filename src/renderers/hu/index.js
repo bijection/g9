@@ -5,7 +5,10 @@ export default class Renderer {
     
     elements = {};
     el = hu('<svg>').attr({"preserveAspectRatio": 'xMidYMid meet'});
-    align = {x:false, y:false}
+    align = {
+        x:'left',
+        y:'top'
+    }
 
     constructor(snapshot, desire){
         this.snapshot = snapshot
@@ -13,24 +16,40 @@ export default class Renderer {
         window.addEventListener('resize', this.resize.bind(this))
     }
 
-    center({x=false, y=false}){
-        this.align = {x,y}
+    xAlign(align='left'){
+        this.align.x = align
         this.resize()
+        return this
+    }
+
+    yAlign(align='top'){
+        this.align.y = align
+        this.resize()
+        return this
     }
 
     resize(){
         var {x,y} = this.align
-        if(x || y){
-            var {width, height} = this.el.n.getBoundingClientRect()
-            this.el.n.setAttribute('viewBox',  
-                  (x ? -width/2 : 0)
-                + " "
-                + (y ? -height/2 : 0)
-                + " "
-                + width
-                + " "
-                + height)
+        var {width, height} = this.el.n.getBoundingClientRect()
+
+        if(x === 'left'){
+            var xcoord = 0
+        } else if (x === 'center') {
+            var xcoord = -width/2
+        } else {
+            var xcoord = -width
         }
+
+        if(y === 'top'){
+            var ycoord = 0
+        } else if (y === 'center') {
+            var ycoord = -height/2
+        } else {
+            var ycoord = -height
+        }
+
+        this.el.n.setAttribute('viewBox',  
+            [xcoord, ycoord, width, height].join(' '))
     }
 
     render(renderables){
@@ -57,5 +76,6 @@ export default class Renderer {
     insertInto(selector){
         hu(this.el, selector)
         this.resize()
+        return this
     }
 }
