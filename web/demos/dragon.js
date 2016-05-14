@@ -40,7 +40,7 @@ var demo = g9({
             dragon(mid, c2,  1,level-1)
 
         } else {
-            draw.line(c1,c2)
+            // draw.line(c1,c2)
                 // .attr({'stroke-width': 1})
         }
     })

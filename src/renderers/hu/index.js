@@ -1,17 +1,18 @@
 import hu from '../../lib/hu'
-import * as elementCreators from './elements'
+// import * as elementCreators from './elements'
+import shapes from  '../../shapes'
+
 
 export default class Renderer {
     
     elements = {};
-    el = hu('<svg>').attr({"preserveAspectRatio": 'xMidYMid meet'});
+    el = hu('<svg>');
     align = {
         x:'left',
         y:'top'
     }
 
-    constructor(snapshot, desire){
-        this.snapshot = snapshot
+    constructor(desire){
         this.desire = desire
         window.addEventListener('resize', this.resize.bind(this))
     }
@@ -53,11 +54,11 @@ export default class Renderer {
     }
 
     render(renderables){
-        var {elements, snapshot, desire, el} = this
+        var {elements, desire, el} = this
         _.forIn(renderables, (renderable, id) => {
 
             if(!elements[id]){
-                elements[id] = new elementCreators[renderable.type](id, el, snapshot, desire)
+                elements[id] = new shapes[renderable.type].renderer.hu(id, el, desire)
             }
 
             elements[id].render(renderable, renderables)
