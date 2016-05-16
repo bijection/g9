@@ -1,6 +1,6 @@
 {
   "name": "g9",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "automatically interactive graphics",
   "main": "./dist/g9.js",
   "scripts": {
@@ -10,9 +10,9 @@
   },
   "author": "bijection",
   "license": "ISC",
-  "repository":{
-     "type" : "git",
-     "url" : "https://github.com/bijection/g9"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bijection/g9"
   },
   "devDependencies": {
     "babel": "^6.5.2",
