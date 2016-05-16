@@ -1,11 +1,11 @@
 import shapes from  './shapes'
-
-const defaultBounds = {
-    xmin: -Infinity,
-    xmax: Infinity,
-    ymin: -Infinity,
-    ymax: Infinity,
-}
+import {forIn} from './utils'
+// const defaultBounds = {
+//     xmin: -Infinity,
+//     xmax: Infinity,
+//     ymin: -Infinity,
+//     ymax: Infinity,
+// }
 
 
 export function Data2Renderables(populateRenderables){
@@ -73,7 +73,7 @@ export function Data2Renderables(populateRenderables){
 
         var ctx = {pure}
 
-        _.forIn(shapes, (shape, type) => {
+        forIn(shapes, (shape, type) => {
             ctx[type] = (...args) => {
                 return addRenderable(shape.populator(getId, ...args))
             }

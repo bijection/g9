@@ -1,3 +1,9 @@
+maybe move attr to shapes
+
+
+
+
+
 how about 
 
 

@@ -25,7 +25,7 @@ function node(a, c){
             var n = document.createElementNS("http://www.w3.org/2000/svg", m[1]);
             if (/^svg$/i.test(n.tagName)) {
                 // hack to force Firefox to see the dimension of the element
-                ù('<rect', n).attr({width:"100%", height:"100%", opacity:0});
+                J('<rect', n).attr({width:"100%", height:"100%", opacity:0});
             }
             return n;
         }
@@ -34,7 +34,7 @@ function node(a, c){
     return a[0]||a; // to support jQuery elements and nodelists
 }   
 
-var ù = window.ù = window.hu = function(a, c){
+var J = window.J = window.hu = function(a, c){
     if (!c) return new U(node(a));
     c = node(c);
     a = node(a, c);
@@ -42,7 +42,7 @@ var ù = window.ù = window.hu = function(a, c){
     if (c && !a.parentNode) c.appendChild(a);
     return new U(a);
 }
-ù.fn = fn; // so that ù can be easily extended
+J.fn = fn; // so that J can be easily extended
 
 // reverse camel case : "strokeOpacity" -> "stroke-opacity"
 function rcc(n){
@@ -69,7 +69,7 @@ fn.empty = function(){
 }
 
 fn.autoid = function(){
-    return this.attrnv('id', 'ù'+nn++);
+    return this.attrnv('id', 'J'+nn++);
 }
 
 fn.text = function(s){
@@ -80,20 +80,20 @@ fn.text = function(s){
 // stores the passed element in the closest SVG parent of this
 //  and gives it an automatic id.
 fn.def = function(a){
-    var u = ù(a), p = this;
+    var u = J(a), p = this;
     while (p) {
         if (p.n.tagName === "svg") {
-            (ù("defs", p)||ù('<defs', p.n)).n.appendChild(u.n); 
+            (J("defs", p)||J('<defs', p.n)).n.appendChild(u.n); 
             return u.autoid();
         }
-        p = ù(p.parentNode);
+        p = J(p.parentNode);
     }
     throw "No parent SVG";
 }
 
 fn.stops = function(){
     for (var i=0; i<arguments.length; i++) {
-        ù('<stop', this).attr(arguments[i]);
+        J('<stop', this).attr(arguments[i]);
     }
     return this;
 }
@@ -165,7 +165,7 @@ fn.remove = function(){
 }
 
 for (var n in fn) {
-    if (typeof fn[n] === "function") ù[n] = fn[n];
+    if (typeof fn[n] === "function") J[n] = fn[n];
 }
 
-export default ù
+export default J

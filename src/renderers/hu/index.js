@@ -1,6 +1,7 @@
 import hu from '../../lib/hu'
 // import * as elementCreators from './elements'
 import shapes from  '../../shapes'
+import {forIn} from  '../../utils'
 
 
 export default class Renderer {
@@ -55,16 +56,16 @@ export default class Renderer {
 
     render(renderables){
         var {elements, desire, el} = this
-        _.forIn(renderables, (renderable, id) => {
+        forIn(renderables, (renderable, id) => {
 
             if(!elements[id]){
-                elements[id] = new shapes[renderable.type].renderer.hu(id, el, desire)
+                elements[id] = new shapes[renderable.type].renderer(id, el, desire)
             }
 
             elements[id].render(renderable, renderables)
         })
 
-        _.forIn(elements, (element, id) => {
+        forIn(elements, (element, id) => {
             if(!(id in renderables)){
                 element.el.remove()
                 delete elements[id]

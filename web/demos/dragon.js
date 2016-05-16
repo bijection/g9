@@ -30,18 +30,18 @@ var demo = g9({
                 midx + l*dir*offset*dy,
                 midy - l*dir*offset*dx,
                 {cares:['l']})
-                // .attr({
-                    // r:1,
+                .attr({
+                    r:2,
                     // stroke:"rgba(0,0,0,.3)",
                     // 'stroke-width': 3,
-                // })
+                })
 
             dragon(c1, mid, -1,level-1)
             dragon(mid, c2,  1,level-1)
 
         } else {
-            // draw.line(c1,c2)
-                // .attr({'stroke-width': 1})
+            draw.line(c1,c2,{cares:['l']})
+                .attr({'stroke-width': 4})
         }
     })
 
@@ -52,7 +52,7 @@ var demo = g9({
 }, function(newdata, renderees){
 
     document.querySelector('.data').innerText = "var initdata = " + JSON.stringify(newdata, null, 4)
-    console.log('data', newdata)
-    console.log('renderees', renderees)
+    // console.log('data', newdata)
+    // console.log('renderees', renderees)
 
 })

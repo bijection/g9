@@ -126,7 +126,8 @@ var demo = g9({
 	
 }, function(newdata, renderees){
 
-	_.forIn(renderees, (renderee) => {
+	Object.keys(renderees).forEach((k) => {
+		var renderee = renderees[k]
 		
 		var {type, id} = renderee
 

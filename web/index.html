@@ -5,7 +5,18 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-
+<div id="sidebar" class="shown">
+<p class="section active">Interlinear Probes</p>
+<p class="section">Numerical Backprop</p>
+<p class="section">String Backprop</p>
+<p class="section">Widgets</p>
+<p class="section">Filter JSON</p>
+<p class="section">Inverted Execution</p>
+<p class="section">Watlab</p>
+<p class="section">Image Processing</p>
+<p class="section">Differentiable Graphics</p>
+<p class="section">Neural Networks</p>
+</div>
 <div class='page page-1'>
     <div class='header'>
         <span class='splash'>
@@ -15,14 +26,14 @@
     -->     
         </span>
         <span class='npm'>npm install g9</span>
-        <p>g9.js is a JavaScript library for creating <b>automatically interactive graphics</b>.
+        <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
 
     </div>
     
     <p><b>Example:</b> We can make an interactive dragon curve in about <a href=''>30 lines of code</a>. Try dragging the circles all along the curve to change its parameters.
-    <div class='demo'>
-        <div class='display'></div>
-    </div>
+<div class='demo'>
+    <div class='display'></div>
+</div>
     <p>Creating the above graphic takes 4 steps and about 30 lines of code:</p>
     
     <p><b>1.</b> Define some initial data:
@@ -108,11 +119,6 @@ demo.getRenderer()
         .xAlign('center')
         .yAlign('center')
         .insertInto('.demo .display')
-    // window.addEventListener('resize', e => {
-    //  var {width, height} = wolo.getBoundingClientRect()
-    //  console.log(width, height)
-    //  wolo.setAttribute('viewBox',  "" + -width/2 + " 0 " + width + " " + height)
-    // })
 
 </script>
 

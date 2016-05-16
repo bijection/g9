@@ -15,33 +15,35 @@ body {
     margin: 0;
 }
 .page {
-	height: 100%;
+	// height: 100%;
     max-width: 670px;
     margin-left: auto;
     margin-right: auto;
 }
-.page-1 {
-	display: flex;
-	flex-direction: column;
-}
+// .page-1 {
+// 	display: flex;
+// 	flex-direction: column;
+// }
 .display svg {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 line {
-	pointer-events: none;
+	// pointer-events: none;
 	stroke: #98A99E;
+	cursor: move;
 }
 circle {
-	fill: rgba(0, 0, 0, 0.04);
+	// pointer-events: none;
+	fill: #98A99E;
 	transition: fill .4s;
 	cursor: move;
 }
-circle:hover {
-	fill: rgba(0, 0, 0, 0.4);
-	cursor: move;
-}
+// circle:hover {
+// 	fill: rgba(0, 0, 0, 0.4);
+// 	cursor: move;
+// }
 .demo {
 	// display: flex;
 	// flex: 1;	
@@ -83,4 +85,28 @@ circle:hover {
     font-family: Monaco;
     white-space: pre-wrap;
     word-break: break-all;	
+}
+#sidebar {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 215px;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    // font-size: 14px;
+    box-sizing: border-box;
+    color: #CCC;
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+}
+#sidebar.shown {
+    opacity: 1;
+    pointer-events: all;
+}
+.section {
+    transition: .3s;
+    margin: 0;
+    cursor: pointer;
 }

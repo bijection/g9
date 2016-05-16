@@ -1,13 +1,16 @@
 import 'lodash'
-import numeric from 'numeric'
+// import numeric from 'numeric'
 // import {clamp} from './utils'
 import {Data2Renderables} from './populators'
+import uncmin from './uncmin'
 // import Render from ./rend
 import Renderer from './renderers/hu'
 import shapes from  './shapes'
+import './circle'
+import './line'
 
 
-global.g9 = function g9(initialData, populateRenderables, onChange) {
+module.exports = function g9(initialData, populateRenderables, onChange) {
 
     var curData = initialData
     var renderables
@@ -15,17 +18,18 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
     var renderer = new Renderer(desire)
     var data2renderables = Data2Renderables(populateRenderables)
 
-    function desire(type, id, ...desires){
+    function desire(id, ...desires){
 
         var renderable = renderables[id]
+        var type = renderable.type
 
-        var keys = _.keys(curData)
+        var keys = Object.keys(curData)
         if(renderable.cares) keys = renderable.cares;
 
         var vals = keys.map(k => curData[k])
 
-        var optvals = numeric.uncmin( v => {
-            var tmpdata = _.clone(curData)
+        var optvals = uncmin( v => {
+            var tmpdata = {...curData}
             keys.forEach( (k, i) => {
                 tmpdata[k] = v[i]
             })
@@ -33,7 +37,9 @@ global.g9 = function g9(initialData, populateRenderables, onChange) {
             var points = data2renderables(tmpdata, renderable.stack)
             var c1 = points[id]
 
-            return shapes[type].cost(c1, ...desires)
+            var cost = shapes[type].cost(c1, points, ...desires)
+            // console.log('cost', cost)
+            return cost
 
         }, vals).solution
 

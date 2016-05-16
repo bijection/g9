@@ -25,7 +25,7 @@ export function makeDraggable(el, startDrag, drag){
         startex = e.clientX
         startey = e.clientY;
 
-        [startx, starty] = startDrag()
+        [startx, starty] = startDrag(e)
         startx = startx || 0
         starty = starty || 0
 
@@ -34,4 +34,7 @@ export function makeDraggable(el, startDrag, drag){
     })
 }
 
-
+//like the only part of lodash I need
+export function forIn(obj, it){
+    return Object.keys(obj).forEach(k => it(obj[k], k))
+}
