@@ -2,7 +2,7 @@ import 'lodash'
 // import numeric from 'numeric'
 // import {clamp} from './utils'
 import {Data2Renderables} from './populators'
-import uncmin from './uncmin'
+import minimize from './minimize'
 // import Render from ./rend
 import Renderer from './renderers/hu'
 import shapes from  './shapes'
@@ -28,7 +28,7 @@ module.exports = function g9(initialData, populateRenderables, onChange) {
 
         var vals = keys.map(k => curData[k])
 
-        var optvals = uncmin( v => {
+        var optvals = minimize( v => {
             var tmpdata = {...curData}
             keys.forEach( (k, i) => {
                 tmpdata[k] = v[i]

@@ -78,12 +78,12 @@ function ten(a,b){
     return a.map((c,i)=>mul(b,c))
 }
 
-export default function uncmin(f,x0,tol=1e-8,maxit=1000) {
+export default function minimize(f,x0,tol=1e-8,maxit=1000) {
     tol = Math.max(tol,2e-16);
     x0 = [...x0];
     var n = x0.length;
     var f0 = f(x0);
-    if(isNaN(f0)) throw new Error('uncmin: f(x0) is a NaN!');
+    if(isNaN(f0)) throw new Error('minimize: f(x0) is a NaN!');
 	var grad = a => gradient(f,a)
     var H1 = identity(n), g0 = grad(x0);
     for(var it = 0; it<maxit; it++) {
@@ -119,5 +119,5 @@ export default function uncmin(f,x0,tol=1e-8,maxit=1000) {
 }
 
 // var x = [4,26,2,8]
-// uncmin(norm2, x).f *1e9
+// minimize(norm2, x).f *1e9
 // 8.597

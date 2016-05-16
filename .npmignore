@@ -1,0 +1,7 @@
+web
+src
+node_modules
+dist/test.html
+IDEAS.md
+webpack*
+devServer.js
