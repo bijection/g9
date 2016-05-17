@@ -22,6 +22,7 @@ var demo = g9({
             var midx = (x1 + x2)/2+ l*dir*offset*dy
             var midy = (y1 + y2)/2- l*dir*offset*dx
 
+            // draw.circle(midx, midy)
             draw.circle({x:midx, y:midy, cares:['l'], r:2})
 
             dragon(x1,y1, midx,midy, -1,level-1)

@@ -44,7 +44,7 @@ export function makeDraggable(el, startDrag, drag){
 
 //acutally the only part of lodash I needed
 export function forIn(obj, it){
-    return Object.keys(obj).forEach(k => it(obj[k], k))
+    obj && Object.keys(obj).forEach(k => it(obj[k], k))
 }
 
 export function setAttributes(el, attrs, ns=null){
