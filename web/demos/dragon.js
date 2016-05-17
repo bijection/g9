@@ -12,47 +12,32 @@ var demo = g9({
     starty2,
 }, draw){
     
-    var dragon = draw.pure(function (c1, c2, dir, level){
+    var dragon = draw.pure(function (x1,y1, x2,y2, dir, level){
         if(level){
-
-            var {x: x1, y: y1} = c1.data
-            var {x: x2, y: y2} = c2.data
 
             var dy = y2 - y1
             var dx = x2 - x1
-            // var d = Math.sqrt(dx*dx+dy*dy)
             var offset = 1/2
 
-            var midx = (x1 + x2)/2
-            var midy = (y1 + y2)/2
+            var midx = (x1 + x2)/2+ l*dir*offset*dy
+            var midy = (y1 + y2)/2- l*dir*offset*dx
 
-            var mid = draw.circle(
-                midx + l*dir*offset*dy,
-                midy - l*dir*offset*dx,
-                {cares:['l']})
-                .attr({
-                    r:2,
-                    // stroke:"rgba(0,0,0,.3)",
-                    // 'stroke-width': 3,
-                })
+            draw.circle({x:midx, y:midy, cares:['l'], r:2})
 
-            dragon(c1, mid, -1,level-1)
-            dragon(mid, c2,  1,level-1)
+            dragon(x1,y1, midx,midy, -1,level-1)
+            dragon(midx,midy, x2,y2,  1,level-1)
 
         } else {
-            draw.line(c1,c2,{cares:['l']})
-                .attr({'stroke-width': 4})
+            draw.line({x1,y1,x2,y2,cares:['l'],'stroke-width': 4})
         }
     })
 
-    dragon(
-        draw.circle(startx1,starty1),
-        draw.circle(startx2,starty2),-1,10)
+    dragon(startx1,starty1,startx2,starty2,-1,10)
+    draw.circle({x:startx1, y:starty1, r:5})
+    draw.circle({x:startx2, y:starty2, r:5})
 
 }, function(newdata, renderees){
 
     document.querySelector('.data').innerText = "var initdata = " + JSON.stringify(newdata, null, 4)
-    // console.log('data', newdata)
-    // console.log('renderees', renderees)
-
+    
 })

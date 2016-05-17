@@ -1,14 +1,7 @@
-import shapes from  './shapes'
+import shapes from  './shapes/'
 import {forIn} from './utils'
-// const defaultBounds = {
-//     xmin: -Infinity,
-//     xmax: Infinity,
-//     ymin: -Infinity,
-//     ymax: Infinity,
-// }
 
-
-export function Data2Renderables(populateRenderables){
+export default function Data2Renderables(populateRenderables){
     return function data2renderables(data, target=null){
 
         var renderables = {}
@@ -17,25 +10,9 @@ export function Data2Renderables(populateRenderables){
         var stack = [0]
         var autoIdInfix = stack.join('|')
 
-        function getId(opts={}, stack){
-            if(typeof opts === 'string' || typeof opts === 'number'){
-                return opts
-            } else if ('id' in opts){
-                return opts.id
-            }
+        function getId(){
             return 'auto' + autoIdInfix + autoId++
         }
-
-        // function handle(id){
-        //     return {
-        //         data:renderables[id],
-        //         attr(attributes){
-        //             renderables[id].attributes = {...renderables[id].attributes, ...attributes}
-        //             return this
-        //         }
-        //     }
-        // }
-
 
         function pure(fn){
             return function(){
@@ -59,100 +36,37 @@ export function Data2Renderables(populateRenderables){
         }
 
 
-        function addRenderable(r){
-            r.stack = stack.join('|')
-            renderables[r.id] = r
-            return {
-                data:r,
-                attr(attributes){
-                    renderables[r.id].attributes = {...renderables[r.id].attributes, ...attributes}
-                    return this
-                }
-            }
-        }
-
         var ctx = {pure}
 
         forIn(shapes, (shape, type) => {
-            ctx[type] = (...args) => {
-                return addRenderable(shape.populator(getId, ...args))
+            ctx[type] = function(opts){
+                // console.log(type, opts)
+
+                var ret = {...shape.base}
+
+                var args = [...arguments]
+                if(args.length > 1){
+                    shape.shortcut.forEach((k,i) => {
+                        ret[k] = args[i]
+                    })
+                } else {
+                    shape.options.forEach(o => {
+                        if(o in opts){
+                            ret[o] = opts[o]
+                            delete opts[o]
+                        }
+                    })                    
+                    ret.attributes = opts
+                }
+
+                ret.id = getId()
+                ret.stack = stack.join('|')
+                renderables[ret.id] = ret
+
             }
         })
 
         populateRenderables(data, ctx)
-
-        // function text(text, x, y, opts={}){
-        //     let {bounds, sticky, cares} = opts, id = getId(opts)
-        //     addRenderable({
-        //         type: 'text', id,
-        //         ...defaultBounds,
-        //         ...bounds,
-        //         x, y, text, sticky, cares
-        //     })
-        //     return handle(id)
-        // }
-
-        // function circle(x, y, opts={}){
-        //     let {bounds, sticky, cares} = opts, id = getId(opts)
-
-        //     addRenderable({
-        //         type: 'circle', id,
-        //         ...defaultBounds,
-        //         ...bounds,
-        //         x, y, sticky, cares
-        //     })
-        //     return handle(id)
-        // }
-
-        // function line(d1, d2, opts={}){
-        //     // console.log(d1, d2)
-        //     let id = getId(opts)
-
-        //     d1 = typeof d1.data == 'undefined' ? d1 : d1.data.id
-        //     d2 = typeof d2.data == 'undefined' ? d2 : d2.data.id
-
-        //     addRenderable({
-        //         type: 'line', id,
-        //         d1, d2,
-        //     })
-
-        //     return handle(id)
-        // }
-
-        // function image(href, x, y, width, height, opts={}){
-        //     let {bounds, sticky, cares} = opts, id = getId(opts)
-            
-        //     addRenderable({
-        //         type: 'image', id,
-        //         ...defaultBounds,
-        //         ...bounds,
-        //         x, y, width, height, href, sticky, cares
-        //     })
-
-        //     return handle(id)
-        // }
-
-        // function polyline(ids, opts={}){
-        //     var ret = [], id = getId(opts)
-        //     for (var i = 1; i < ids.length; i++) {
-        //         // console.log(i, ids[i], ids)
-        //         ret.push(line(ids[i-1], ids[i], id+'_'+i))
-        //     }
-        //     return ret
-        // }
-
-        // var it = populateRenderables(data, {
-        //     text,
-        //     circle,
-        //     line,
-        //     image,
-        //     polyline, 
-        //     pure
-        // })
-
-        // if(populateRenderables.constructor.name === 'GeneratorFunction'){
-        //     for(var val of it);    
-        // }
 
         return renderables
     }

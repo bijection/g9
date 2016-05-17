@@ -1,3 +1,10 @@
+insertinto should take a dom el
+
+
+move elements to renderer file
+
+
+
 maybe move attr to shapes
 
 

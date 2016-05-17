@@ -1,13 +1,7 @@
-import 'lodash'
-// import numeric from 'numeric'
-// import {clamp} from './utils'
-import {Data2Renderables} from './populators'
+import Data2Renderables from './populators'
+import Renderer from './renderer'
 import minimize from './minimize'
-// import Render from ./rend
-import Renderer from './renderers/hu'
-import shapes from  './shapes'
-import './circle'
-import './line'
+import shapes from  './shapes/'
 
 
 module.exports = function g9(initialData, populateRenderables, onChange) {
@@ -37,7 +31,7 @@ module.exports = function g9(initialData, populateRenderables, onChange) {
             var points = data2renderables(tmpdata, renderable.stack)
             var c1 = points[id]
 
-            var cost = shapes[type].cost(c1, points, ...desires)
+            var cost = shapes[type].cost(c1, ...desires)
             // console.log('cost', cost)
             return cost
 

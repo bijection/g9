@@ -1,13 +1,10 @@
-import hu from '../../lib/hu'
-// import * as elementCreators from './elements'
-import shapes from  '../../shapes'
-import {forIn} from  '../../utils'
-
+import shapes from  './shapes/'
+import {forIn, clamp} from  './utils'
 
 export default class Renderer {
     
     elements = {};
-    el = hu('<svg>');
+    el = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     align = {
         x:'left',
         y:'top'
@@ -32,7 +29,7 @@ export default class Renderer {
 
     resize(){
         var {x,y} = this.align
-        var {width, height} = this.el.n.getBoundingClientRect()
+        var {width, height} = this.el.getBoundingClientRect()
 
         if(x === 'left'){
             var xcoord = 0
@@ -50,7 +47,7 @@ export default class Renderer {
             var ycoord = -height
         }
 
-        this.el.n.setAttribute('viewBox',  
+        this.el.setAttribute('viewBox',  
             [xcoord, ycoord, width, height].join(' '))
     }
 
@@ -62,12 +59,12 @@ export default class Renderer {
                 elements[id] = new shapes[renderable.type].renderer(id, el, desire)
             }
 
-            elements[id].render(renderable, renderables)
+            elements[id].render(renderable)
         })
 
         forIn(elements, (element, id) => {
             if(!(id in renderables)){
-                element.el.remove()
+                element.remove()
                 delete elements[id]
             }
         })
@@ -76,7 +73,11 @@ export default class Renderer {
     }
 
     insertInto(selector){
-        hu(this.el, selector)
+        if(typeof selector === "string"){
+            document.querySelector(selector).appendChild(this.el)
+        } else {
+            selector.appendChild(this.el)
+        }
         this.resize()
         return this
     }

@@ -23,7 +23,7 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
-      include: [path.join(__dirname, 'src'), path.join(__dirname, 'lib/hu.js')]
+      include: [path.join(__dirname, 'src')]
     }]
   },
   node: {
