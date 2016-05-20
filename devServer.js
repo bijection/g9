@@ -13,7 +13,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.use('/', express.static('web'));
+app.use('/', express.static('./'));
 
 app.listen(3000, 'localhost', function(err) {
   if (err) {

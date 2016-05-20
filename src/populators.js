@@ -39,24 +39,26 @@ export default function Data2Renderables(populateRenderables){
         var ctx = {pure}
 
         forIn(shapes, (shape, type) => {
-            ctx[type] = function(opts){
+            ctx[type] = function(){
                 // console.log(type, opts)
 
                 var ret = {...shape.base}
 
                 var args = [...arguments]
-                if(args.length > 1){
-                    shape.shortcut.forEach((k,i) => {
-                        ret[k] = args[i]
-                    })
-                } else {
+                for (var i = 0; i < args.length - 1; i++) {
+                    ret[shape.shortcut[i]] = args[i]
+                }
+                if(typeof args[i] === 'object'){
+                    var opts = {...args[i]}
                     shape.options.forEach(o => {
                         if(o in opts){
                             ret[o] = opts[o]
                             delete opts[o]
                         }
-                    })                    
+                    })
                     ret.attributes = opts
+                } else {
+                    ret[shape.shortcut[i]] = args[i]
                 }
 
                 ret.id = getId()

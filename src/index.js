@@ -4,7 +4,7 @@ import minimize from './minimize'
 import shapes from  './shapes/'
 
 
-module.exports = function g9(initialData, populateRenderables, onChange) {
+module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) {
 
     var curData = initialData
     var renderables

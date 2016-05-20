@@ -12,6 +12,7 @@ export default class Renderer {
 
     constructor(desire){
         this.desire = desire
+        window.addEventListener('load', this.resize.bind(this))
         window.addEventListener('resize', this.resize.bind(this))
     }
 
