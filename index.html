@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+<!-- <div id="sidebar" class="shown">
+<p class="section active">Interlinear Probes</p>
+<p class="section">Numerical Backprop</p>
+<p class="section">String Backprop</p>
+<p class="section">Widgets</p>
+<p class="section">Filter JSON</p>
+<p class="section">Inverted Execution</p>
+<p class="section">Watlab</p>
+<p class="section">Image Processing</p>
+<p class="section">Differentiable Graphics</p>
+<p class="section">Neural Networks</p>
+</div>
+ --><div class='page page-1'>
+    <div class='header'>
+        <span class='splash'>
+            g9.js
+    <!--            <p>data -> graphics</p>
+            <p>graphics -> data </p>
+    -->     
+        </span>
+        <span class='npm'>npm install g9</span>
+        <span class='npm'>Download</span>
+        <span>
+            <a href='' class='nav'>Docs</a>
+            <a href='' class='nav'>Gallery</a>
+            <a href='' class='nav'>Github</a>
+        </span>
+        <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
+        
+
+    </div>
+    
+    <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="">included below</a>).
+    Try dragging the curve to change its parameters.
+    <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
+    <span class='gallery-plug'>For more examples, see the <a href="">Gallery</a>.</span>
+<div class='demo'>
+    <div class='display'></div>
+</div>
+    <h2>How It Works</h2>
+    <p>
+    g9.js exposes a single function, <span class='literal'>g9(initialData, data2graphics[, onChange])</span>. This represents the following flow: 
+    <ol>
+    <li>
+        You create some intial data as key-value pairs. For example:
+<div class='code'>var initialData = {
+    foo: 10
+}</div>
+    </li>
+    <li>
+        This data is fed into a function that uses it to decide how to draw the graphics.
+<div class='code'>function data2graphics(data, context){
+    context.circle(data.foo, 17)
+}</div>
+    </li>
+    <li>When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for your data to find a set of values that comes closest to creating the change. If you tried to drag the circle to the left, g9 might come up with 
+<div class='code'>{
+    foo: 8
+}</div></li>
+    <li>g9 rerenders the entire scene with the new data, so that everything is consistent. If you've provided one, g9 calls your onChange callback with the new data, so you can update other parts of your page.</li>
+    </ol>
+    </p>
+
+    <p>For a complete treatment of the g9 API, <a href="">head to the Docs</a>.</p>
+
+    <h2>Making the Dragon Curve</h2>
+    
+    <p>
+    <div class='code data'>var initdata = {
+    "l": 0,
+    "startx1": 200,
+    "starty1": 0,
+    "startx2": -200,
+    "starty2": 0,
+}</div>
+    </p>
+        
+    <p> 
+    <div class='code'>function data2graphics(data, ctx){
+    var lineoptions = {'stroke-width': 4, cares:['squareness']}
+    var circleoptions = {r:2, cares:['squareness']}
+
+    function dragon(x1,y1, x2,y2, dir, level){
+        if(level == 0){
+            ctx.line(x1, y1,x2, y2, lineoptions)
+        } else {
+            var midx = (x1 + x2 + data.squareness*dir*(y2 - y1))/2
+            var midy = (y1 + y2 - data.squareness*dir*(x2 - x1))/2
+
+            ctx.circle(midx, midy, circleoptions)
+
+            dragon(x1,y1, midx,midy, -1,level-1)
+            dragon(midx,midy, x2,y2,  1,level-1)
+        }
+    }
+    
+    dragon = ctx.pure(dragon)
+    
+    dragon(data.fromX, data.fromY, data.toX, data.toY, -1, 9)
+    
+    ctx.circle(data.fromX, data.fromY, {r:5})
+    ctx.circle(data.toX, data.toY, {r:5})
+}</div>
+    </p>
+    <p> (Optional) Define a callback that will get called when your data changes.
+    <div class='code'>function onUpdate(data){
+    document.querySelector('.data')
+            .innerText = "var initdata = " + JSON.stringify(data)
+}</div>
+    </p>
+    <p> Add your graphics to the document!</p>
+    <div class='code'>var demo = g9(initdata, data2graphics, onUpdate)
+
+demo.getRenderer()
+    .xAlign('center')
+    .yAlign('center')
+    .insertInto('.demo .display')</div>
+
+    <div class='editor'></div>
+    <div class='lead'></div>
+</div>
+
+
+<div class='page'>
+</div>
+
+<!-- <svg id='wolo' width="500" height="75"
+     preserveAspectRatio="xMinYMid meet"
+     style="border: 1px solid #cccccc;">
+
+    <rect x="1" y="1" width="50" height="50"
+          style="stroke: #000000; fill:none;"/>
+
+</svg>
+ -->
+<script type="text/javascript" src='./build/g9.js'></script>
+
+<script type="text/javascript" src='./demos/dragon.js'></script>
+
+<script type="text/javascript">
+
+    demo.getRenderer()
+        .xAlign('center')
+        .yAlign('center')
+        .insertInto('.demo .display')
+
+</script>
+
+</body>
+</html>

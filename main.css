@@ -110,3 +110,17 @@ circle {
     margin: 0;
     cursor: pointer;
 }
+.gallery-plug {
+    color: #A5A5A5;
+}
+.literal {
+    font-family: Monaco;
+    background: #EFEFEF;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+li {
+    margin-bottom: 8px;
+}
