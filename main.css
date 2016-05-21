@@ -7,6 +7,8 @@ body {
 }
 .header {
     color: #222;
+    display: flex;
+    align-items: baseline;
     // padding: 15px;
 }
 .splash {
@@ -20,10 +22,6 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
-// .page-1 {
-// 	display: flex;
-// 	flex-direction: column;
-// }
 .display svg {
 	position: absolute;
 	width: 100%;
@@ -123,4 +121,16 @@ circle {
 }
 li {
     margin-bottom: 8px;
+}
+.nav-wrap {
+    flex: 1;
+    text-align: center;
+}
+.nav, .npm {
+    margin-left: 10px
+}
+.nav.current {
+    color: #222;
+    text-decoration: none;
+    font-weight: bold;
 }

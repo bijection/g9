@@ -5,45 +5,28 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-<!-- <div id="sidebar" class="shown">
-<p class="section active">Interlinear Probes</p>
-<p class="section">Numerical Backprop</p>
-<p class="section">String Backprop</p>
-<p class="section">Widgets</p>
-<p class="section">Filter JSON</p>
-<p class="section">Inverted Execution</p>
-<p class="section">Watlab</p>
-<p class="section">Image Processing</p>
-<p class="section">Differentiable Graphics</p>
-<p class="section">Neural Networks</p>
-</div>
- --><div class='page page-1'>
+<div class='page'>
     <div class='header'>
-        <span class='splash'>
+        <div class='splash'>
             g9.js
-    <!--            <p>data -> graphics</p>
-            <p>graphics -> data </p>
-    -->     
-        </span>
-        <span class='npm'>npm install g9</span>
-        <span class='npm'>Download</span>
-        <span>
+        </div>
+        <div class='npm'>npm install g9</div>
+        <div class='npm'>Download</div>
+        <div class='nav-wrap'>
             <a href='' class='nav'>Docs</a>
-            <a href='' class='nav'>Gallery</a>
+            <a href='./gallery' class='nav'>Gallery</a>
             <a href='' class='nav'>Github</a>
-        </span>
-        <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
-        
-
+        </div>        
     </div>
+    <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
     
     <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="">included below</a>).
     Try dragging the curve to change its parameters.
     <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
     <span class='gallery-plug'>For more examples, see the <a href="">Gallery</a>.</span>
-<div class='demo'>
-    <div class='display'></div>
-</div>
+    <div class='demo'>
+        <div class='display'></div>
+    </div>
     <h2>How It Works</h2>
     <p>
     g9.js exposes a single function, <span class='literal'>g9(initialData, data2graphics[, onChange])</span>. This represents the following flow: 
@@ -131,15 +114,6 @@ demo.getRenderer()
 <div class='page'>
 </div>
 
-<!-- <svg id='wolo' width="500" height="75"
-     preserveAspectRatio="xMinYMid meet"
-     style="border: 1px solid #cccccc;">
-
-    <rect x="1" y="1" width="50" height="50"
-          style="stroke: #000000; fill:none;"/>
-
-</svg>
- -->
 <script type="text/javascript" src='./dist/g9.js'></script>
 
 <script type="text/javascript" src='./demos/dragon.js'></script>

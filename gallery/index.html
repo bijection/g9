@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    <link rel="stylesheet" type="text/css" href="../gallery.css">
+</head>
+<body>
+<div class='page'>
+    <div class='header'>
+        <div class='splash'>
+            g9.js
+        </div>
+        <div class='npm'>npm install g9</div>
+        <div class='npm'>Download</div>
+        <div class='nav-wrap'>
+            <a href='' class='nav'>Docs</a>
+            <a href='' class='nav current'>Gallery</a>
+            <a href='' class='nav'>Github</a>
+        </div>        
+    </div>
+    <p>
+        Here's the really cute gallery page! There's nothing here now, but maybe you will add something...
+    </p>
+</div>
+
+<div class='page'>
+<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
+</div>
+<div class='related-wrap'>
+    <div class='page'>Super Cereal Stuff</div>
+    <div class='related'></div>
+</div>
+<div class='page'>
+<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
+</div>
+<div class='related-wrap'>
+    <div class='page'>Really Pretty stuff</div>
+    <div class='related'></div>
+</div>
+<div class='page'>
+<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
+</div>
+<div class='related-wrap'>
+    <div class='page'>Funny Stuff</div>
+    <div class='related'></div>
+</div>
+<div class='page'>
+<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
+</div>
+<div class='related-wrap'>
+    <div class='page'>XSS</div>
+    <div class='related'></div>
+</div>
+
+<script type="text/javascript">
+[].slice.call(document.querySelectorAll('.related')).forEach(related => {
+    for (var i = 0; i < Math.random()*10; i++) {
+        var d = document.createElement('div')
+        d.className = 'item'
+        related.appendChild(d)
+    }
+})
+</script>
+
+</body>
+</html>
