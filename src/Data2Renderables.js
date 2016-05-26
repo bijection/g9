@@ -2,7 +2,7 @@ import shapes from  './shapes/'
 import {forIn} from './utils'
 
 export default function Data2Renderables(populateRenderables){
-    return function data2renderables(data, target=null){
+    return function data2renderables(data, target=null, {width, height}){
 
         var renderables = {}
 
@@ -35,8 +35,8 @@ export default function Data2Renderables(populateRenderables){
             }
         }
 
-
-        var ctx = {pure}
+        // var {width, height} = renderer
+        var ctx = {pure, width, height}
 
         forIn(shapes, (shape, type) => {
             ctx[type] = function(){

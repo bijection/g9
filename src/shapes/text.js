@@ -39,9 +39,9 @@ export class renderer {
         this.renderable = renderable
         setAttributes(this.el, renderable.attributes)
         setAttributes(this.el, {
-            cx:clamp(renderable.x, renderable.xmin, renderable.xmax),
-            cy:clamp(renderable.y, renderable.ymin, renderable.ymax)
+            x:clamp(renderable.x, renderable.xmin, renderable.xmax),
+            y:clamp(renderable.y, renderable.ymin, renderable.ymax)
         })
-        this.el.innerText = renderable.text
+        this.el.innerHTML = renderable.text
     }
 }
