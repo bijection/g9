@@ -32,27 +32,27 @@ export class renderer {
 
     startDrag(e){
         var {x1,y1,x2,y2} = this.renderable
-        var {left, top} = this.el.getBoundingClientRect()
         var {clientX, clientY} = e
-        var cx = clientX + (Math.min(x1, x2) - left)
-        var cy = clientY + (Math.min(y1, y2) - top)
+        var cx = clientX  - this.leftOffset
+        var cy = clientY - this.topOffset
 
-        this.setR(cx,cy)
-        
-        return [cx, cy]
-    }
-
-    setR(cx,cy){
-        var {x1,y1,x2,y2} = this.renderable
         var dx1 = x2 - x1, dy1 = y2 - y1
         var dx2 = cx - x1
         var dy2 = cy - y1
 
         this.r = Math.sqrt(dx2*dx2 + dy2*dy2) / Math.sqrt(dx1*dx1 + dy1*dy1)
+        
+        return [cx, cy]
+    }
+
+    setOffset(topOffset, leftOffset){
+        this.topOffset = topOffset
+        this.leftOffset = leftOffset        
     }
 
     render(renderable){
         this.renderable = renderable
+
         var {x1,y1,x2,y2,xmin,xmax,ymin,ymax,attributes} = renderable
 
         setAttributes(this.el, attributes)

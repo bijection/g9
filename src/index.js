@@ -13,51 +13,39 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     var data2renderables = Data2Renderables(populateRenderables)
 
     var elements = {}
-    var el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    var align = {
-        x:'left',
-        y:'top'
-    }
-    var width = 0
-    var height = 0
+    var container = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    var xAlign = 'left', yAlign = 'top'
+    
+    var width = 0, height = 0, top = 0, left = 0
+    var xOffset = 0, yOffset = 0
 
-    function xAlign(val='left'){
-        align.x = val
-        resize()
-        return this
-    }
-
-    function yAlign(val='top'){
-        align.y = val
+    function align(xval='left', yval='top'){
+        xAlign = xval
+        yAlign = yval
         resize()
         return this
     }
 
     function resize(){
-        var {x,y} = align
-        var {width: w, height: h} = el.getBoundingClientRect()
+        ({width, height, top, left} = container.getBoundingClientRect())
 
-        if(x === 'left'){
-            var xcoord = 0
-        } else if (x === 'center') {
-            var xcoord = -w/2
+        if(xAlign === 'left'){
+            xOffset = 0
+        } else if (xAlign === 'center') {
+            xOffset = width/2
         } else {
-            var xcoord = -w
+            xOffset = width
         }
 
-        if(y === 'top'){
-            var ycoord = 0
-        } else if (y === 'center') {
-            var ycoord = -h/2
+        if(yAlign === 'top'){
+            yOffset = 0
+        } else if (yAlign === 'center') {
+            yOffset = height/2
         } else {
-            var ycoord = -h
+            yOffset = height
         }
 
-        width = w
-        height = h
-
-        el.setAttribute('viewBox',  
-            [xcoord, ycoord, w, h].join(' '))
+        container.setAttribute('viewBox', [-xOffset, -yOffset, width, height].join(' '))
 
         render()
     }
@@ -65,9 +53,9 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
     function insertInto(selector){
         if(typeof selector === "string"){
-            document.querySelector(selector).appendChild(el)
+            document.querySelector(selector).appendChild(container)
         } else {
-            selector.appendChild(el)
+            selector.appendChild(container)
         }
         resize()
         return this
@@ -112,9 +100,10 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         forIn(renderables, (renderable, id) => {
 
             if(!elements[id]){
-                elements[id] = new shapes[renderable.type].renderer(id, el, desire)
+                elements[id] = new shapes[renderable.type].renderer(id, container, desire)
             }
 
+            elements[id].setOffset(top + yOffset, left + xOffset)
             elements[id].render(renderable)
         })
 
@@ -136,5 +125,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     window.addEventListener('load', resize)
     window.addEventListener('resize', resize)
 
-    return {setData, desire, xAlign, yAlign, insertInto}
+    return {setData, desire, align, insertInto}
 }

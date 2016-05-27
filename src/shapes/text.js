@@ -35,6 +35,11 @@ export class renderer {
         return [this.renderable.x, this.renderable.y]   
     }
 
+    setOffset(topOffset, leftOffset){
+        this.topOffset = topOffset
+        this.leftOffset = leftOffset        
+    }
+
     render(renderable){
         this.renderable = renderable
         setAttributes(this.el, renderable.attributes)
