@@ -13,7 +13,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     var data2renderables = Data2Renderables(populateRenderables)
 
     var elements = {}
-    var container = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    var node = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     var xAlign = 'left', yAlign = 'top'
     
     var width = 0, height = 0, top = 0, left = 0
@@ -27,7 +27,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     }
 
     function resize(){
-        ({width, height, top, left} = container.getBoundingClientRect())
+        ({width, height, top, left} = node.getBoundingClientRect())
 
         if(xAlign === 'left'){
             xOffset = 0
@@ -45,7 +45,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
             yOffset = height
         }
 
-        container.setAttribute('viewBox', [-xOffset, -yOffset, width, height].join(' '))
+        node.setAttribute('viewBox', [-xOffset, -yOffset, width, height].join(' '))
 
         render()
     }
@@ -53,9 +53,9 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
     function insertInto(selector){
         if(typeof selector === "string"){
-            document.querySelector(selector).appendChild(container)
+            document.querySelector(selector).appendChild(node)
         } else {
-            selector.appendChild(container)
+            selector.appendChild(node)
         }
         resize()
         return this
@@ -100,7 +100,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         forIn(renderables, (renderable, id) => {
 
             if(!elements[id]){
-                elements[id] = new shapes[renderable.type].renderer(id, container, desire)
+                elements[id] = new shapes[renderable.type].renderer(id, node, desire)
             }
 
             elements[id].setOffset(top + yOffset, left + xOffset)
@@ -125,5 +125,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     window.addEventListener('load', resize)
     window.addEventListener('resize', resize)
 
-    return {setData, desire, align, insertInto, resize}
+    return {setData, desire, align, insertInto, resize, node}
 }
