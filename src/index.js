@@ -125,5 +125,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
     window.addEventListener('load', resize)
     window.addEventListener('resize', resize)
 
-    return {setData, desire, align, insertInto}
+    return {setData, desire, align, insertInto, resize}
 }
