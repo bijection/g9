@@ -26,7 +26,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         return this
     }
 
-    function resize(){
+    function resize(rerender = true){
         ({width, height, top, left} = node.getBoundingClientRect())
 
         if(xAlign === 'left'){
@@ -47,7 +47,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
         node.setAttribute('viewBox', [-xOffset, -yOffset, width, height].join(' '))
 
-        render()
+        if(rerender) render();
     }
 
 
@@ -124,6 +124,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
     window.addEventListener('load', resize)
     window.addEventListener('resize', resize)
+    window.addEventListener('scroll', e => resize(false))
 
     return {setData, desire, align, insertInto, resize, node}
 }
