@@ -1,8 +1,84 @@
+function norm2(x){
+    return Math.sqrt(x.reduce((a,b)=>a+b*b,0))
+}
+
+function identity(n){
+    var ret = Array(n)
+    for (var i = 0; i < n; i++) {
+        ret[i] = Array(n)
+        for (var j = 0; j < n; j++) ret[i][j] = +(i == j) ;
+    }
+    return ret
+}
+
+function neg(x){
+    return x.map(a=>-a)
+}
+
+function dot(a,b){
+    if (typeof a[0] !== 'number'){
+        return a.map(x=>dot(x,b))
+    }
+    return a.reduce((x,y,i) => x+y*b[i],0)
+}
+
+function sub(a,b){
+    if(typeof a[0] !== 'number'){
+        return a.map((c,i)=>sub(c,b[i]))
+    }
+    return a.map((c,i)=>c-b[i])
+}
+
+function add(a,b){
+    if(typeof a[0] !== 'number'){
+        return a.map((c,i)=>add(c,b[i]))
+    }
+    return a.map((c,i)=>c+b[i])
+}
+
+function div(a,b){
+    return a.map(c=>c.map(d=>d/b))
+}
+
+function mul(a,b){
+    if(typeof a[0] !== 'number'){
+        return a.map(c=>mul(c,b))
+    }
+    return a.map(c=>c*b)
+}
+
+function ten(a,b){
+    return a.map((c,i)=>mul(b,c))
+}
+
+
+// Adapted from numeric.js
+// Numeric Javascript
+// Copyright (C) 2011 by Sébastien Loisel
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 function gradient(f,x) {
     var dim = x.length, f1 = f(x);
     if(isNaN(f1)) throw new Error('The gradient at ['+x.join(' ')+'] is NaN!');
     var {max, abs, min} = Math
-    var tempX = [...x], grad = Array(dim);
+    var tempX = x.slice(0), grad = Array(dim);
     for(var i=0; i<dim; i++) {
         var delta = max(1e-6*f1, 1e-8);
         for (var k = 0;; k++) {
@@ -30,68 +106,14 @@ function gradient(f,x) {
 }
 
 
-function norm2(x){
-    return Math.sqrt(x.reduce((a,b)=>a+b*b,0))
-}
-
-function identity(n){
-    return Array.from(Array(n), (_,i) => Array.from(Array(n), (_,j) => +(i==j)))
-}
-
-function neg(x){
-    return x.map(a=>-a)
-}
-
-function dot(a,b){
-    if (Array.isArray(a[0])){
-        return a.map(x=>dot(x,b))
-    }
-    return a.reduce((x,y,i) => x+y*b[i],0)
-}
-
-function sub(a,b){
-    if(Array.isArray(a[0])){
-        return a.map((c,i)=>sub(c,b[i]))
-    }
-    return a.map((c,i)=>c-b[i])
-}
-
-function add(a,b){
-    if(Array.isArray(a[0])){
-        return a.map((c,i)=>add(c,b[i]))
-    }
-    return a.map((c,i)=>c+b[i])
-}
-
-function div(a,b){
-    return a.map(c=>c.map(d=>d/b))
-}
-
-function mul(a,b){
-    if(Array.isArray(a[0])){
-        return a.map(c=>mul(c,b))
-    }
-    return a.map(c=>c*b)
-}
-
-function ten(a,b){
-    return a.map((c,i)=>mul(b,c))
-}
-
 export default function minimize(f,x0,tol=1e-8,maxit=1000) {
     tol = Math.max(tol,2e-16);
-    x0 = [...x0];
+    x0 = x0.slice(0);
     var n = x0.length;
     var f0 = f(x0);
     if(isNaN(f0)) throw new Error('minimize: f(x0) is a NaN!');
     var grad = a => gradient(f,a)
     var H1 = identity(n), g0 = grad(x0);
-    // var randsteps = 0
-    // while(g0.every(x=>x<2e-16)){
-    //     x0[Math.floor(Math.random()*n)] += (Math.random()-.5)*Math.pow(2, randsteps-10)
-    //     g0 = grad(x0)
-    //     if(++randsteps > 20) break;
-    // }
     for(var it = 0; it<maxit; it++) {
         if(!g0.every(isFinite)) { var msg = "Gradient has Infinity or NaN"; break; }
         var step = neg(dot(H1,g0));

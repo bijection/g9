@@ -15,11 +15,12 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.use('/', express.static('./'));
 
-app.listen(3000, 'localhost', function(err) {
+var port = 1337
+app.listen(port, 'localhost', function(err) {
   if (err) {
     console.log(err);
     return;
   }
 
-  console.log('Listening at http://localhost:3000');
+  console.log('Listening at http://localhost:' + port);
 });
