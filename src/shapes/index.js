@@ -6,8 +6,8 @@ import * as rect from './rect'
 
 var shapes = {}
 
-export function addshape({type, renderer, base, options, shortcut, cost}){
-	shapes[type] = {renderer, base,shortcut, options, cost}
+export function addshape({type, renderer, base, options, cost}){
+	shapes[type] = {renderer, base, type, options, cost}
 }
 
 addshape(circle)

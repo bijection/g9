@@ -1,9 +1,9 @@
-import {makeDraggable, clamp, defaultBounds, setAttributes} from '../utils'
+import {makeDraggable, setAttributes} from '../utils'
 
 export const type = "line"
-export const options = ['x1', 'y1', 'x2', 'y2', 'cares','xmin', 'xmax', 'ymin', 'ymax']
-export const shortcut = ['x1', 'y1', 'x2', 'y2']
-export const base = {type: 'line', ...defaultBounds}
+export const options = ['x1', 'y1', 'x2', 'y2', 'cares']
+export const base = {stroke: '#000'}
+
 export function cost(renderable, r, x, y){
     var {x1, y1, x2, y2} = renderable
     var dx = x1 + (x2 - x1)*r - x
@@ -15,7 +15,6 @@ export class renderer {
 
     constructor(id, container, desire){
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "line")
-        setAttributes(this.el, {stroke: '#000'})
         container.appendChild(this.el)
 
         makeDraggable(
@@ -53,15 +52,10 @@ export class renderer {
     render(renderable){
         this.renderable = renderable
 
-        var {x1,y1,x2,y2,xmin,xmax,ymin,ymax,attributes} = renderable
+        var {x1,y1,x2,y2,attributes} = renderable
 
         setAttributes(this.el, attributes)
 
-        setAttributes(this.el, {
-            x1:clamp(x1, xmin, xmax),
-            y1:clamp(y1, ymin, ymax),
-            x2:clamp(x2, xmin, xmax),
-            y2:clamp(y2, ymin, ymax),
-        })
+        setAttributes(this.el, { x1, y1, x2, y2, })
     }
 }

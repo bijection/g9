@@ -1,13 +1,9 @@
-import {clamp, makeDraggable, defaultBounds, setAttributes} from '../utils'
+import {makeDraggable,setAttributes} from '../utils'
 
 export const type = "text"
-export const base = { type: 'text', ...defaultBounds }
-export const options = ['text','x', 'y', 'xmin', 'xmax', 'ymin', 'ymax', 'cares']
-export const shortcut = ['text', 'x', 'y']
+export const base = {}
+export const options = ['text','x', 'y', 'cares']
 export function cost(renderable, x, y){
-    x = clamp(x, renderable.xmin, renderable.xmax)
-    y = clamp(y, renderable.ymin, renderable.ymax)
-
     var dx = renderable.x - x
     var dy = renderable.y - y
     return dx*dx + dy*dy
@@ -44,8 +40,8 @@ export class renderer {
         this.renderable = renderable
         setAttributes(this.el, renderable.attributes)
         setAttributes(this.el, {
-            x:clamp(renderable.x, renderable.xmin, renderable.xmax),
-            y:clamp(renderable.y, renderable.ymin, renderable.ymax)
+            x:renderable.x,
+            y:renderable.y
         })
         this.el.innerHTML = renderable.text
     }

@@ -51,8 +51,15 @@ function ten(a,b){
     return a.map((c,i)=>mul(b,c))
 }
 
+function isZero(a){
+    for (var i = 0; i < a.length; i++) {
+        if(a[i]!== 0) return false
+    }
+    return true
+}
 
-// Adapted from numeric.js
+
+// Adapted from the numeric.js gradient and uncmin functions
 // Numeric Javascript
 // Copyright (C) 2011 by Sébastien Loisel
 
@@ -74,7 +81,7 @@ function ten(a,b){
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-function gradient(f,x) {
+export function gradient(f,x) {
     var dim = x.length, f1 = f(x);
     if(isNaN(f1)) throw new Error('The gradient at ['+x.join(' ')+'] is NaN!');
     var {max, abs, min} = Math
@@ -105,15 +112,19 @@ function gradient(f,x) {
     return grad;
 }
 
+export default function minimize(f, x0, end_on_line_search,tol=1e-8,maxit=1000) {
 
-export default function minimize(f,x0,tol=1e-8,maxit=1000) {
+
     tol = Math.max(tol,2e-16);
-    x0 = x0.slice(0);
-    var n = x0.length;
-    var f0 = f(x0);
-    if(isNaN(f0)) throw new Error('minimize: f(x0) is a NaN!');
     var grad = a => gradient(f,a)
-    var H1 = identity(n), g0 = grad(x0);
+
+    x0 = x0.slice(0)
+    var g0 = grad(x0)
+    var f0 = f(x0)
+    if(isNaN(f0)) throw new Error('minimize: f(x0) is a NaN!');
+    var n = x0.length;
+    var H1 = identity(n)
+    
     for(var it = 0; it<maxit; it++) {
         if(!g0.every(isFinite)) { var msg = "Gradient has Infinity or NaN"; break; }
         var step = neg(dot(H1,g0));
@@ -132,7 +143,7 @@ export default function minimize(f,x0,tol=1e-8,maxit=1000) {
             if(!(f1-f0 >= 0.1*t*df0 || isNaN(f1))) break;
             t *= 0.5;
         }
-        if(t*nstep < tol) { var msg = "Line search step size smaller than tol"; break; }
+        if(t*nstep < tol && end_on_line_search) {var msg = "Line search step size smaller than tol"; break; }
         if(it === maxit) { var msg = "maxit reached during line search"; break; }
         var g1 = grad(x1);
         var y = sub(g1,g0);
@@ -143,6 +154,7 @@ export default function minimize(f,x0,tol=1e-8,maxit=1000) {
         f0 = f1;
         g0 = g1;
     }
+
     return {solution: x0, f: f0, gradient: g0, invHessian: H1, iterations:it, message: msg};
 }
 

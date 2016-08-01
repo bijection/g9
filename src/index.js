@@ -1,6 +1,6 @@
 import Data2Renderables from './Data2Renderables'
 // import Renderer from './Renderer'
-import minimize from './minimize'
+import minimize, {gradient} from './minimize'
 import shapes from  './shapes/'
 import {forIn} from  './utils'
 
@@ -61,6 +61,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         return this
     }
 
+    var firstvals = {}, lastvals = {};
 
     function desire(id, ...desires){
 
@@ -72,7 +73,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
         var vals = keys.map(k => curData[k])
 
-        var optvals = minimize( v => {
+        var f = v => {
             var tmpdata = {...curData}
             keys.forEach( (k, i) => {
                 tmpdata[k] = v[i]
@@ -85,13 +86,47 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
             // console.log('cost', cost)
             return cost
 
-        }, vals).solution
+        }
 
-        keys.forEach(function(k, i){
-            curData[k] = optvals[i]
-        })
+        var old_cost = f(vals)
 
-        render()
+        var low_precision = true
+        if(!firstvals[id]) firstvals[id] = vals;
+        
+        var grad = a => gradient(f,a)
+
+        if( grad(vals).every(e => e===0) ){
+            grad(lastvals[id]).forEach((e,i) => {
+                if(e !== 0){
+                    vals[i] = lastvals[id][i]
+                }
+            })
+            if( grad(vals).every(e => e===0) ){
+                grad(firstvals[id]).forEach((e,i) => {
+                    if(e !== 0){
+                        vals[i] = firstvals[id][i]
+                    }
+                })
+            }
+            low_precision = false
+        }
+
+        lastvals[id] = vals.slice(0)
+
+        var optvals = minimize(f, vals, low_precision).solution
+
+        var new_cost = f(optvals)
+
+        if( new_cost < old_cost){
+
+            keys.forEach(function(k, i){
+                curData[k] = optvals[i]
+            })
+
+            render()
+
+        }
+
     }
 
     function render(){

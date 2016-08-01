@@ -1,14 +1,6 @@
-export const defaultBounds = {
-    xmin: -Infinity,
-    xmax: Infinity,
-    ymin: -Infinity,
-    ymax: Infinity,
-}
-
-
-export function clamp(v, min, max){
-    return Math.min(Math.max(v, min), max)
-}
+// export function clamp(v, min, max){
+//     return Math.min(Math.max(v, min), max)
+// }
 
 export function makeDraggable(el, startDrag, drag){
     var startex, startey,

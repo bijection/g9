@@ -1,1 +1,1 @@
-remove bounds, make minimize robust to zero gradients
+remove bounds, make minimize robust to zero gradients - CHECK :)

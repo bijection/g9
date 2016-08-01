@@ -42,24 +42,26 @@ export default function Data2Renderables(populateRenderables){
             ctx[type] = function(){
                 // console.log(type, opts)
 
-                var ret = {...shape.base}
+                var ret = {type}
 
-                var args = [...arguments]
+                var args = [].slice.call(arguments)
                 for (var i = 0; i < args.length - 1; i++) {
-                    ret[shape.shortcut[i]] = args[i]
+                    ret[shape.options[i]] = args[i]
                 }
-                if(typeof args[i] === 'object'){
-                    var opts = {...args[i]}
-                    shape.options.forEach(o => {
-                        if(o in opts){
-                            ret[o] = opts[o]
-                            delete opts[o]
-                        }
-                    })
-                    ret.attributes = opts
+                if(typeof args[i] !== 'object'){
+                    ret[shape.options[i]] = args[i]
+                    var opts = {...shape.base}
                 } else {
-                    ret[shape.shortcut[i]] = args[i]
+                    var opts = {...shape.base, ...args[i]}
                 }
+                shape.options.forEach(o => {
+                    if(o in opts){
+                        ret[o] = opts[o]
+                        delete opts[o]
+                    }
+                })
+
+                ret.attributes = opts
 
                 ret.id = getId()
                 ret.stack = stack.join('|')
