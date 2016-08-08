@@ -15,7 +15,7 @@
         <div class='nav-wrap'>
             <a href='' class='nav'>Docs</a>
             <a href='./gallery' class='nav'>Gallery</a>
-            <a href='' class='nav'>Github</a>
+            <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
     <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
@@ -23,7 +23,7 @@
     <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="">included below</a>).
     Try dragging the curve to change its parameters.
     <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
-    <span class='gallery-plug'>For more examples, see the <a href="">Gallery</a>.</span>
+    <span class='gallery-plug'>For more examples, see the <a href="./gallery">Gallery</a>.</span>
     <div class='demo'>
         <div class='display'></div>
     </div>
@@ -56,12 +56,12 @@
     <h2>Making the Dragon Curve</h2>
     
     <p>
-    <div class='code data'>var initdata = {
-    "l": 0,
-    "startx1": 200,
-    "starty1": 0,
-    "startx2": -200,
-    "starty2": 0,
+    <div class='code data'>var data = {
+    "squareness": 0.8,
+    "fromX": 175,
+    "fromY": 96,
+    "toX": -220,
+    "toY": 39
 }</div>
     </p>
         
@@ -92,18 +92,10 @@
     ctx.circle(data.toX, data.toY, {r:5})
 }</div>
     </p>
-    <p> (Optional) Define a callback that will get called when your data changes.
-    <div class='code'>function onUpdate(data){
-    document.querySelector('.data')
-            .innerText = "var initdata = " + JSON.stringify(data)
-}</div>
-    </p>
     <p> Add your graphics to the document!</p>
-    <div class='code'>var demo = g9(initdata, data2graphics, onUpdate)
+    <div class='code'>var demo = g9(initdata, data2graphics)
 
-demo.getRenderer()
-    .xAlign('center')
-    .yAlign('center')
+demo.align('center', 'center')
     .insertInto('.demo .display')</div>
 
     <div class='editor'></div>

@@ -4,6 +4,7 @@ body, html {
 }
 body {
 	font-family: Avenir;
+    padding: 0 10px;
 }
 .header {
     color: #222;

@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="../main.css">
-    <link rel="stylesheet" type="text/css" href="../gallery.css">
+    <link rel="stylesheet" type="text/css" href="./gallery.css">
 </head>
 <body>
 <div class='page'>
@@ -27,40 +27,34 @@
 <div class='page'>
 <p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
 </div>
-<div class='related-wrap'>
-    <div class='page'>Super Cereal Stuff</div>
-    <div class='related'></div>
+<div class='gallery-wrap'>
+    <div class='sidebar'>
+        <h2>Examples</h2>
+        <div class='examples'>
+            <div><a href="#">Something</a></div>
+            <div><a href="#">Hello</a></div>
+            <div><a href="#">Doge</a></div>
+            <div><a href="#">Ozymandias</a></div>
+            <div><a href="#">Ozyosbourne</a></div>            
+        </div>
+    </div>
+    <div class='input'>
+        <div class='data'></div>
+        <div class='data2graphics'></div>
+        <div class='invocation'>g9(initdata, data2graphics)
+    .align('center', 'center')
+    .insertInto('.display')</div>
+    </div>
+    <div class='display'></div>
 </div>
-<div class='page'>
-<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
-</div>
-<div class='related-wrap'>
-    <div class='page'>Really Pretty stuff</div>
-    <div class='related'></div>
-</div>
-<div class='page'>
-<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
-</div>
-<div class='related-wrap'>
-    <div class='page'>Funny Stuff</div>
-    <div class='related'></div>
-</div>
-<div class='page'>
-<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
-</div>
-<div class='related-wrap'>
-    <div class='page'>XSS</div>
-    <div class='related'></div>
-</div>
-
 <script type="text/javascript">
-[].slice.call(document.querySelectorAll('.related')).forEach(related => {
-    for (var i = 0; i < Math.random()*10; i++) {
-        var d = document.createElement('div')
-        d.className = 'item'
-        related.appendChild(d)
-    }
-})
+// [].slice.call(document.querySelectorAll('.related')).forEach(related => {
+//     for (var i = 0; i < Math.random()*10; i++) {
+//         var d = document.createElement('div')
+//         d.className = 'item'
+//         related.appendChild(d)
+//     }
+// })
 </script>
 
 </body>
