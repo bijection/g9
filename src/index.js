@@ -92,6 +92,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
         var low_precision = true
         if(!firstvals[id]) firstvals[id] = vals;
+        if(!lastvals[id]) lastvals[id] = vals;
         
         var grad = a => gradient(f,a)
 

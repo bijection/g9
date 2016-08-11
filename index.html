@@ -2,6 +2,14 @@
 <html>
 <head>
     <title>g9 test page</title>
+    <style type="text/css">
+    html, body, svg {
+    	position: absolute;
+    	width: 100%;
+    	height: 100%;
+    	margin: 0;
+    }
+    </style>
 </head>
 <body>
 <div class='demo'>
@@ -9,12 +17,19 @@
 
 <script type="text/javascript" src='./build/g9.js'></script>
 
-<script type="text/javascript" src='./demos/dragon.js'></script>
+<!-- <script type="text/javascript" src='./demos/dragon.js'></script> -->
 
 <script type="text/javascript">
 
-    demo.align('center', 'center')
-        .insertInto('.demo')
+var sc = location.search.slice(1) || 'dragon'
+
+fetch('http://localhost:1337/demos/' + sc + '.js')
+	.then(s => s.text())
+	.then(x => {
+		eval(x)
+	    demo.align('center', 'center')
+    	    .insertInto('.demo')
+	})
 
 </script>
 
