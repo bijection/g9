@@ -1,8 +1,11 @@
 # g9
 
-g9 is a javascript library for creating automatically interactive graphics. Give g9 some intial data and a function that takes data and creates a drawing, and it will automatically change your data when you interact with the drawing.
+g9 is a javascript library for creating *automatically interactive graphics*.
+
+Give g9 some intial data and a function that takes data and creates a drawing, and it will automatically change your data when you interact with the drawing.
 
 
+For example, the following code:
 ```javascript
 g9({
 	x: 0,
@@ -13,7 +16,16 @@ g9({
 	ctx.circle(data.y, data.x)
 	
 })
+.insertInto('#container')
 ```
+
+produces the following interactive graphic: 
+
+![basic demo](basic.gif)
+
+This gets more exciting when you do stuff like fractals:
+
+![dragon demo](dragon.gif)
 
 
 
@@ -48,7 +60,7 @@ import g9 from 'g9'
 ```
 
 
-# Docs
+# Guide to g9
 
 
 
