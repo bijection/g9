@@ -42,7 +42,7 @@ import g9 from 'g9'
 
 
 
-## <script/>
+## `<script/>`
 
 ```html
 <script src='https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js'></script>
