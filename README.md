@@ -1,34 +1,49 @@
 # g9
 
+
+
+
 # Examples
 
 You can see live versions of these examples here
 
+
+
+
 # Installation
 You can use g9 with npm or with a script tag:
 
+
+
+
 ## npm
 
-```javascript
+```
 npm install g9
 ```
-```
+
+```javascript
 var g9 = require('g9')
 // or 
 import g9 from 'g9'
 ```
 
+
+
 ## \<script/\>
 
-```javascript
- <script src=''></script>
- <script>
+```html
+<script src='https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js'></script>
+ 
+<script>
 	// g9 is now defined 
- </script>
+</script>
 ```
 
 
 # Docs
+
+
 
 ## g9(initialData, data2graphics[, onChange])
 This is the main g9 function, which returns a graphic object which you can mount in your page with the `g9.insertInto(selectorOrDOMNode)` method. For example: 
@@ -39,7 +54,10 @@ g9({foo: 10}, function(data, ctx){
 })
 .insertInto('#container')
 ```
+
 All of the properties of the object returned by g9() are covered at the bottom of this page.
+
+
 
 
 ### initialData
@@ -50,6 +68,9 @@ var initialData = {
     foo: 10
 }
 ```
+
+
+
 ### data2graphics(data, ctx)
 
 `data2graphics(data, ctx)` is a function that receives a `data` object with the same keys as `initialData`, but possibly different values, and a drawing context `ctx`. 
@@ -74,8 +95,13 @@ When someone interacts with the graphics, for example by trying to drag an eleme
 ```
 After optimization, g9 rerenders the entire scene with the new data, so that everything is consistent.
 
+
+
 ### onChange(data, renderedObjects)
 `onChange(data, renderedObjects)` is an optional argument which, if included, is called after each re-render with the data that determined the render, and the set of rendered objects. Typical uses for `onChange` include debugging compositions and updating other parts of your page.
+
+
+
 
 ## ctx
 `ctx` is the drawing context that gets passed to `data2graphics`. It has two read-only properties `ctx.width` and `ctx.height` that give the current width and height of the drawing, a special method, `ctx.pure`, that can speed up recursive drawings, and a variety of drawing methods.
@@ -106,12 +132,12 @@ Currently, the built-in drawing methods are
 
 * `ctx.circle(x, y[, cares])`, a circle. Useful svg properties are `r` (radius), and `fill`. For example:
 
-	```
+	```javascript
 ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
 ```
 * `ctx.line(x1, y1, x2, y2[, cares])`, a line. Useful svg properties are `stroke-width`, `stroke` (stroke color), and `stroke-linecap`. For example:
 
-	```
+	```javascript
 ctx.line(30, 50, 60, 100, {
 	'stroke-width': 10,
 	stroke: 'red',
@@ -120,12 +146,12 @@ ctx.line(30, 50, 60, 100, {
 ```
 * `ctx.rect(x, y, width, height[, cares])`, a rectangle. A useful svg property is `fill`. For example:
 
-	```
+	```javascript
 ctx.rect(0, 0, 100, 100, {'fill': '#ff6600'})
 ```
 * `ctx.text(text, x, y[, cares])`, a text label. Useful svg properties are `font-family`, `font-size`, `fill`, and `text-anchor`. For example:
 
-	```
+	```javascript
 ctx.text('Hello World!', 30, 50, {
 	'font-family': 'sans-serif',
 	'font-size': '20px',
@@ -136,7 +162,7 @@ ctx.text('Hello World!', 30, 50, {
 
 * `ctx.image(href, x, y, width, height[, cares])`, an image. A useful svg property is `preserveAspectRatio`. For example:
 
-	```
+	```javascript
 ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
 	preserveAspectRatio: 'xMaxYMax'
 })
@@ -188,6 +214,8 @@ A live version of this example is on the examples page.
 
 ### g9().insertInto(selectorOrDOMNode)
 Mounts the graphics as a child of `selectorOrDOMNode`, which can be either a selector or a DOM node, and returns the graphics object to enable chaining.
+
+
 ### g9().align(xAlign, yAlign)
 Sets the position of the origin in relation to which graphics are drawn. `xAlign` and `yAlign` are both strings that default to 'center'. Returns the graphics object to enable chaining.
 
@@ -204,8 +232,12 @@ g9({foo: 10}, function(data, ctx){
 .insertInto('#container')
 ```
 
+
+
 ### g9().node
 A read-only reference to the `svg` DOM node that holds the g9 graphics.
+
+
 
 ### g9().setData(data)
 Sets the data currently being visualized by a g9 instance to `data`. This is useful for animations. For example: 
@@ -223,5 +255,12 @@ setInterval(function(){
 }, 30)
 ```
 
-### g9().desire()
+
 ### g9().resize()
+Invalidates the g9 display. Usually a noop, but should be called after programmatically resizing the g9 DOM node or its container.
+
+
+
+
+### g9().desire(id, ...desires)
+Internal method, genreally safe to ignore, but useful for complex animation. For now, the best way to use this is to read the source.
