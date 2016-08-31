@@ -3,8 +3,11 @@
 <head>
     <title>g9 | Automatically Interactive Graphics</title>
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="https://antimatter15.com/style/temp/test.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-solarizedlight.min.css">
+    <!-- <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-javascript.min.js'></script> -->
 </head>
-<body>
+<body class='language-js'>
 <div class='page'>
     <div class='header'>
         <div class='splash'>
@@ -33,20 +36,20 @@
     <ol>
     <li>
         You create some intial data as key-value pairs. For example:
-<div class='code'>var initialData = {
+<pre><code>var initialData = {
     foo: 10
-}</div>
+}</code></pre>
     </li>
     <li>
         This data is fed into a function that uses it to decide how to draw the graphics.
-<div class='code'>function data2graphics(data, context){
+<pre><code>function data2graphics(data, context){
     context.circle(data.foo, 17)
-}</div>
+}</code></pre>
     </li>
     <li>When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for your data to find a set of values that comes closest to creating the change. If you tried to drag the circle to the left, g9 might come up with 
-<div class='code'>{
+<pre><code>{
     foo: 8
-}</div></li>
+}</code></pre></li>
     <li>g9 rerenders the entire scene with the new data, so that everything is consistent. If you've provided one, g9 calls your onChange callback with the new data, so you can update other parts of your page.</li>
     </ol>
     </p>
@@ -56,17 +59,17 @@
     <h2>Making the Dragon Curve</h2>
     
     <p>
-    <div class='code data'>var data = {
+    <pre><code class='data'>var data = {
     "squareness": 0.8,
     "fromX": 175,
     "fromY": 96,
     "toX": -220,
     "toY": 39
-}</div>
+}</code></pre>
     </p>
         
     <p> 
-    <div class='code'>function data2graphics(data, ctx){
+    <pre><code>function data2graphics(data, ctx){
     var lineoptions = {'stroke-width': 4, cares:['squareness']}
     var circleoptions = {r:2, cares:['squareness']}
 
@@ -90,13 +93,17 @@
     
     ctx.circle(data.fromX, data.fromY, {r:5})
     ctx.circle(data.toX, data.toY, {r:5})
-}</div>
+}</code></pre>
     </p>
     <p> Add your graphics to the document!</p>
-    <div class='code'>var demo = g9(initdata, data2graphics)
+    <pre><code>var demo = g9(initdata, data2graphics)
 
 demo.align('center', 'center')
-    .insertInto('.demo .display')</div>
+    .insertInto('.demo .display')</code></pre>
+
+    <h2>Finally</h2>
+
+    You might want to try more <a href="">interactive examples</a>
 
     <div class='editor'></div>
     <div class='lead'></div>
@@ -109,6 +116,8 @@ demo.align('center', 'center')
 <script type="text/javascript" src='./dist/g9.js'></script>
 
 <script type="text/javascript" src='./demos/dragon.js'></script>
+
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/prism.min.js'></script>
 
 <script type="text/javascript">
 

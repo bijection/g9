@@ -3,7 +3,8 @@ body, html {
 	height: 100%;
 }
 body {
-	font-family: Avenir;
+    font-family: Zombocom;
+    letter-spacing: -.1px;
     padding: 0 10px;
 }
 .header {
@@ -30,12 +31,14 @@ body {
 }
 line {
 	// pointer-events: none;
-	stroke: #98A99E;
+    // stroke: #98A99E;
+	stroke: rgb(201, 135, 135);
 	cursor: move;
 }
 circle {
 	// pointer-events: none;
-	fill: #98A99E;
+    // fill: #98A99E;
+	fill: rgb(201, 135, 135);
 	transition: fill .4s;
 	cursor: move;
 }
@@ -52,7 +55,7 @@ circle {
 .demo .editor {
 	/*width: 400px;*/
     white-space: pre;
-	font-family: Monaco;
+	font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
 	font-size: 12px;
 	padding: 15px;
     color: white;
@@ -61,7 +64,7 @@ circle {
 .demo .display {
 	// flex: 1;
 	position: relative;
-	background: #F5ECD5;
+	background: #fdf6e3;
 	// border: 15px solid #98A99E;
 	border-radius: 3px;
 	margin-top: 15px;
@@ -74,17 +77,17 @@ circle {
     display: inline-block;
     background: #EFEFEF;
     padding: 10px;
-    font-family: Monaco;
+    font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
     border-radius: 3px;
 }
-.code {
-    border-radius: 3px;
-    padding: 10px;
-    background: #EFEFEF;
-    font-family: Monaco;
-    white-space: pre-wrap;
-    word-break: break-all;	
-}
+// code {
+//     border-radius: 3px;
+//     padding: 10px;
+//     background: #EFEFEF;
+//     font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
+//     white-space: pre-wrap;
+//     word-break: break-all;	
+// }
 #sidebar {
     position: fixed;
     top: 0;
@@ -113,7 +116,7 @@ circle {
     color: #A5A5A5;
 }
 .literal {
-    font-family: Monaco;
+    font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
     background: #EFEFEF;
     padding-left: 3px;
     padding-right: 3px;
