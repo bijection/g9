@@ -1,12 +1,24 @@
 # g9
 
+g9 is a javascript library for creating automatically interactive graphics.
 
 
+```javascript
+var demo = g9({
+	x: 0,
+	y: 0
+}, function(data, ctx){
+	
+	ctx.circle(data.x, data.y)
 
-# Examples
+	ctx.circle(data.y, data.x)
+	
+}, function(newdata, rendered_objects){
 
-You can see live versions of these examples here
+	console.log(newdata, rendered_objects)
 
+})
+```
 
 
 
@@ -30,7 +42,7 @@ import g9 from 'g9'
 
 
 
-## \<script/\>
+## <script/>
 
 ```html
 <script src='https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js'></script>
