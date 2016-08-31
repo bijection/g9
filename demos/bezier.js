@@ -1,31 +1,32 @@
 var demo = g9({
 
-	t: 0.400000000000008,
-
-	startx: 148.00000000002743,
-	starty: 232.000000002497,
-
-	middlex: 299.00000000255926,
-	middley: 21.000000000037627,
-
-	endx: 469.00000000063096,
-	endy: 244.0000000000004,
+	endx: 189.99999999995265,
+	endy: 76.99999999995309,
+	middlex: 9.000000002109623,
+	middley: -223.99999999996237,
+	startx: -139.9999999999726,
+	starty: 81.99999999698782,
+	t: 0.5066666666666662,
 
 }, ({
 
-	startx, starty,	middlex, middley, endx, endy, t, nasay
+	startx,
+	starty,
+	middlex,
+	middley,
+	endx,
+	endy,
+	t,
 
 }, {
-	circle, line, text, polyline
+	circle, line, text, height
 }) => {
 
-	circle(t*300+100, 300).attr({fill: 'blue'})
-
-	var tlabel = 't='+t.toString().slice(0,4)
-	text(tlabel, t*300+110, 300).attr({alignmentBaseline:"middle"})
+	var tlabel = 'tween='+t.toString().slice(0,4)
+	text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
 
 	var steps = 30
-	var spline = []
+	var smooth = []
 
 	for (var i = 0; i < steps; i++) {
 		var r = t*i/steps
@@ -39,27 +40,26 @@ var demo = g9({
 			bx = tween(middlex, endx),
 			by = tween(middley, endy);
 		
-		line('a'+i, 'b'+i).attr({stroke:'rgba(0,0,0,.1)'})
-		circle(ax,ay,{id: 'a'+i, cares: ['middlex', 'middley']}).attr({fill:'rgba(0,0,0,.1)'})
-		circle(bx,by,{id: 'b'+i, cares: ['middlex', 'middley']}).attr({fill:'rgba(0,0,0,.1)'})
+		// line('a'+i, 'b'+i, {stroke:'rgba(0,0,0,.1)'})
+		// circle(ax,ay,{id: 'a'+i, cares: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+		// circle(bx,by,{id: 'b'+i, cares: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
 
-		spline.push(
-			circle(tween(ax, bx), tween(ay, by), {cares: ['t']}).attr({fill:'rgba(0,0,0,.1)'})
-		)
-
+		line(ax, ay, bx, by, {cares: ['t'], stroke:'rgba(0,0,0,.1)'})
+		smooth.push([tween(ax,bx), tween(ay,by)])
 	}
 
-	polyline(spline)
+	var p = smooth[0]
+	for (var i = 1; i < smooth.length; i++) {
+		line(...p, ...smooth[i], {cares: ['t'], 'stroke-width': 5})
+		p = smooth[i]
+	}
 
-	spline[steps-1].attr({fill:'red'})
+	line(startx,starty, middlex,middley)
+	line(middlex,middley, endx,endy)
 
-
-		line('start', 'middle')
-	line('middle', 'end')
-
-	circle(startx,starty,'start')
-	circle(middlex,middley,'middle')
-	circle(endx,endy,'end')
+	circle(startx,starty)
+	circle(middlex,middley)
+	circle(endx,endy)
 
 }, newdata => {
 	console.log(newdata)

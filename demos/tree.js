@@ -4,25 +4,24 @@ var demo = g9({
     startLength:189
 }, function({deltaAngle,attenuation,startLength}, ctx){
     
-    var drawTree = ctx.pure(function (x1, y1, length, angle, n, oldid, id){
+    var drawTree = ctx.pure(function (x1, y1, length, angle, n){
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        ctx.circle(x2, y2,
-            id === 'trunk' ? id : {id, cares:['deltaAngle', 'attenuation']})
+        ctx.circle(x2, y2, {cares:['deltaAngle', 'attenuation']})
         
-        ctx.line(oldid, id)
+        ctx.line(x1,y1,x2,y2)
 
         if(n > 0) {
-            drawTree(x2, y2, length*attenuation, angle+deltaAngle, n-1, id, id+'l');
-            drawTree(x2, y2, length*attenuation, angle-deltaAngle, n-1, id, id+'r');
+            drawTree(x2, y2, length*attenuation, angle+deltaAngle, n-1);
+            drawTree(x2, y2, length*attenuation, angle-deltaAngle, n-1);
         }
 
     })
 
-    ctx.circle(0, -40, 'tree')
+    ctx.circle(0, ctx.height/2 - 30)
 
-    drawTree(0, -40, startLength, -90, 9, 'tree', 'trunk')
+    drawTree(0, ctx.height/2 - 30, startLength, -90, 9)
 
 }, function(newdata, renderees){
 
