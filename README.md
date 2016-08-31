@@ -9,7 +9,7 @@ You can use g9 with npm or with a script tag:
 
 ## npm
 
-```
+```javascript
 npm install g9
 ```
 ```
@@ -20,7 +20,7 @@ import g9 from 'g9'
 
 ## \<script/\>
 
-```
+```javascript
  <script src=''></script>
  <script>
 	// g9 is now defined 
@@ -33,7 +33,7 @@ import g9 from 'g9'
 ## g9(initialData, data2graphics[, onChange])
 This is the main g9 function, which returns a graphic object which you can mount in your page with the `g9.insertInto(selectorOrDOMNode)` method. For example: 
 
-```
+```javascript
 g9({foo: 10}, function(data, ctx){
 	ctx.circle(data.foo, 17)
 })
@@ -45,7 +45,7 @@ All of the properties of the object returned by g9() are covered at the bottom o
 ### initialData
 `initialData` is a flat object with numeric values, which will be used in the first call to `data2graphics`. For example:
 
-```
+```javascript
 var initialData = {
     foo: 10
 }
@@ -57,7 +57,7 @@ var initialData = {
 `data2graphics` is responsible for calling methods on `ctx` to produce a drawing.
 For example:
 
-```
+```javascript
 function data2graphics(data, ctx){
     ctx.circle(data.foo, 17)
 }
@@ -67,7 +67,7 @@ creates a circle at x-coordinate `data.foo` and y-coordinate 17.
 
 When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for `data` to find a set of values that comes closest to creating the change. In the preceeding example, if `data.foo` is initially 10 and you tried to drag the circle to the left, g9 might come up with
 
-```
+```javascript
 {
     foo: 8
 }
@@ -85,7 +85,7 @@ After optimization, g9 rerenders the entire scene with the new data, so that eve
 ### ctx.[drawingMethod]
 g9 comes with a small but powerful set of primitives for drawing. When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies futher arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
 
-```
+```javascript
 ctx.circle(30, 50, ['a'])
 
 ctx.circle(30, 50, {cares: ['a']})
@@ -151,7 +151,7 @@ Read only. The current height of the svg container, as dertermined by page size 
 ### ctx.pure(pureFn)
 `ctx.pure(pureFn)` is a decorator that speeds up deterministic, stateless (and usually recursive) functions. Internally, `ctx.pure` tells g9 that it doesn't have to execute certain branches when it is optimizing. For recursive funtions, this can make optimization take `O(log(n))` time, instead of `O(n)` time, where `n` is the number of objects drawn by `pureFn`. For example: 
 
-```
+```javascript
 g9({
     deltaAngle:33,
     attenuation:0.7,
@@ -196,7 +196,7 @@ Sets the position of the origin in relation to which graphics are drawn. `xAlign
 
 For example:
 
-```
+```javascript
 g9({foo: 10}, function(data, ctx){
 	ctx.circle(data.foo, 17)
 })
@@ -210,7 +210,7 @@ A read-only reference to the `svg` DOM node that holds the g9 graphics.
 ### g9().setData(data)
 Sets the data currently being visualized by a g9 instance to `data`. This is useful for animations. For example: 
 
-```
+```javascript
 var graphics = g9({foo: 10}, function(data, ctx){
 	ctx.circle(data.foo, 17)
 })
