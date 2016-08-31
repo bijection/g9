@@ -1,22 +1,17 @@
 # g9
 
-g9 is a javascript library for creating automatically interactive graphics.
+g9 is a javascript library for creating automatically interactive graphics. Give g9 some intial data and a function that takes data and creates a drawing, and it will automatically change your data when you interact with the drawing.
 
 
 ```javascript
-var demo = g9({
+g9({
 	x: 0,
 	y: 0
 }, function(data, ctx){
 	
 	ctx.circle(data.x, data.y)
-
 	ctx.circle(data.y, data.x)
 	
-}, function(newdata, rendered_objects){
-
-	console.log(newdata, rendered_objects)
-
 })
 ```
 
