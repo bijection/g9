@@ -45,6 +45,20 @@ export function setAttributes(el, attrs, ns=null){
     })
 }
 
+export function shallowClone(o){
+    var ret = {}
+    Object.keys(o).forEach(k => ret[k] = o[k])
+    return ret
+}
+
+export function findPhaseChange(f, known_true, known_false){
+    while(Math.abs(known_true - known_false) > 1e-3){
+        var mid = (known_true + known_false) / 2
+        f(mid) ? known_true = mid : known_false = mid
+    }
+    return (known_true + known_false) / 2
+}
+
 // export function getAttribute(el, name){
 //     return this.n.getAttributeNS(null, name);
 //     this.n.setAttributeNS(null, name, value);

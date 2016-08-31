@@ -58,7 +58,6 @@ function isZero(a){
     return true
 }
 
-
 // Adapted from the numeric.js gradient and uncmin functions
 // Numeric Javascript
 // Copyright (C) 2011 by Sébastien Loisel

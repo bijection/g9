@@ -9,6 +9,9 @@
     	height: 100%;
     	margin: 0;
     }
+    line, circle {
+        cursor: move;
+    }
     </style>
 </head>
 <body>
@@ -23,10 +26,12 @@
 
 var sc = location.search.slice(1) || 'dragon'
 
+var e = eval
+
 fetch('http://localhost:1337/demos/' + sc + '.js')
 	.then(s => s.text())
 	.then(x => {
-		eval(x)
+		e(x)
 	    demo.align('center', 'center')
     	    .insertInto('.demo')
 	})

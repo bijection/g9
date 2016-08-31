@@ -2,12 +2,13 @@ import Data2Renderables from './Data2Renderables'
 // import Renderer from './Renderer'
 import minimize, {gradient} from './minimize'
 import shapes from  './shapes/'
-import {forIn} from  './utils'
+import {forIn, shallowClone, findPhaseChange} from  './utils'
 
 
 module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) {
 
-    var curData = initialData
+    var curData = shallowClone(initialData)
+
     var renderables
 
     var data2renderables = Data2Renderables(populateRenderables)
@@ -61,10 +62,11 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         return this
     }
 
-    var firstvals = {}, lastvals = {};
+    var lastvals = {};
 
     function desire(id, ...desires){
 
+        var low_precision = true
         var renderable = renderables[id]
         var type = renderable.type
 
@@ -73,57 +75,65 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
         var vals = keys.map(k => curData[k])
 
-        var f = v => {
+        var cost = v => {
             var tmpdata = {...curData}
-            keys.forEach( (k, i) => {
-                tmpdata[k] = v[i]
-            })
+            keys.forEach( (k, i) => tmpdata[k] = v[i])
 
             var points = data2renderables(tmpdata, renderable.stack, {width, height})
             var c1 = points[id]
 
-            var cost = shapes[type].cost(c1, ...desires)
-            // console.log('cost', cost)
-            return cost
-
+            return shapes[type].cost(c1, ...desires)
         }
 
-        var old_cost = f(vals)
+        var old_cost = cost(vals)
 
-        var low_precision = true
-        if(!firstvals[id]) firstvals[id] = vals;
-        if(!lastvals[id]) lastvals[id] = vals;
-        
-        var grad = a => gradient(f,a)
+        var grad = a => gradient(cost,a)
+        var gradZero = v => grad(v).every(e => e===0)
 
-        if( grad(vals).every(e => e===0) ){
-            grad(lastvals[id]).forEach((e,i) => {
-                if(e !== 0){
-                    vals[i] = lastvals[id][i]
-                }
+        // If we're stuck in a zero gradient, try
+        // substituting the last set of values 
+        // with a nonzero gradient, and fall back
+        // to the initial values if that doesn't 
+        // work.
+        if( gradZero(vals) ){
+            
+            var substitute = alt => grad(alt).forEach((e,i) => {
+                if(e !== 0) vals[i] = alt[i];
             })
-            if( grad(vals).every(e => e===0) ){
-                grad(firstvals[id]).forEach((e,i) => {
-                    if(e !== 0){
-                        vals[i] = firstvals[id][i]
-                    }
-                })
-            }
+
+            if( lastvals[id]   ) substitute(lastvals[id]);
+            if( gradZero(vals) ) substitute(keys.map(k => initialData[k]));
+
             low_precision = false
         }
 
-        lastvals[id] = vals.slice(0)
+        // Probably the most important part of the
+        // desire function. I'm putting a comment
+        // here because otherwise it would be easy
+        // to miss this line.
+        var optvals = minimize(cost, vals, low_precision).solution
 
-        var optvals = minimize(f, vals, low_precision).solution
+        // If we end up with a zero gradient make
+        // sure we don't overshoot. We want to be
+        // exactly at the phase change.
+        if(gradZero(optvals)){
 
-        var new_cost = f(optvals)
-
-        if( new_cost < old_cost){
-
-            keys.forEach(function(k, i){
-                curData[k] = optvals[i]
+            keys.forEach((k, i) => {
+                optvals[i] = findPhaseChange(v => {
+                    var mock = optvals.slice(0)
+                    mock[i] = v
+                    return grad(mock)[i] === 0
+                }, optvals[i], vals[i])
             })
 
+        } else {
+            lastvals[id] = vals.slice(0)
+        }
+
+
+        if( cost(optvals) < old_cost){
+
+            keys.forEach((k, i) => curData[k] = optvals[i])
             render()
 
         }

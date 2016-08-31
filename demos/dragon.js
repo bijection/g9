@@ -7,7 +7,8 @@ var data = {
 }
 
 function data2graphics(data, ctx){
-    var lineoptions = {'stroke-width': 4, cares:['squareness'], "stroke-linecap":"round"}
+    var lineoptions = {'stroke-width': 4, cares:['squareness']}
+    var circleoptions = {r:2, cares:['squareness']}
 
     function dragon(x1,y1, x2,y2, dir, level){
         if(level == 0){
@@ -16,6 +17,8 @@ function data2graphics(data, ctx){
             var midx = (x1 + x2 + data.squareness*dir*(y2 - y1))/2
             var midy = (y1 + y2 - data.squareness*dir*(x2 - x1))/2
 
+            ctx.circle(midx, midy, circleoptions)
+
             dragon(x1,y1, midx,midy, -1,level-1)
             dragon(midx,midy, x2,y2,  1,level-1)
         }
@@ -23,14 +26,10 @@ function data2graphics(data, ctx){
     
     dragon = ctx.pure(dragon)
     
-    dragon(data.fromX, data.fromY, data.toX, data.toY, -1, 8)
+    dragon(data.fromX, data.fromY, data.toX, data.toY, -1, 9)
     
     ctx.circle(data.fromX, data.fromY, {r:5})
     ctx.circle(data.toX, data.toY, {r:5})
 }
 
-function log(x) {
-    console.log(x)
-}
-
-var demo = g9(data, data2graphics, log)
+var demo = g9(data, data2graphics)
