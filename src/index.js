@@ -15,12 +15,12 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
     var elements = {}
     var node = document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    var xAlign = 'left', yAlign = 'top'
+    var xAlign = 'center', yAlign = 'center'
     
     var width = 0, height = 0, top = 0, left = 0
     var xOffset = 0, yOffset = 0
 
-    function align(xval='left', yval='top'){
+    function align(xval='center', yval='center'){
         xAlign = xval
         yAlign = yval
         resize()
