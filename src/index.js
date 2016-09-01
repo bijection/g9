@@ -51,16 +51,33 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         if(rerender) render();
     }
 
+    var noRerender = e => resize(false)
 
     function insertInto(selector){
+
+        if(node.parentNode) remove();
+
         if(typeof selector === "string"){
             document.querySelector(selector).appendChild(node)
         } else {
             selector.appendChild(node)
         }
+
+        window.addEventListener('load', resize)
+        window.addEventListener('resize', resize)
+        window.addEventListener('scroll', noRerender)
+
         resize()
         return this
     }
+
+    function remove() {
+        window.removeEventListener('load', resize)
+        window.removeEventListener('resize', resize)
+        window.removeEventListener('scroll', noRerender)
+        node.parentNode.removeChild(node)
+    }
+
 
     var lastvals = {};
 
@@ -168,9 +185,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         render()
     }
 
-    window.addEventListener('load', resize)
-    window.addEventListener('resize', resize)
-    window.addEventListener('scroll', e => resize(false))
-
-    return {setData, desire, align, insertInto, resize, node}
+    return {setData, desire, align, insertInto, resize, node, remove}
 }
