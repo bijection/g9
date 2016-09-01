@@ -164,42 +164,42 @@ Currently, the built-in drawing methods are
 * `ctx.circle(x, y[, cares])`, a circle. Useful svg properties are `r` (radius), and `fill`. For example:
 
 	```javascript
-ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
+	ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
 	```
 
 * `ctx.line(x1, y1, x2, y2[, cares])`, a line. Useful svg properties are `stroke-width`, `stroke` (stroke color), and `stroke-linecap`. For example:
 
 	```javascript
-ctx.line(30, 50, 60, 100, {
-	'stroke-width': 10,
-	stroke: 'red',
-	'stroke-linecap': 'round'
-})
+	ctx.line(30, 50, 60, 100, {
+		'stroke-width': 10,
+		stroke: 'red',
+		'stroke-linecap': 'round'
+	})
 	```
 * `ctx.rect(x, y, width, height[, cares])`, a rectangle. A useful svg property is `fill`. For example:
 
 	```javascript
-ctx.rect(0, 0, 100, 100, {'fill': '#ff6600'})
+	ctx.rect(0, 0, 100, 100, {'fill': '#ff6600'})
 	```
 
 
 * `ctx.text(text, x, y[, cares])`, a text label. Useful svg properties are `font-family`, `font-size`, `fill`, and `text-anchor`. For example:
 
 	```javascript
-ctx.text('Hello World!', 30, 50, {
-	'font-family': 'sans-serif',
-	'font-size': '20px',
-	'text-anchor': 'middle',
-	fill: '#badd09'
-})
+	ctx.text('Hello World!', 30, 50, {
+		'font-family': 'sans-serif',
+		'font-size': '20px',
+		'text-anchor': 'middle',
+		fill: '#badd09'
+	})
 	```
 
 * `ctx.image(href, x, y, width, height[, cares])`, an image. A useful svg property is `preserveAspectRatio`. For example:
 
 	```javascript
-ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
-	preserveAspectRatio: 'xMaxYMax'
-})
+	ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
+		preserveAspectRatio: 'xMaxYMax'
+	})
 	```
 
 #### ctx.width
