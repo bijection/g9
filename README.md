@@ -90,7 +90,7 @@ g9({foo: 10}, function(data, ctx){
 .insertInto('#container')
 ```
 
-All of the properties of the object returned by g9() are covered at the bottom of this page.
+All of the properties of the object returned by g9() are covered [at the bottom of this page](https://github.com/bijection/g9#properties-of-the-object-returned-by-g9).
 
 
 
