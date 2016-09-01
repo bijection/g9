@@ -3,7 +3,7 @@ body, html {
 	height: 100%;
 }
 body {
-    font-family: Zombocom;
+    font-family: Zombocom, sans-serif;
     letter-spacing: -.1px;
     padding: 0 10px;
 }
