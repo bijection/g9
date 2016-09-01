@@ -27,7 +27,7 @@ This gets more exciting when you do stuff like fractals:
 
 ![dragon demo](dragon.gif)
 
-You can see (and play with!) more examples [on the website](http://omrelli.ug/g9)
+You can see (and play with!) more examples [on the website](http://omrelli.ug/g9), or [head to the docs](#docs) for a full treatment of the API.
 
 
 # Installation
