@@ -62,16 +62,15 @@ import g9 from 'g9'
 
 # Docs
 
-
 * [g9(initialData, data2graphics[, onChange])](#g9initialdata-data2graphics-onchange)
   + [initialData](#initialdata)
   + [data2graphics(data, ctx)](#data2graphicsdata-ctx)
+  + [ctx](#ctx)
+    - [ctx.[drawingMethod]](#ctxdrawingmethod)
+    - [ctx.width](#ctxwidth)
+    - [ctx.height](#ctxheight)
+    - [ctx.pure(pureFn)](#ctxpurepurefn)
   + [onChange(data, renderedObjects)](#onchangedata-renderedobjects)
-* [ctx](#ctx)
-  + [ctx.[drawingMethod]](#ctxdrawingmethod)
-  + [ctx.width](#ctxwidth)
-  + [ctx.height](#ctxheight)
-  + [ctx.pure(pureFn)](#ctxpurepurefn)
 * [Properties of the object returned by g9()](#properties-of-the-object-returned-by-g9)
   + [g9().insertInto(selectorOrDOMNode)](#g9insertintoselectorordomnode)
   + [g9().align(xAlign, yAlign)](#g9alignxalign-yalign)
@@ -79,10 +78,6 @@ import g9 from 'g9'
   + [g9().setData(data)](#g9setdatadata)
   + [g9().resize()](#g9resize)
   + [g9().desire(id, ...desires)](#g9desireid-desires)
-
-
-
-
 
 
 ## g9(initialData, data2graphics[, onChange])
@@ -115,7 +110,7 @@ var initialData = {
 
 `data2graphics(data, ctx)` is a function that receives a `data` object with the same keys as `initialData`, but possibly different values, and a drawing context `ctx`. 
 
-`data2graphics` is responsible for calling methods on `ctx` to produce a drawing.
+`data2graphics` is responsible for calling methods on `ctx` ([covered below](#ctx)) to produce a drawing.
 For example:
 
 ```javascript
@@ -136,19 +131,12 @@ When someone interacts with the graphics, for example by trying to drag an eleme
 After optimization, g9 rerenders the entire scene with the new data, so that everything is consistent.
 
 
-
-### onChange(data, renderedObjects)
-`onChange(data, renderedObjects)` is an optional argument which, if included, is called after each re-render with the data that determined the render, and the set of rendered objects. Typical uses for `onChange` include debugging compositions and updating other parts of your page.
-
-
-
-
-## ctx
+#### ctx
 `ctx` is the drawing context that gets passed to `data2graphics`. It has two read-only properties `ctx.width` and `ctx.height` that give the current width and height of the drawing, a special method, `ctx.pure`, that can speed up recursive drawings, and a variety of drawing methods.
 
 
 
-### ctx.[drawingMethod]
+#### ctx.[drawingMethod]
 g9 comes with a small but powerful set of primitives for drawing. When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies futher arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
 
 ```javascript
@@ -211,13 +199,13 @@ ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
 })
 	```
 
-### ctx.width
+#### ctx.width
 Read only. The current width of the svg container, as dertermined by page size and / or css.
 
-### ctx.height
+#### ctx.height
 Read only. The current height of the svg container, as dertermined by page size and / or css.
 
-### ctx.pure(pureFn)
+#### ctx.pure(pureFn)
 `ctx.pure(pureFn)` is a decorator that speeds up deterministic, stateless (and usually recursive) functions. Internally, `ctx.pure` tells g9 that it doesn't have to execute certain branches when it is optimizing. For recursive funtions, this can make optimization take `O(log(n))` time, instead of `O(n)` time, where `n` is the number of objects drawn by `pureFn`. For example: 
 
 ```javascript
@@ -251,6 +239,45 @@ g9({
 })
 ```
 A live version of this example is on the examples page.
+
+
+
+
+
+### onChange(data, renderedObjects)
+`onChange(data, renderedObjects)` is an optional argument which, if included, is called after each re-render with the data that determined the render, and the set of rendered objects. Typical uses for `onChange` include debugging compositions and updating other parts of your page.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Properties of the object returned by g9()
 
