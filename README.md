@@ -68,7 +68,7 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 * [g9(initialData, data2graphics[, onChange])](#g9initialdata-data2graphics-onchange)
   + [initialData](#initialdata)
   + [data2graphics(data, ctx)](#data2graphicsdata-ctx)
-  + [ctx](#ctx)
+    - [ctx](#ctx)
     - [ctx.[drawingMethod]](#ctxdrawingmethod)
     - [ctx.width](#ctxwidth)
     - [ctx.height](#ctxheight)
