@@ -51,8 +51,10 @@ import g9 from 'g9'
 
 ## `<script/>`
 
+First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js), then
+
 ```html
-<script src='https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js'></script>
+<script src='path/to/g9.js'></script>
  
 <script>
 	// g9 is now defined 
