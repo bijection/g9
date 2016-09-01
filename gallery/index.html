@@ -2,8 +2,17 @@
 <html>
 <head>
     <title></title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.css">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/addon/edit/matchbrackets.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/theme/solarized.css">
+
+    <link rel="stylesheet" type="text/css" href="https://antimatter15.com/style/temp/test.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
     <link rel="stylesheet" type="text/css" href="./gallery.css">
+
+    <script src="../dist/g9.js"></script>
+
 </head>
 <body>
 <div class='page'>
@@ -12,11 +21,11 @@
             g9.js
         </div>
         <div class='npm'>npm install g9</div>
-        <div class='npm'>Download</div>
+        <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js"><div class='npm'>Download</div></a>
         <div class='nav-wrap'>
-            <a href='' class='nav'>Docs</a>
-            <a href='' class='nav current'>Gallery</a>
-            <a href='' class='nav'>Github</a>
+            <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
+            <a href='./gallery' class='nav current'>Gallery</a>
+            <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
     <p>
@@ -26,35 +35,53 @@
 
 <div class='page'>
 <p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
+<h1>Basic</h1>
+A minimal example with only two circles.
 </div>
+
 <div class='gallery-wrap'>
-    <div class='sidebar'>
-        <h2>Examples</h2>
-        <div class='examples'>
-            <div><a href="#">Something</a></div>
-            <div><a href="#">Hello</a></div>
-            <div><a href="#">Doge</a></div>
-            <div><a href="#">Ozymandias</a></div>
-            <div><a href="#">Ozyosbourne</a></div>            
-        </div>
-    </div>
     <div class='input'>
-        <div class='data'></div>
-        <div class='data2graphics'></div>
-        <div class='invocation'>g9(initdata, data2graphics)
-    .align('center', 'center')
-    .insertInto('.display')</div>
+        <div class='run-button'>&#9654; Run</div>
+        <textarea class='user'>
+var initialData = {
+    x: 0,
+    y: 0
+}
+
+var data2graphics = function(data, ctx){
+    ctx.circle(data.x, data.y)
+    ctx.circle(data.y, data.x)
+}         
+
+var demo = g9(initialData, data2graphics)
+    .insertInto('#demo1')</textarea>
     </div>
-    <div class='display'></div>
+    <div class='display' id='demo1'></div>
 </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/mode/javascript/javascript.min.js"></script>
 <script type="text/javascript">
-// [].slice.call(document.querySelectorAll('.related')).forEach(related => {
-//     for (var i = 0; i < Math.random()*10; i++) {
-//         var d = document.createElement('div')
-//         d.className = 'item'
-//         related.appendChild(d)
-//     }
-// })
+[].slice.call(document.querySelectorAll('.input')).forEach(function(i){
+    var cm = CodeMirror.fromTextArea(i.querySelector('textarea'), {
+        theme: 'solarized'
+    })
+
+    var graphics;
+
+    i.querySelector('.run-button').addEventListener('click', function(){
+        var old = g9
+        var g9 = function() {
+            if(graphics.delete) {graphics.delete()}
+            graphics = old.call(old, arguments)
+            return graphics
+        }
+        // try{
+            eval(cm.getValue())
+        // } catch(e) {cons}
+    })
+})
 </script>
 
 </body>
