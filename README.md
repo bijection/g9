@@ -1,4 +1,4 @@
-# [g9.js](https://github.com/bijection/g9)
+# [g9.js](http://omrelli.ug/g9)
 
 g9 is a javascript library for creating **automatically interactive graphics**.
 
