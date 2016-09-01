@@ -1,6 +1,6 @@
-# g9
+# [g9.js](https://github.com/bijection/g9)
 
-g9 is a javascript library for creating *automatically interactive graphics*.
+g9 is a javascript library for creating **automatically interactive graphics**.
 
 Give g9 some intial data and a function that takes data and creates a drawing, and it will automatically change your data when you interact with the drawing.
 
@@ -60,7 +60,28 @@ import g9 from 'g9'
 ```
 
 
-# Guide to g9
+# Docs
+
+
+* [g9(initialData, data2graphics[, onChange])](#g9initialdata-data2graphics-onchange)
+  + [initialData](#initialdata)
+  + [data2graphics(data, ctx)](#data2graphicsdata-ctx)
+  + [onChange(data, renderedObjects)](#onchangedata-renderedobjects)
+* [ctx](#ctx)
+  + [ctx.[drawingMethod]](#ctxdrawingmethod)
+  + [ctx.width](#ctxwidth)
+  + [ctx.height](#ctxheight)
+  + [ctx.pure(pureFn)](#ctxpurepurefn)
+* [Properties of the object returned by g9()](#properties-of-the-object-returned-by-g9)
+  + [g9().insertInto(selectorOrDOMNode)](#g9insertintoselectorordomnode)
+  + [g9().align(xAlign, yAlign)](#g9alignxalign-yalign)
+  + [g9().node](#g9node)
+  + [g9().setData(data)](#g9setdatadata)
+  + [g9().resize()](#g9resize)
+  + [g9().desire(id, ...desires)](#g9desireid-desires)
+
+
+
 
 
 
@@ -153,7 +174,8 @@ Currently, the built-in drawing methods are
 
 	```javascript
 ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
-```
+	```
+
 * `ctx.line(x1, y1, x2, y2[, cares])`, a line. Useful svg properties are `stroke-width`, `stroke` (stroke color), and `stroke-linecap`. For example:
 
 	```javascript
@@ -162,12 +184,14 @@ ctx.line(30, 50, 60, 100, {
 	stroke: 'red',
 	'stroke-linecap': 'round'
 })
-```
+	```
 * `ctx.rect(x, y, width, height[, cares])`, a rectangle. A useful svg property is `fill`. For example:
 
 	```javascript
 ctx.rect(0, 0, 100, 100, {'fill': '#ff6600'})
-```
+	```
+
+
 * `ctx.text(text, x, y[, cares])`, a text label. Useful svg properties are `font-family`, `font-size`, `fill`, and `text-anchor`. For example:
 
 	```javascript
@@ -177,7 +201,7 @@ ctx.text('Hello World!', 30, 50, {
 	'text-anchor': 'middle',
 	fill: '#badd09'
 })
-```
+	```
 
 * `ctx.image(href, x, y, width, height[, cares])`, an image. A useful svg property is `preserveAspectRatio`. For example:
 
@@ -185,7 +209,7 @@ ctx.text('Hello World!', 30, 50, {
 ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
 	preserveAspectRatio: 'xMaxYMax'
 })
-```
+	```
 
 ### ctx.width
 Read only. The current width of the svg container, as dertermined by page size and / or css.
