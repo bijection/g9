@@ -12,6 +12,7 @@ body {
     display: flex;
     align-items: baseline;
     // padding: 15px;
+    flex-wrap: wrap;
 }
 .splash {
     font-size: 60px;
@@ -139,6 +140,7 @@ li > a {
     /* text-decoration: none; */
     margin-top: -30px;
     margin-right: 5px;
+    position: relative;
 }
 .nav-wrap {
     flex: 1;
