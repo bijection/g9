@@ -19,11 +19,11 @@ g9({
 .insertInto('#container')
 ```
 
-produces the following interactive graphic: 
+draws two dots at (x,y) and (y,x) as you might expect. The cool thing about g9 is that with no additional effort, it's interactive, so dragging either of the points changes the value of x and y, and moves the other dot: 
 
 ![basic demo](basic.gif)
 
-This gets more exciting when you do stuff like fractals:
+This **automatic interactivity** makes it trivial to manipulable complex visualizations like this fractal:
 
 ![dragon demo](dragon.gif)
 
