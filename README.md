@@ -65,9 +65,9 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 
 # Docs
 
-* [g9(initialData, data2graphics[, onChange])](#g9initialdata-data2graphics-onchange)
+* [g9(initialData, render[, onChange])](#g9initialdata-render-onchange)
   + [initialData](#initialdata)
-  + [data2graphics(data, ctx)](#data2graphicsdata-ctx)
+  + [render(data, ctx)](#renderdata-ctx)
     - [ctx](#ctx)
     - [ctx.[drawingMethod]](#ctxdrawingmethod)
     - [ctx.width](#ctxwidth)
@@ -83,7 +83,7 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
   + [g9().desire(id, ...desires)](#g9desireid-desires)
 
 
-## g9(initialData, data2graphics[, onChange])
+## g9(initialData, render[, onChange])
 This is the main g9 function, which returns a graphic object which you can mount in your page with the `g9.insertInto(selectorOrDOMNode)` method. For example: 
 
 ```javascript
@@ -99,7 +99,7 @@ All of the properties of the object returned by g9() are covered [at the bottom 
 
 
 ### initialData
-`initialData` is a flat object with numeric values, which will be used in the first call to `data2graphics`. For example:
+`initialData` is a flat object with numeric values, which will be used in the first call to `render`. For example:
 
 ```javascript
 var initialData = {
@@ -109,15 +109,15 @@ var initialData = {
 
 
 
-### data2graphics(data, ctx)
+### render(data, ctx)
 
-`data2graphics(data, ctx)` is a function that receives a `data` object with the same keys as `initialData`, but possibly different values, and a drawing context `ctx`. 
+`render(data, ctx)` is a function that receives a `data` object with the same keys as `initialData`, but possibly different values, and a drawing context `ctx`. 
 
-`data2graphics` is responsible for calling methods on `ctx` ([covered below](#ctx)) to produce a drawing.
+`render` is responsible for calling methods on `ctx` ([covered below](#ctx)) to produce a drawing.
 For example:
 
 ```javascript
-function data2graphics(data, ctx){
+function render(data, ctx){
     ctx.circle(data.foo, 17)
 }
 ```
@@ -135,7 +135,7 @@ After optimization, g9 rerenders the entire scene with the new data, so that eve
 
 
 #### ctx
-`ctx` is the drawing context that gets passed to `data2graphics`. It has two read-only properties `ctx.width` and `ctx.height` that give the current width and height of the drawing, a special method, `ctx.pure`, that can speed up recursive drawings, and a variety of drawing methods.
+`ctx` is the drawing context that gets passed to `render`. It has two read-only properties `ctx.width` and `ctx.height` that give the current width and height of the drawing, a special method, `ctx.pure`, that can speed up recursive drawings, and a variety of drawing methods.
 
 
 
