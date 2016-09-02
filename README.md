@@ -2,7 +2,7 @@
 
 g9 is a javascript library for creating **automatically interactive graphics**.
 
-Give g9 some intial data and a function that takes data and creates a drawing, and it will automatically change your data when you interact with the drawing.
+With g9, making an interactive visualization is as easy as making a visualization that isn't. Just write a function which draws shapes based on data, and it will automatically figure out how to manipulate that data when you drag shapes around.
 
 
 For example, the following code:
