@@ -1,6 +1,6 @@
 {
   "name": "g9",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "automatically interactive graphics",
   "main": "./dist/g9.js",
   "scripts": {
