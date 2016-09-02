@@ -91,7 +91,7 @@ function data2graphics(data, ctx){
                 translate(rotate(p1, ax,ay,0), 0,0,2)),
             ...project(
                 translate(rotate(p2, ax,ay,0), 0,0,2)), {
-            cares: ['ax', 'ay'],
+            affects: ['ax', 'ay'],
             "stroke-width": 10,
             "stroke-linecap": "round"
         })

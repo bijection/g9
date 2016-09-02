@@ -63,43 +63,43 @@ var demo = g9({
 			var l = i
 			pl.push(base)
 			pl.push(rcircle((l+ a1)*a, s2, i+'l'))
-			pl.push(rcircle((l+a2)*a, s3, {id:i+'lr', cares:['s3', 'a2']}))
+			pl.push(rcircle((l+a2)*a, s3, {id:i+'lr', affects:['s3', 'a2']}))
 			
 			// right side
 			var r = i
 			pr.push(base)
 			pr.push(rcircle((r- a1)*a,s2, i+'r'))
-			pr.push(rcircle((r-a2)*a,s3, {id:i+'rl', cares:['s3', 'a2']}))
+			pr.push(rcircle((r-a2)*a,s3, {id:i+'rl', affects:['s3', 'a2']}))
 
 			if(i%2){
-				pl.push(rcircle((l+a3l)*a, s4l, {id:i+'lr1', cares:['s4l', 'a3l']}))
+				pl.push(rcircle((l+a3l)*a, s4l, {id:i+'lr1', affects:['s4l', 'a3l']}))
 				
 
-				pr.push(rcircle((r-a3r)*a,s4r, {id:i+'rl1', cares:['s4r', 'a3r']}))
+				pr.push(rcircle((r-a3r)*a,s4r, {id:i+'rl1', affects:['s4r', 'a3r']}))
 				
 
-				pr.push(rcircle((r-a4)*a,s5, {id:i+'rl2', cares:['s5', 'a4']}))
+				pr.push(rcircle((r-a4)*a,s5, {id:i+'rl2', affects:['s5', 'a4']}))
 
 
-				pr.push(rcircle((r-a5)*a,s6, {id:i+'rl3', cares:['s6', 'a5']}))
+				pr.push(rcircle((r-a5)*a,s6, {id:i+'rl3', affects:['s6', 'a5']}))
 
 
-				pr.push(rcircle((r-a6)*a,s7, {id:i+'rl4', cares:['s7', 'a6']}))
+				pr.push(rcircle((r-a6)*a,s7, {id:i+'rl4', affects:['s7', 'a6']}))
 			} else {
 
 
-				pl.push(rcircle((l+a3r)*a, s4r, {id:i+'lr1', cares:['s4r', 'a3r']}))
+				pl.push(rcircle((l+a3r)*a, s4r, {id:i+'lr1', affects:['s4r', 'a3r']}))
 				
-				pr.push(rcircle((r-a3l)*a,s4l, {id:i+'rl1', cares:['s4l', 'a3l']}))	
-				
-
-				pl.push(rcircle((l+a4)*a, s5, {id:i+'lr2', cares:['s5', 'a4']}))
+				pr.push(rcircle((r-a3l)*a,s4l, {id:i+'rl1', affects:['s4l', 'a3l']}))	
 				
 
-				pl.push(rcircle((l+a5)*a, s6, {id:i+'lr3', cares:['s6', 'a5']}))
+				pl.push(rcircle((l+a4)*a, s5, {id:i+'lr2', affects:['s5', 'a4']}))
 				
 
-				pl.push(rcircle((l+a6)*a, s7, {id:i+'lr4', cares:['s7', 'a6']}))
+				pl.push(rcircle((l+a5)*a, s6, {id:i+'lr3', affects:['s6', 'a5']}))
+				
+
+				pl.push(rcircle((l+a6)*a, s7, {id:i+'lr4', affects:['s7', 'a6']}))
 			}
 
 			// lines

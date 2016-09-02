@@ -2,7 +2,7 @@ import {makeDraggable,setAttributes} from '../utils'
 
 export const type = "text"
 export const base = {}
-export const options = ['text','x', 'y', 'cares']
+export const options = ['text','x', 'y', 'affects']
 export function cost(renderable, x, y){
     var dx = renderable.x - x
     var dy = renderable.y - y

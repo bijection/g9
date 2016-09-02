@@ -2,7 +2,7 @@ import {makeDraggable, setAttributes} from '../utils'
 
 export const type = "image"
 export const base = {}
-export const options = ['href', 'x', 'y', 'width', 'height', 'cares']
+export const options = ['href', 'x', 'y', 'width', 'height', 'affects']
 export function cost(renderable, x, y){
     var dx = renderable.x - x
     var dy = renderable.y - y

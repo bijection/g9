@@ -7,6 +7,7 @@ export function makeDraggable(el, startDrag, drag){
         startx, starty
 
     var onmove = function(e){
+        e = e.touches ? e.touches[0] : e
         drag(
             startx + e.clientX - startex,
             starty + e.clientY - startey
@@ -15,12 +16,17 @@ export function makeDraggable(el, startDrag, drag){
 
     var onend = function(e){
         document.removeEventListener('mousemove', onmove)
+        document.removeEventListener('touchmove', onmove)
+        document.removeEventListener('touchend', onend)
+        document.removeEventListener('touchcancel', onend)
         document.removeEventListener('mouseup', onend)
     }
 
-    el.addEventListener('mousedown',function(e){
+    function onstart(e){
 
         e.preventDefault()
+
+        e = e.touches ? e.touches[0] : e
 
         startex = e.clientX
         startey = e.clientY;
@@ -29,9 +35,15 @@ export function makeDraggable(el, startDrag, drag){
         startx = startx || 0
         starty = starty || 0
 
+        document.addEventListener('touchmove', onmove)
         document.addEventListener('mousemove', onmove)
+        document.addEventListener('touchend', onend)
+        document.addEventListener('touchcancel', onend)
         document.addEventListener('mouseup', onend)
-    })
+    }
+
+    el.addEventListener('touchstart', onstart)
+    el.addEventListener('mousedown', onstart)
 }
 
 //acutally the only part of lodash I needed

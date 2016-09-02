@@ -145,23 +145,23 @@ g9 comes with a small but powerful set of primitives for drawing. When calling a
 ```javascript
 ctx.circle(30, 50, ['a'])
 
-ctx.circle(30, 50, {cares: ['a']})
+ctx.circle(30, 50, {affects: ['a']})
 
 ctx.circle(30, {
 	y: 50,
-	cares: ['a']
+	affects: ['a']
 })
 
 ctx.circle({
 	x: 30,
 	y: 50,
-	cares: ['a']
+	affects: ['a']
 })
 ```
 
 Currently, the built-in drawing methods are
 
-* **ctx.circle(x, y[, cares])**
+* **ctx.circle(x, y[, affects])**
   
   A circle. Useful svg properties are `r` (radius), and `fill`. For example:
 
@@ -169,7 +169,7 @@ Currently, the built-in drawing methods are
 	ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
 	```
 
-* **ctx.line(x1, y1, x2, y2[, cares])**
+* **ctx.line(x1, y1, x2, y2[, affects])**
   
   A line. Useful svg properties are `stroke-width`, `stroke` (stroke color), and `stroke-linecap`. For example:
 
@@ -180,7 +180,7 @@ Currently, the built-in drawing methods are
 		'stroke-linecap': 'round'
 	})
 	```
-* **ctx.rect(x, y, width, height[, cares])**
+* **ctx.rect(x, y, width, height[, affects])**
   
   A rectangle. A useful svg property is `fill`. For example:
 
@@ -189,7 +189,7 @@ Currently, the built-in drawing methods are
 	```
 
 
-* **ctx.text(text, x, y[, cares])**
+* **ctx.text(text, x, y[, affects])**
   
   A text label. Useful svg properties are `font-family`, `font-size`, `fill`, and `text-anchor`. For example:
 
@@ -202,7 +202,7 @@ Currently, the built-in drawing methods are
 	})
 	```
 
-* **ctx.image(href, x, y, width, height[, cares])**
+* **ctx.image(href, x, y, width, height[, affects])**
   
   An image. A useful svg property is `preserveAspectRatio`. For example:
 
@@ -236,7 +236,7 @@ g9({
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        ctx.circle(x2, y2, {cares:['deltaAngle', 'attenuation']})
+        ctx.circle(x2, y2, {affects:['deltaAngle', 'attenuation']})
         
         ctx.line(x1,y1,x2,y2)
 

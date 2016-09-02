@@ -2,7 +2,7 @@ import {makeDraggable, setAttributes} from '../utils'
 
 export const type = "circle"
 export const base = {r:5, fill:'#000'}
-export const options = ['x', 'y', 'cares']
+export const options = ['x', 'y', 'affects']
 export function cost(renderable, x, y){
     var dx = renderable.x - x
     var dy = renderable.y - y

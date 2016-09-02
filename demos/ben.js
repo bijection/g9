@@ -22,17 +22,17 @@ function data2graphics(data, ctx){
 	var pymy = (total - data.down) * (1 + days*.1/365) / 3
 	
 	ctx.rect(day1, bottom, 20, -pymy, {
-		cares: ['day1'],
+		affects: ['day1'],
 	})
 	ctx.text(Math.round(day1*100)/100, day1, bottom + 20)
 	
 	ctx.rect(day2, bottom, 20, -pymy, {
-		cares: ['day2'],
+		affects: ['day2'],
 	})
 	ctx.text(Math.round(day2*100)/100, day2, bottom + 20)
 	
 	ctx.rect(day3, bottom, 20, -pymy, {
-		cares: ['day3'],
+		affects: ['day3'],
 	})
 	ctx.text(Math.round(day3*100)/100, day3, bottom + 20)
 

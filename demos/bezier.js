@@ -41,16 +41,16 @@ var demo = g9({
 			by = tween(middley, endy);
 		
 		// line('a'+i, 'b'+i, {stroke:'rgba(0,0,0,.1)'})
-		// circle(ax,ay,{id: 'a'+i, cares: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
-		// circle(bx,by,{id: 'b'+i, cares: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+		// circle(ax,ay,{id: 'a'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+		// circle(bx,by,{id: 'b'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
 
-		line(ax, ay, bx, by, {cares: ['t'], stroke:'rgba(0,0,0,.1)'})
+		line(ax, ay, bx, by, {affects: ['t'], stroke:'rgba(0,0,0,.1)'})
 		smooth.push([tween(ax,bx), tween(ay,by)])
 	}
 
 	var p = smooth[0]
 	for (var i = 1; i < smooth.length; i++) {
-		line(...p, ...smooth[i], {cares: ['t'], 'stroke-width': 5})
+		line(...p, ...smooth[i], {affects: ['t'], 'stroke-width': 5})
 		p = smooth[i]
 	}
 

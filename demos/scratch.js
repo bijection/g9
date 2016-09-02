@@ -6,8 +6,8 @@ var initial = {
 
 function data2graphics(data, ctx){
     var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
-    ctx.circle(m,0, {cares: ['x2']})
-    ctx.circle(data.x2,20, {cares: ['x2']})
+    ctx.circle(m,0, {affects: ['x2']})
+    ctx.circle(data.x2,20, {affects: ['x2']})
     ctx.circle(data.x1,0, {fill: 'red'})
     ctx.circle(data.x3,0, {fill: 'red'})
 }

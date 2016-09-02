@@ -2,7 +2,7 @@ import {makeDraggable, setAttributes} from '../utils'
 
 export const type = "rect"
 export const base = {fill:'#000'}
-export const options = ['x', 'y', 'width', 'height', 'cares']
+export const options = ['x', 'y', 'width', 'height', 'affects']
 export function cost(renderable, rx, ry, x, y){
     var dx = renderable.x + renderable.width*rx - x
     var dy = renderable.y + renderable.height*ry- y

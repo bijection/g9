@@ -88,7 +88,7 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         var type = renderable.type
 
         var keys = Object.keys(curData)
-        if(renderable.cares) keys = renderable.cares;
+        if(renderable.affects) keys = renderable.affects;
 
         var vals = keys.map(k => curData[k])
 

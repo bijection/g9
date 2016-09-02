@@ -1,7 +1,7 @@
 import {makeDraggable, setAttributes} from '../utils'
 
 export const type = "line"
-export const options = ['x1', 'y1', 'x2', 'y2', 'cares']
+export const options = ['x1', 'y1', 'x2', 'y2', 'affects']
 export const base = {stroke: '#000'}
 
 export function cost(renderable, r, x, y){

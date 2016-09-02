@@ -7,8 +7,8 @@ var data = {
 }
 
 function data2graphics(data, ctx){
-    var lineoptions = {'stroke-width': 4, cares:['squareness']}
-    var circleoptions = {r:2, cares:['squareness']}
+    var lineoptions = {'stroke-width': 4, affects:['squareness']}
+    var circleoptions = {r:2, affects:['squareness']}
 
     function dragon(x1,y1, x2,y2, dir, level){
         if(level == 0){
