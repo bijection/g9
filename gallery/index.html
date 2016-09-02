@@ -11,37 +11,41 @@
     <link rel="stylesheet" type="text/css" href="../main.css">
     <link rel="stylesheet" type="text/css" href="./gallery.css">
 
-    <script src="../dist/g9.js"></script>
 
 </head>
 <body>
 <div class='page'>
     <div class='header'>
-        <div class='splash'>
+        <a href='/' class='splash'>
             g9.js
-        </div>
+        </a>
         <div class='npm'>npm install g9</div>
         <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js"><div class='npm'>Download</div></a>
         <div class='nav-wrap'>
+            <a href='/' class='nav'>Home</a>
             <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
-            <a href='./gallery' class='nav current'>Gallery</a>
             <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
-    <p>
-        Here's the really cute gallery page! There's nothing here now, but maybe you will add something...
-    </p>
+    <p>Welcome to the g9 gallery! <b>Drag all the graphics!</b></p>
+    <p>I've tried to organize stuff from basic to advanced, so you can scroll from the top to get an intuitive feel for g9. It's worth mentioning, of course, that intuitive feeling is no match for <a href='https://github.com/bijection/g9#docs'>reading the docs</a>.</p>
+    <p>In order to avoid repetion, every example gets a special function <span class='literal'>_special_log</span> that shows its arguments somewhere.</p>
 </div>
 
+
+
+
+
+
+
 <div class='page'>
-<p>g9 isnt that good at most things, but since I made it I'll pretend it is.</p>
 <h1>Basic</h1>
-A minimal example with only two circles.
+<p>A minimal example with only two circles.</p>
 </div>
 
 <div class='gallery-wrap'>
     <div class='input'>
-        <div class='run-button'>&#9654; Run</div>
+        <div class='run-button'>Run</div>
         <textarea class='user'>
 var initialData = {
     x: 0,
@@ -53,36 +57,117 @@ var data2graphics = function(data, ctx){
     ctx.circle(data.y, data.x)
 }         
 
-var demo = g9(initialData, data2graphics)
-    .insertInto('#demo1')</textarea>
+g9(initialData, data2graphics)
+    .align('center', 'center')
+    .insertInto('#demo-basic')</textarea>
     </div>
-    <div class='display' id='demo1'></div>
+    <div class='display' id='demo-basic'></div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>Lines</h1>
+<p>Two concentric rings</p>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initialData = {
+    l1_start_x: -100,
+    l1_start_y: -50,
+    l1_end_x: 100,
+    l1_end_y: -50,
+
+    l2_start_x: -100,
+    l2_start_y: 0,
+    l2_end_x: 100,
+    l2_end_y: 0,
+
+    l3_start_x: -100,
+    l3_start_y: 50,
+    l3_end_x: 100,
+    l3_end_y: 50,
+}
+
+var data2graphics = function(data, ctx){
+    ctx.line( data.l1_start_x, data.l1_start_y, data.l1_end_x, data.l1_end_y )
+    //if we provide a `cares` option, the line will only change the parameters in it.
+    ctx.line( data.l2_start_x, data.l2_start_y, data.l2_end_x, data.l2_end_y, {
+        cares: []
+    })
+    ctx.line( data.l3_start_x, data.l3_start_y, data.l3_end_x, data.l3_end_y )
+}         
+
+g9(initialData, data2graphics)
+    .align('center', 'center')
+    .insertInto('#demo-lines')</textarea>
+    </div>
+    <div class='display' id='demo-lines'></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>Rings</h1>
+<p>Two concentric rings</p>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initialData = {
+    radius: 100,
+    angle: 0
+}
+
+var data2graphics = function(data, ctx){
+    var sides = 10
+    for(var i=0; i&lt;sides; i++){
+        var a = data.angle + i/sides * Math.PI * 2
+        var r1 = data.radius
+        var r2 = r1/2
+        ctx.circle(r1 * Math.cos(a), r1 * Math.sin(a))
+        ctx.circle(r2 * Math.cos(-a), r2 * Math.sin(-a))
+    }
+
+}         
+
+g9(initialData, data2graphics)
+    .align('center', 'center')
+    .insertInto('#demo-rings')</textarea>
+    </div>
+    <div class='display' id='demo-rings'></div>
+</div>
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/mode/javascript/javascript.min.js"></script>
-<script type="text/javascript">
-[].slice.call(document.querySelectorAll('.input')).forEach(function(i){
-    var cm = CodeMirror.fromTextArea(i.querySelector('textarea'), {
-        theme: 'solarized'
-    })
-
-    var graphics;
-
-    i.querySelector('.run-button').addEventListener('click', function(){
-        var old = g9
-        var g9 = function() {
-            if(graphics.delete) {graphics.delete()}
-            graphics = old.call(old, arguments)
-            return graphics
-        }
-        // try{
-            eval(cm.getValue())
-        // } catch(e) {cons}
-    })
-})
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/keymap/sublime.min.js"></script>
+<script src="../dist/g9.js"></script>
+<script type="text/javascript" src='./gallery.js'></script>
 
 </body>
 </html>

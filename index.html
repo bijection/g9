@@ -16,14 +16,14 @@
         <div class='npm'>npm install g9</div>
         <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js"><div class='npm'>Download</div></a>
         <div class='nav-wrap'>
-            <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
             <a href='./gallery' class='nav'>Gallery</a>
+            <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
             <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
     <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
     
-    <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="">included below</a>).
+    <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="#dragon">included below</a>).
     Try dragging the curve to change its parameters.
     <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
     <span class='gallery-plug'>For more examples, see the <a href="./gallery">Gallery</a>.</span>
@@ -34,29 +34,36 @@
     <p>
     g9.js exposes a single function, <a href="https://github.com/bijection/g9#g9initialdata-data2graphics-onchange"><span class='literal'>g9(initialData, data2graphics[, onChange])</span></a>. This represents the following flow: 
     <ol>
+    
     <li>
-        You create some intial data as key-value pairs with numeric values. For example:
+        You create some initial data as key-value pairs with numeric values. For example:
 <pre><code>var initialData = {
     foo: 10
 }</code></pre>
+    <a href='https://github.com/bijection/g9#initialdata'>initialData in the docs</a>
     </li>
+
     <li>
         This data is fed into a function that uses it to decide how to draw the graphics.
-<pre><code>function data2graphics(data, context){
-    context.circle(data.foo, 17)
+<pre><code>function data2graphics(data, ctx){
+    ctx.circle(data.foo, 17)
 }</code></pre>
+    <a href='https://github.com/bijection/g9#data2graphicsdata-ctx'>data2graphics in the docs</a>
     </li>
+    
     <li>When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for your data to find a set of values that comes closest to creating the change. If you tried to drag the circle to the left, g9 might come up with 
 <pre><code>{
     foo: 8
 }</code></pre></li>
+    
     <li>g9 rerenders the entire scene with the new data, so that everything is consistent. If you've provided one, g9 calls your onChange callback with the new data, so you can update other parts of your page.</li>
+    
     </ol>
     </p>
-
+    <p>You can play aroung with basic examples like this (and slightly crazier ones), <a href='./gallery'>in the gallery</a>.</p>
     <p>For a complete treatment of the g9 API, <a href="https://github.com/bijection/g9#docs">head to the Docs</a>.</p>
 
-    <h2>Making the Dragon Curve</h2>
+    <h2 id='dragon'>Making the Dragon Curve</h2>
     
     <p>
     <pre><code class='data'>var data = {
@@ -65,13 +72,14 @@
     "fromY": 96,
     "toX": -220,
     "toY": 39
-}</code></pre>
-    </p>
-        
-    <p> 
-    <pre><code>function data2graphics(data, ctx){
-    var lineoptions = {'stroke-width': 4, cares:['squareness']}
-    var circleoptions = {r:2, cares:['squareness']}
+}
+
+function data2graphics(data, ctx){
+    var lineoptions = {
+        'stroke-width': 4,
+        'stroke-linecap':'round',
+        cares:['squareness']
+    }
 
     function dragon(x1,y1, x2,y2, dir, level){
         if(level == 0){
@@ -79,8 +87,6 @@
         } else {
             var midx = (x1 + x2 + data.squareness*dir*(y2 - y1))/2
             var midy = (y1 + y2 - data.squareness*dir*(x2 - x1))/2
-
-            ctx.circle(midx, midy, circleoptions)
 
             dragon(x1,y1, midx,midy, -1,level-1)
             dragon(midx,midy, x2,y2,  1,level-1)
@@ -93,17 +99,14 @@
     
     ctx.circle(data.fromX, data.fromY, {r:5})
     ctx.circle(data.toX, data.toY, {r:5})
-}</code></pre>
-    </p>
-    <p> Add your graphics to the document!</p>
-    <pre><code>var demo = g9(initdata, data2graphics)
+}
 
-demo.align('center', 'center')
+g9(initdata, data2graphics)
     .insertInto('.demo .display')</code></pre>
 
     <h2>Finally</h2>
 
-    You might want to try more <a href="">interactive examples</a>
+    You might want to try more <a href="./gallery">interactive examples</a>
 
     <div class='editor'></div>
     <div class='lead'></div>
