@@ -103,9 +103,9 @@ var initialData = {
 
 var data2graphics = function(data, ctx){
     ctx.line( data.l1_start_x, data.l1_start_y, data.l1_end_x, data.l1_end_y )
-    //if we provide a `cares` option, the line will only change the parameters in it.
+    //if we provide a `affects` option, the line will only change the parameters in it.
     ctx.line( data.l2_start_x, data.l2_start_y, data.l2_end_x, data.l2_end_y, {
-        cares: []
+        affects: []
     })
     ctx.line( data.l3_start_x, data.l3_start_y, data.l3_end_x, data.l3_end_y )
 }         

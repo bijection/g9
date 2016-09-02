@@ -10,7 +10,7 @@ function data2graphics(data, ctx){
     var lineoptions = {
         'stroke-width': 4,
         'stroke-linecap':'round',
-        cares:['squareness']
+        affects:['squareness']
     }
 
     function dragon(x1,y1, x2,y2, dir, level){

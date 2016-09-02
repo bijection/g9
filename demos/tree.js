@@ -8,7 +8,7 @@ var demo = g9({
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        ctx.circle(x2, y2, {cares:['deltaAngle', 'attenuation']})
+        ctx.circle(x2, y2, {affects:['deltaAngle', 'attenuation']})
         
         ctx.line(x1,y1,x2,y2)
 

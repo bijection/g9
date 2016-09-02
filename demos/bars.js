@@ -49,7 +49,7 @@ function data2graphics(data, ctx){
             height,
             {
                 fill: color(colors1[i]),//color(tween(colors1[i], colors2[i], t)),
-                cares: i ? ['t'] : ['x']
+                affects: i ? ['t'] : ['x']
             }
         )
     }))
