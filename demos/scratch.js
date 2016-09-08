@@ -1,15 +1,36 @@
 var initial = {
-    x1: -100,
-    x2: 0,
-    x3: 100,
+	c1: Math.random(),
+	c2: Math.random(),
+	c3: Math.random(),
+	c4: Math.random()
+}
+
+function f(x){
+	return c1 * Math.cos(x / 1)
+		+ c2 * Math.cos(x / 3)
+		+ c3 * Math.cos(x / 5)
+		+ c4 * Math.cos(x / 17)
 }
 
 function data2graphics(data, ctx){
-    var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
-    ctx.circle(m,0, {affects: ['x2']})
-    ctx.circle(data.x2,20, {affects: ['x2']})
-    ctx.circle(data.x1,0, {fill: 'red'})
-    ctx.circle(data.x3,0, {fill: 'red'})
+
+	function f(x){
+		return data.c1 * Math.cos(x / 1)
+			+ data.c2 * Math.cos(x / 3)
+			+ data.c3 * Math.cos(x / 5)
+			+ data.c4 * Math.cos(x / 17)
+	}
+	
+	var radius = 500
+
+	var ix = i => i*(ctx.width - 20) / radius
+	var iy = i => f(i/radius * 100) * 100
+
+	var k = ctx.pure(i => ctx.line( ix(i), iy(i), ix(i+1), iy(i+1), {'stroke-width': 10, 'stroke-linecap': 'round'} ))
+
+	for (var i = -radius; i < radius; i++) {
+		k(i)
+	}
 }
 
 function log(x, y){
