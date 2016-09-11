@@ -6,14 +6,14 @@ import * as rect from './rect'
 
 var shapes = {}
 
-export function addshape({type, renderer, base, options, cost}){
+export function addShape({type, renderer, base, options, cost}){
 	shapes[type] = {renderer, base, type, options, cost}
 }
 
-addshape(circle)
-addshape(line)
-addshape(text)
-addshape(image)
-addshape(rect)
+addShape(circle)
+addShape(line)
+addShape(text)
+addShape(image)
+addShape(rect)
 
 export default shapes

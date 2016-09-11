@@ -1,7 +1,7 @@
 import Data2Renderables from './Data2Renderables'
 // import Renderer from './Renderer'
 import minimize, {gradient} from './minimize'
-import shapes from  './shapes/'
+import shapes, {addShape} from  './shapes/'
 import {forIn, shallowClone, findPhaseChange, draggingCount} from  './utils'
 
 
@@ -195,3 +195,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
     return {setData, desire, align, insertInto, resize, node, remove, getData, isManipulating}
 }
+
+g9.addShape = addShape;
