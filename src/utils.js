@@ -1,6 +1,7 @@
 // export function clamp(v, min, max){
 //     return Math.min(Math.max(v, min), max)
 // }
+export var draggingCount = 0
 
 export function makeDraggable(el, startDrag, drag){
     var startex, startey,
@@ -15,6 +16,7 @@ export function makeDraggable(el, startDrag, drag){
     }
 
     var onend = function(e){
+        draggingCount--
         document.removeEventListener('mousemove', onmove)
         document.removeEventListener('touchmove', onmove)
         document.removeEventListener('touchend', onend)
@@ -23,6 +25,7 @@ export function makeDraggable(el, startDrag, drag){
     }
 
     function onstart(e){
+        draggingCount++
 
         e.preventDefault()
 

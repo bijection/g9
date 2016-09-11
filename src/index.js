@@ -2,7 +2,7 @@ import Data2Renderables from './Data2Renderables'
 // import Renderer from './Renderer'
 import minimize, {gradient} from './minimize'
 import shapes from  './shapes/'
-import {forIn, shallowClone, findPhaseChange} from  './utils'
+import {forIn, shallowClone, findPhaseChange, draggingCount} from  './utils'
 
 
 module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) {
@@ -185,5 +185,13 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
         render()
     }
 
-    return {setData, desire, align, insertInto, resize, node, remove}
+    function getData(){
+        return {...curData}
+    }
+
+    function isManipulating(){
+        return draggingCount > 0;
+    }
+
+    return {setData, desire, align, insertInto, resize, node, remove, getData, isManipulating}
 }
