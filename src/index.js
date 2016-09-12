@@ -5,7 +5,7 @@ import shapes, {addShape} from  './shapes/'
 import utils, {forIn, shallowClone, findPhaseChange, draggingCount} from  './utils'
 
 
-module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) {
+function g9(initialData, populateRenderables, onChange=()=>{}) {
 
     var curData = shallowClone(initialData)
 
@@ -198,3 +198,5 @@ module.exports = function g9(initialData, populateRenderables, onChange=()=>{}) 
 
 g9.addShape = addShape;
 g9.utils = utils;
+
+module.exports = g9;
