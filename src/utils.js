@@ -1,6 +1,61 @@
 // export function clamp(v, min, max){
 //     return Math.min(Math.max(v, min), max)
 // }
+
+
+
+
+
+export function addDragHandler(el, startDrag){
+    var startex, startey;
+
+    function onstart(e){
+        draggingCount++
+
+        var onDrag = startDrag(e)
+
+        e.preventDefault()
+        e = e.touches ? e.touches[0] : e
+
+        startex = e.clientX
+        startey = e.clientY
+
+        var onmove = function(e){
+            e = e.touches ? e.touches[0] : e
+            onDrag(
+                e.clientX - startex,
+                e.clientY - startey
+            )
+        }
+
+        var onend = function(e){
+            draggingCount--
+            document.removeEventListener('mousemove', onmove)
+            document.removeEventListener('touchmove', onmove)
+            document.removeEventListener('touchend', onend)
+            document.removeEventListener('touchcancel', onend)
+            document.removeEventListener('mouseup', onend)
+        }
+
+        document.addEventListener('touchmove', onmove)
+        document.addEventListener('mousemove', onmove)
+        document.addEventListener('touchend', onend)
+        document.addEventListener('touchcancel', onend)
+        document.addEventListener('mouseup', onend)
+    }
+
+    el.addEventListener('touchstart', onstart)
+    el.addEventListener('mousedown', onstart)
+}
+
+
+
+
+
+
+
+
+
 export var draggingCount = 0
 
 export function makeDraggable(el, startDrag, drag){

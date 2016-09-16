@@ -81,25 +81,24 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
 
     var lastvals = {};
 
-    function desire(id, ...desires){
+    function desire(id, keys, f){
+
+        keys = keys || Object.keys(curData)
 
         var low_precision = true
         var renderable = renderables[id]
         var type = renderable.type
 
-        var keys = Object.keys(curData)
-        if(renderable.affects) keys = renderable.affects;
-
         var vals = keys.map(k => curData[k])
 
         var cost = v => {
             var tmpdata = {...curData}
-            keys.forEach( (k, i) => tmpdata[k] = v[i])
+            keys.forEach( (k, i) => tmpdata[k] = v[i] )
 
             var points = data2renderables(tmpdata, renderable.stack, {width, height})
             var c1 = points[id]
 
-            return shapes[type].cost(c1, ...desires)
+            return f(c1)
         }
 
         var old_cost = cost(vals)
@@ -163,16 +162,21 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
         forIn(renderables, (renderable, id) => {
 
             if(!elements[id]){
-                elements[id] = new shapes[renderable.type].renderer(id, node, desire)
+                elements[id] = new shapes[renderable.type](
+                    node,
+                    (keys, f) => desire(id, keys, f),
+                    () => renderables[id]
+                )
+                elements[id].mount()
             }
 
-            elements[id].setOffset(top + yOffset, left + xOffset)
-            elements[id].render(renderable)
+            // elements[id].setOffset(top + yOffset, left + xOffset)
+            elements[id].update()
         })
 
         forIn(elements, (element, id) => {
             if(!(id in renderables)){
-                element.remove()
+                element.unmount()
                 delete elements[id]
             }
         })
