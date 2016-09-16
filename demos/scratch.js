@@ -32,7 +32,7 @@ function data2graphics(data, ctx){
 	// 	k(i)
 	// }
 
-	ctx.point(data.c1, data.c2)
+	ctx.circle(data.c1, data.c2, 100)
 
 }
 

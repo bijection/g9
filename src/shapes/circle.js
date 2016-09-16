@@ -1,47 +1,52 @@
-import {makeDraggable, setAttributes} from '../utils'
+import {addDragHandler, setAttributes} from '../utils'
 
-export const type = "circle"
-export const base = {r:5, fill:'#000'}
-export const options = ['x', 'y', 'affects']
-export function cost(renderable, x, y){
-    var dx = renderable.x - x
-    var dy = renderable.y - y
-    return dx*dx + dy*dy
-}
+export default class circle {
 
-export class renderer {
+    static args = ['cx', 'cy', 'r', 'affects'];
 
-	constructor(id, container, desire){
+    constructor(container, minimize, get_args){
+        this.container = container
+        this.minimize = minimize
+        this.get_args = get_args
+    }
+
+    mount(){
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "circle")
-        container.appendChild(this.el)
+        this.container.appendChild(this.el)
 
-        makeDraggable(
-            this.el,
-            this.getPos.bind(this),
-            (x, y) => desire(id, x, y)
-        )
+        var get_dist_ratio = (args, x, y) => {
+            var dx = args.cx - x
+            var dy = args.cy - y
+
+            return Math.sqrt(dx*dx + dy*dy) / args.r
+        }
+
+        var drag_start = e => {
+            var {clientX, clientY} = e
+            
+            var ex = clientX - this.container.g9Offset.left
+            var ey = clientY - this.container.g9Offset.top
+    
+            var r = get_dist_ratio(this.get_args(), ex, ey)
+
+            return (dx, dy) => {
+                this.minimize(this.get_args().affects, args => {
+
+                    var dr = r - get_dist_ratio(args, ex + dx, ey + dy)
+                    return dr*dr
+
+                })
+            }
+        }
+
+        addDragHandler(this.el, drag_start)
     }
 
-    remove(){
-        this.el.parentNode.removeChild(this.el)
-        delete this.el
+   unmount() {
+        this.container.removeChild(this.el)
     }
 
-    getPos(){
-        return [this.renderable.x, this.renderable.y]   
-    }
-
-    setOffset(topOffset, leftOffset){
-        this.topOffset = topOffset
-        this.leftOffset = leftOffset        
-    }
-
-    render(renderable){
-        this.renderable = renderable
-        setAttributes(this.el, renderable.attributes)
-        setAttributes(this.el, {
-            cx:renderable.x,
-            cy:renderable.y
-        })
+    update() {
+        setAttributes(this.el, this.get_args())
     }
 }

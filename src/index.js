@@ -158,6 +158,11 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
 
     function render(){
         renderables = data2renderables(curData, null, {width, height})
+
+        node.g9Offset = {
+            top: top + yOffset,
+            left: left + xOffset
+        }
         
         forIn(renderables, (renderable, id) => {
 
@@ -170,7 +175,6 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
                 elements[id].mount()
             }
 
-            // elements[id].setOffset(top + yOffset, left + xOffset)
             elements[id].update()
         })
 
