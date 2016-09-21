@@ -1,48 +1,40 @@
-import {makeDraggable,setAttributes} from '../utils'
+import {addDragHandler, setAttributes} from '../utils'
 
-export const type = "text"
-export const base = {}
-export const options = ['text','x', 'y', 'affects']
-export function cost(renderable, x, y){
-    var dx = renderable.x - x
-    var dy = renderable.y - y
-    return dx*dx + dy*dy
-}
+export default class text {
+    static argNames = ['text', 'x', 'y', 'affects'];
 
-export class renderer {
+    constructor(container, minimize, get_args){
+        this.container = container
+        this.minimize = minimize
+        this.get_args = get_args
+    }
 
-    constructor(id, container, desire){
+    mount(){
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "text")
-        container.appendChild(this.el)
+        this.container.appendChild(this.el)
 
-        makeDraggable(
-            this.el,
-            this.getPos.bind(this),
-            (x, y) => desire(id, x, y)
-        )
+        var dragstart = e => {
+            var {x, y} = this.get_args()
+
+            return (dx, dy) => {
+                this.minimize(this.get_args().affects, r => {
+                    var drx = r.x - (x + dx)
+                    var dry = r.y - (y + dy)
+                    return drx*drx + dry*dry
+                })
+            }
+        }
+
+        addDragHandler(this.el, dragstart)
     }
 
-    remove(){
-        this.el.parentNode.removeChild(this.el)
-        delete this.el
+    unmount() {
+        this.container.removeChild(this.el)
     }
 
-    getPos(){
-        return [this.renderable.x, this.renderable.y]   
-    }
-
-    setOffset(topOffset, leftOffset){
-        this.topOffset = topOffset
-        this.leftOffset = leftOffset        
-    }
-
-    render(renderable){
-        this.renderable = renderable
-        setAttributes(this.el, renderable.attributes)
-        setAttributes(this.el, {
-            x:renderable.x,
-            y:renderable.y
-        })
-        this.el.innerHTML = renderable.text
+    update() {
+        var args = this.get_args()
+        setAttributes(this.el, args)
+        this.el.innerHTML = args.text
     }
 }

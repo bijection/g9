@@ -6,6 +6,7 @@ import circle from './circle'
 import point from './point'
 import line from './line'
 import rect from './rect'
+import text from './text'
 
 var shapes = {}
 
@@ -18,6 +19,7 @@ addShape(point)
 addShape(circle)
 addShape(line)
 addShape(rect)
+addShape(text)
 
 
 // export function addShape({type, renderer, base, options, cost}){

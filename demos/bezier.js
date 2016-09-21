@@ -19,11 +19,11 @@ var demo = g9({
 	t,
 
 }, {
-	point, line, height
+	text, point, line, height
 }) => {
 
 	var tlabel = 'tween='+t.toString().slice(0,4)
-	// text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
+	text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
 
 	var steps = 30
 	var smooth = []
