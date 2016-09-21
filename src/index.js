@@ -172,6 +172,7 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
                     (keys, f) => desire(id, keys, f),
                     () => renderables[id]
                 )
+                
                 elements[id].mount()
             }
 

@@ -1,61 +1,53 @@
-import {makeDraggable, setAttributes} from '../utils'
+import {addDragHandler, setAttributes} from '../utils'
 
-export const type = "line"
-export const options = ['x1', 'y1', 'x2', 'y2', 'affects']
-export const base = {stroke: '#000'}
+export default class line {
 
-export function cost(renderable, r, x, y){
-    var {x1, y1, x2, y2} = renderable
-    var dx = x1 + (x2 - x1)*r - x
-    var dy = y1 + (y2 - y1)*r - y
-    return dx*dx + dy*dy
-}
+    static argNames = ['x1', 'y1', 'x2', 'y2', 'affects'];
 
-export class renderer {
+    constructor(container, minimize, get_args){
+        this.container = container
+        this.minimize = minimize
+        this.get_args = get_args
+    }
 
-    constructor(id, container, desire){
+    mount(){
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "line")
-        container.appendChild(this.el)
+        this.container.appendChild(this.el)
+        setAttributes(this.el, {stroke: '#000'})
 
-        makeDraggable(
-            this.el,
-            this.startDrag.bind(this),
-            (x,y) => desire(id, this.r, x, y)
-        )
+        var drag_start = e => {
+            var {x1,y1,x2,y2} = this.get_args()
+            var {clientX, clientY} = e
+
+            var cx = clientX - this.container.g9Offset.left
+            var cy = clientY - this.container.g9Offset.top
+
+            var dx1 = x2 - x1, dy1 = y2 - y1
+            var dx2 = cx - x1
+            var dy2 = cy - y1
+
+            var r = Math.sqrt(dx2*dx2 + dy2*dy2) / Math.sqrt(dx1*dx1 + dy1*dy1)
+
+            return (dx, dy) => {
+                this.minimize(this.get_args().affects, args => {
+
+                    var {x1, y1, x2, y2} = args
+                    var dx1 = x1 + (x2 - x1)*r - (cx + dx)
+                    var dy1 = y1 + (y2 - y1)*r - (cy + dy)
+                    return dx1*dx1 + dy1*dy1
+
+                })
+            }
+        }
+
+        addDragHandler(this.el, drag_start)
     }
 
-    remove(){
-        this.el.parentNode.removeChild(this.el)
-        delete this.el
+    unmount() {
+        this.container.removeChild(this.el)
     }
 
-    startDrag(e){
-        var {x1,y1,x2,y2} = this.renderable
-        var {clientX, clientY} = e
-        var cx = clientX  - this.leftOffset
-        var cy = clientY - this.topOffset
-
-        var dx1 = x2 - x1, dy1 = y2 - y1
-        var dx2 = cx - x1
-        var dy2 = cy - y1
-
-        this.r = Math.sqrt(dx2*dx2 + dy2*dy2) / Math.sqrt(dx1*dx1 + dy1*dy1)
-        
-        return [cx, cy]
-    }
-
-    setOffset(topOffset, leftOffset){
-        this.topOffset = topOffset
-        this.leftOffset = leftOffset        
-    }
-
-    render(renderable){
-        this.renderable = renderable
-
-        var {x1,y1,x2,y2,attributes} = renderable
-
-        setAttributes(this.el, attributes)
-
-        setAttributes(this.el, { x1, y1, x2, y2, })
+    update() {
+        setAttributes(this.el, this.get_args())
     }
 }

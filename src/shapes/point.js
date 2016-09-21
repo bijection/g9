@@ -1,7 +1,7 @@
 import {addDragHandler, setAttributes} from '../utils'
 
 export default class point {
-    static args = ['cx', 'cy', 'affects'];
+    static argNames = ['cx', 'cy', 'affects'];
 
     constructor(container, minimize, get_args){
         this.container = container

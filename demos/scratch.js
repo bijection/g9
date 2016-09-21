@@ -32,7 +32,7 @@ function data2graphics(data, ctx){
 	// 	k(i)
 	// }
 
-	ctx.circle(data.c1, data.c2, 100)
+	ctx.line(data.c1*100, data.c2, 0, 0, {'stroke-width': 10})
 
 }
 

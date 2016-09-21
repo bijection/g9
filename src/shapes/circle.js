@@ -2,7 +2,7 @@ import {addDragHandler, setAttributes} from '../utils'
 
 export default class circle {
 
-    static args = ['cx', 'cy', 'r', 'affects'];
+    static argNames = ['cx', 'cy', 'r', 'affects'];
 
     constructor(container, minimize, get_args){
         this.container = container
@@ -42,7 +42,7 @@ export default class circle {
         addDragHandler(this.el, drag_start)
     }
 
-   unmount() {
+    unmount() {
         this.container.removeChild(this.el)
     }
 

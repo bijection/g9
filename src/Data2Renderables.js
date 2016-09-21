@@ -15,7 +15,7 @@ export default function Data2Renderables(populateRenderables){
         }
 
         function pure(fn){
-            return function(){
+            return function pureFn(){
                 stack[stack.length - 1]++
                 if(target === null || (target + '|').startsWith(stack.join('|'))){
                     stack.push(0)
@@ -41,19 +41,21 @@ export default function Data2Renderables(populateRenderables){
         forIn(shapes, (shape, type) => {
             ctx[type] = function(){
                 // console.log(type, opts)
-
-                var ret = {type}
-
                 var args = [].slice.call(arguments)
-                for (var i = 0; i < args.length - 1; i++) {
-                    ret[shape.args[i]] = args[i]
-                }
-                if(typeof args[i] !== 'object'){
-                    ret[shape.args[i]] = args[i]
+                var ret = {}
+
+                var lastArg = args[args.length - 1]
+                if(typeof lastArg === 'object'){
+                    ret = {...lastArg}
+                    var stop = args.length - 1
                 } else {
-                    ret = {...ret, ...args[i]}
+                    var stop = args.length
                 }
 
+                for (var i = 0; i < stop; i++)
+                    ret[shape.argNames[i]] = args[i];
+
+                ret.type = type
                 ret.id = getId()
                 ret.stack = stack.join('|')
                 renderables[ret.id] = ret
