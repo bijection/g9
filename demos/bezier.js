@@ -19,11 +19,11 @@ var demo = g9({
 	t,
 
 }, {
-	circle, line, text, height
+	point, line, height
 }) => {
 
 	var tlabel = 'tween='+t.toString().slice(0,4)
-	text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
+	// text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
 
 	var steps = 30
 	var smooth = []
@@ -41,8 +41,8 @@ var demo = g9({
 			by = tween(middley, endy);
 		
 		// line('a'+i, 'b'+i, {stroke:'rgba(0,0,0,.1)'})
-		// circle(ax,ay,{id: 'a'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
-		// circle(bx,by,{id: 'b'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+		// point(ax,ay,{id: 'a'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+		// point(bx,by,{id: 'b'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
 
 		line(ax, ay, bx, by, {affects: ['t'], stroke:'rgba(0,0,0,.1)'})
 		smooth.push([tween(ax,bx), tween(ay,by)])
@@ -57,9 +57,9 @@ var demo = g9({
 	line(startx,starty, middlex,middley)
 	line(middlex,middley, endx,endy)
 
-	circle(startx,starty)
-	circle(middlex,middley)
-	circle(endx,endy)
+	point(startx,starty)
+	point(middlex,middley)
+	point(endx,endy)
 
 }, newdata => {
 	console.log(newdata)

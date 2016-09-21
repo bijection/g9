@@ -1,60 +1,56 @@
-import {makeDraggable, setAttributes} from '../utils'
+import {addDragHandler, setAttributes} from '../utils'
 
-export const type = "rect"
-export const base = {fill:'#000'}
-export const options = ['x', 'y', 'width', 'height', 'affects']
-export function cost(renderable, rx, ry, x, y){
-    var dx = renderable.x + renderable.width*rx - x
-    var dy = renderable.y + renderable.height*ry- y
-    return dx*dx + dy*dy
-}
+export default class rect {
+    static argNames = ['x', 'y', 'width', 'height', 'affects'];
 
-export class renderer {
+    constructor(container, minimize, get_args){
+        this.container = container
+        this.minimize = minimize
+        this.get_args = get_args
+    }
 
-	constructor(id, container, desire){
+    mount(){
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "rect")
-        container.appendChild(this.el)
+        this.container.appendChild(this.el)
 
-        makeDraggable(
-            this.el,
-            this.startDrag.bind(this),
-            (x, y) => desire(id, this.rx, this.ry, x, y)
-        )
+        var drag_start = e => {
+            var {x, y, width, height} = this.get_args()
+            
+            var cx = e.clientX  - this.container.g9Offset.left
+            var cy = e.clientY - this.container.g9Offset.top
+
+            var rx = (cx - x) / width
+            var ry = (cy - y) / height
+
+            return (dcx, dcy) => {
+                this.minimize(this.get_args().affects, args => {
+
+                    var dx = args.x + args.width*rx - (cx+dcx)
+                    var dy = args.y + args.height*ry - (cy+dcy)
+                    return dx*dx + dy*dy
+
+                })
+            }
+        }
+
+        addDragHandler(this.el, drag_start)
     }
 
-    remove(){
-        this.el.parentNode.removeChild(this.el)
-        delete this.el
+    unmount() {
+        this.container.removeChild(this.el)
     }
 
-    startDrag(e){
-        var {clientX, clientY} = e
-        var cx = clientX  - this.leftOffset
-        var cy = clientY - this.topOffset
-
-        this.rx = (cx - this.renderable.x) / this.renderable.width
-        this.ry = (cy - this.renderable.y) / this.renderable.height
-
-        return [cx, cy]
-    }
-
-    setOffset(topOffset, leftOffset){
-        this.topOffset = topOffset
-        this.leftOffset = leftOffset
-    }
-
-    render(renderable){
-        this.renderable = renderable
-        let {x,y,width,height} = renderable
+    update() {
+        var args = this.get_args()
+        let {x,y,width,height} = args
         if(width < 0){
-            x += width
-            width = -width
+            args.x += width
+            args.width = -width
         }
         if(height < 0){
-            y+=height
-            height = -height
+            args.y+=height
+            args.height = -height
         }
-        setAttributes(this.el, renderable.attributes)
-        setAttributes(this.el, {x, y, width, height})
+        setAttributes(this.el, args)
     }
 }
