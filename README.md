@@ -12,8 +12,8 @@ g9({
 	y: 0
 }, function(data, ctx){
 	
-	ctx.circle(data.x, data.y)
-	ctx.circle(data.y, data.x)
+	ctx.point(data.x, data.y)
+	ctx.point(data.y, data.x)
 	
 })
 .insertInto('#container')
@@ -71,7 +71,7 @@ This is the main g9 function, which returns a [g9Canvas](#g9Canvas) which you ca
 
 ```javascript
 g9({foo: 10}, function(data, ctx){
-	ctx.circle(data.foo, 17)
+	ctx.point(data.foo, 17)
 })
 .insertInto('#container')
 ```
@@ -101,13 +101,13 @@ For example:
 
 ```javascript
 function render(data, ctx){
-    ctx.circle(data.foo, 17)
+    ctx.point(data.foo, 17)
 }
 ```
-creates a circle at x-coordinate `data.foo` and y-coordinate 17.
+creates a point at x-coordinate `data.foo` and y-coordinate 17.
 
 
-When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for `data` to find a set of values that comes closest to creating the change. In the preceeding example, if `data.foo` is initially 10 and you tried to drag the circle to the left, g9 might come up with
+When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for `data` to find a set of values that comes closest to creating the change. In the preceeding example, if `data.foo` is initially 10 and you tried to drag the point to the left, g9 might come up with
 
 ```javascript
 {
@@ -146,7 +146,7 @@ For example:
 
 ```javascript
 g9({foo: 10}, function(data, ctx){
-	ctx.circle(data.foo, 17)
+	ctx.point(data.foo, 17)
 })
 .insertInto('#container')
 ```
@@ -162,7 +162,7 @@ For example:
 
 ```javascript
 g9({foo: 10}, function(data, ctx){
-	ctx.circle(data.foo, 17)
+	ctx.point(data.foo, 17)
 })
 .align('bottom', 'left')
 .insertInto('#container')
@@ -180,7 +180,7 @@ Sets the data currently being visualized by a g9 instance to `data`. This is use
 
 ```javascript
 var graphics = g9({foo: 10}, function(data, ctx){
-	ctx.circle(data.foo, 17)
+	ctx.point(data.foo, 17)
 })
 .insertInto('#container')
 
@@ -224,16 +224,16 @@ A new, immutable g9Context object `ctx` is passed as the second argument to `ren
 When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies futher arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
 
 ```javascript
-ctx.circle(30, 50, ['a'])
+ctx.point(30, 50, ['a'])
 
-ctx.circle(30, 50, {affects: ['a']})
+ctx.point(30, 50, {affects: ['a']})
 
-ctx.circle(30, {
+ctx.point(30, {
 	y: 50,
 	affects: ['a']
 })
 
-ctx.circle({
+ctx.point({
 	x: 30,
 	y: 50,
 	affects: ['a']
@@ -244,13 +244,22 @@ ctx.circle({
 
 Currently, the built-in drawing methods are
 
-#### g9Context.circle(x, y[, affects])
+#### g9Context.point(x, y[, affects])
   
-A circle. Useful svg properties are `r` (radius), and `fill`. For example:
+A point. Useful svg properties are `r` (radius), and `fill`. For example:
 
 ```javascript
-ctx.circle(30, 50, {r: 40, 	fill: 'red'	})
+ctx.point(30, 50, {r: 40, 	fill: 'red'	})
 ```
+
+#### g9Context.circle(x, y, radius[, affects])
+  
+A circle. As opposed to the point, circles can rotate around your mouse as you drag them. Useful svg properties are `stroke` (a color), and `fill`. For example:
+
+```javascript
+ctx.circle(30, 50, 40, {r: 40, stroke: 'blue' })
+```
+
 
 #### g9Context.line(x1, y1, x2, y2[, affects])
   
@@ -319,7 +328,7 @@ g9({
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        ctx.circle(x2, y2, {affects:['deltaAngle', 'attenuation']})
+        ctx.point(x2, y2, {affects:['deltaAngle', 'attenuation']})
         
         ctx.line(x1,y1,x2,y2)
 
