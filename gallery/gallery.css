@@ -1,14 +1,19 @@
 .CodeMirror {
-    height: auto;
     box-shadow: none !important;
     background: #fdf6e3;
     font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
     font-size: 15px;
+    height: auto;
 }
 
 .CodeMirror-lines {
     // min-height: 600px;
     padding: 20px;
+}
+
+.CodeMirror-scroll {
+    max-height: 900px;
+    max-height: 100vh;
 }
 
 .run-button {
