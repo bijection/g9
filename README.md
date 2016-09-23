@@ -88,7 +88,7 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
   + [g9Context.width](#g9contextwidth)
   + [g9Context.height](#g9contextheight)
   + [g9Context.pure(pureFn)](#g9contextpurepurefn)
-* [Adding new shapes](#adding-new-shapes)
+* [Adding new shapes to g9Context](#adding-new-shapes-to-g9Context)
   + [g9.shapes.myNewShape = shape](#g9shapesmynewshape--shape)
 
 ## g9([initialData](#initialdata), [render](#render)[, [onRender](#onrender)]): [g9Canvas](#g9canvas)
@@ -395,7 +395,7 @@ A live version of this example is on [the examples page](https://omrelli.ug/g9/g
 
 
 
-## Adding new shapes
+## Adding new shapes to g9Context
 
 ### g9.shapes.myNewShape = shape
 
