@@ -48,6 +48,11 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
 
         node.setAttribute('viewBox', [-xOffset, -yOffset, width, height].join(' '))
 
+        node.g9Offset = {
+            top: top + yOffset,
+            left: left + xOffset
+        }
+
         if(rerender) render();
     }
 
@@ -158,11 +163,6 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
 
     function render(){
         renderables = data2renderables(curData, null, {width, height})
-
-        node.g9Offset = {
-            top: top + yOffset,
-            left: left + xOffset
-        }
         
         forIn(renderables, (renderable, id) => {
 
