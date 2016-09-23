@@ -66,9 +66,9 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 # Docs
 
 
-* [g9(initialData, render[, onRender]): g9Canvas](#g9initialdata#initialdata-render#render-onrender#onrender-g9canvas#g9canvas)
+* [g9(initialData, render[, onRender]): g9Canvas](#g9initialdata-render-onrender-g9canvas)
   + [initialData](#initialdata)
-  + [render(data, ctx: g9Context)](#renderdata-ctx-g9context#g9context)
+  + [render(data, ctx: g9Context)](#renderdata-ctx-g9context)
   + [onRender(data, renderedObjects)](#onrenderdata-renderedobjects)
 * [g9Canvas](#g9canvas)
   + [g9Canvas.insertInto(selectorOrDOMNode)](#g9canvasinsertintoselectorordomnode)
