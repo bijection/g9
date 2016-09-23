@@ -1,7 +1,7 @@
 import Data2Renderables from './Data2Renderables'
 // import Renderer from './Renderer'
 import minimize, {gradient} from './minimize'
-import shapes, {addShape} from  './shapes/'
+import shapes from './shapes/'
 import utils, {forIn, shallowClone, findPhaseChange, draggingCount} from  './utils'
 
 
@@ -168,12 +168,11 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
 
             if(!elements[id]){
                 elements[id] = new shapes[renderable.type](
-                    node,
-                    (keys, f) => desire(id, keys, f),
-                    () => renderables[id]
+                    () => renderables[id],
+                    (f, keys) => desire(id, keys, f)
                 )
                 
-                elements[id].mount()
+                elements[id].mount(node)
             }
 
             elements[id].update()
@@ -205,7 +204,7 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
     return {setData, desire, align, insertInto, resize, node, remove, getData, isManipulating}
 }
 
-g9.addShape = addShape;
+g9.shapes = shapes;
 g9.utils = utils;
 
 module.exports = g9;

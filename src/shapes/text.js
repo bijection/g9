@@ -3,13 +3,13 @@ import {addDragHandler, setAttributes} from '../utils'
 export default class text {
     static argNames = ['text', 'x', 'y', 'affects'];
 
-    constructor(container, minimize, get_args){
-        this.container = container
-        this.minimize = minimize
+    constructor(minimize_args, get_args){
+        this.minimize_args = minimize_args
         this.get_args = get_args
     }
 
-    mount(){
+    mount(container){
+        this.container = container
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "text")
         this.container.appendChild(this.el)
 
@@ -17,11 +17,14 @@ export default class text {
             var {x, y} = this.get_args()
 
             return (dx, dy) => {
-                this.minimize(this.get_args().affects, r => {
-                    var drx = r.x - (x + dx)
-                    var dry = r.y - (y + dy)
+
+                var {affects} = this.get_args()
+
+                this.minimize_args(args => {
+                    var drx = args.x - (x + dx)
+                    var dry = args.y - (y + dy)
                     return drx*drx + dry*dry
-                })
+                }, affects)
             }
         }
 

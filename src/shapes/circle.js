@@ -4,13 +4,13 @@ export default class circle {
 
     static argNames = ['cx', 'cy', 'r', 'affects'];
 
-    constructor(container, minimize, get_args){
-        this.container = container
-        this.minimize = minimize
+    constructor(get_args, minimize_args){
+        this.minimize_args = minimize_args
         this.get_args = get_args
     }
 
-    mount(){
+    mount(container){
+        this.container = container
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         this.container.appendChild(this.el)
 
@@ -30,12 +30,15 @@ export default class circle {
             var r = get_dist_ratio(this.get_args(), ex, ey)
 
             return (dx, dy) => {
-                this.minimize(this.get_args().affects, args => {
+
+                var {affects} = this.get_args()
+
+                this.minimize_args(args => {
 
                     var dr = r - get_dist_ratio(args, ex + dx, ey + dy)
                     return dr*dr
 
-                })
+                }, affects)
             }
         }
 

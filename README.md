@@ -65,7 +65,6 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 
 # Docs
 
-
 ## g9([initialData](#initialdata), [render](#render)[, [onRender](#onrender)]): [g9Canvas](#g9canvas)
 This is the main g9 function, which returns a [g9Canvas](#g9Canvas) which you can mount in your page with the `g9Canvas.insertInto(selectorOrDOMNode)` method. For example: 
 
@@ -350,3 +349,135 @@ A live version of this example is on [the examples page](https://omrelli.ug/g9/g
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Adding new shapes
+
+### g9.shapes.myNewShape = shape
+
+    This is an experimental API and may be subject to change. That said, pull requests with particularly good new shapes are welcome.
+
+g9 allows you to go beyond basic shapes like circles and rectangles by adding your own shapes, which will then be available as drawing methods on g9Context objects. 
+
+You can add a custom shape in the folowing way: 
+```javascript
+g9.shapes.myNewShape = shape
+```
+
+After which it will be available as 
+```javascript
+g9({
+    x: 0,
+    y: 0
+}, function render(data, ctx){
+    ctx.myNewShape(ctx.x, ctx.y, 1, 3, 5, 'asdf')
+})
+```
+
+A shape is a javascript class with the following properties:
+- **argNames**: an array of the names that should be assigned to arguments passed to the shape
+- **contructor(get_args, minimize_args)**: a constructor method, which usually saves the two functions it recieves.
+    - **get_args()**: A getter that returns a flat set of keys and values that represents that arguments passed to your shape's drawing method on the last render.
+    - **minimize_args(cost(potentialArgs) -> Number[, keys: array])**: changes the values of data with the keys `keys`, or all of the values of data if `keys` is not included, to minimize the number returned by `cost`. `cost` is passed an abject `potentialArgs`, a flat set of keys and values that represent the arguments that *would be passed* to your shape's drawing method for some potential new values of your drawing's `data`. After minimization your graphics are rerendered.
+- **mount(container)**: a method which recieves the relevant g9Canvas.node svg element as its only argument. Typically you use this method to add an svg object to container, attach event handlers, etc.
+- **unmount()**: a method responsible for cleaning up any mutation to the DOM or event listeners created in mount(). 
+- **update()**: a method that is called every time the graphics are rendered. `update` usually call `get_args` and uses the result to change the DOM.
+
+
+For example, you might define an `equilateral_triangle` shape like this:
+```javascript
+function equilateral_triangle(get_args, minimize_args){
+    this.minimize_args = minimize_args
+    this.get_args = get_args
+}
+
+equilateral_triangle.argNames = ['x', 'y', 'size', 'affects']
+
+equilateral_triangle.prototype.mount = function(container){
+    this.container = container
+    this.el = document.createElementNS("http://www.w3.org/2000/svg", "polygon")
+    this.container.appendChild(this.el)
+    this.el.setAttributeNS(null, 'fill', 'red')
+
+    var startex, startey;
+
+    var self = this
+
+    function onmove(e){
+        var dx = e.clientX - startex
+        var dy = e.clientY - startey
+
+        var current_affects = self.get_args().affects
+
+        self.minimize_args(function(args){
+            var ddx = (args.x - start_args.x) - dx
+            var ddy = (args.y - start_args.y) - dy
+
+            return ddx*ddx + ddy*ddy
+        }, current_affects)
+    }
+
+    function onstart(e){
+
+        var start_args = self.get_args()
+
+        e.preventDefault()
+
+        startex = e.clientX
+        startey = e.clientY
+
+        var onend = function(e){
+            document.removeEventListener('mousemove', onmove)
+            document.removeEventListener('mouseup', onend)
+        }
+
+        document.addEventListener('mousemove', onmove)
+        document.addEventListener('mouseup', onend)
+    }
+
+    this.el.addEventListener('mousedown', onstart)
+}
+
+equilateral_triangle.prototype.unmount = function() {
+    this.container.removeChild(this.el)
+}
+
+equilateral_triangle.prototype.update = function() {
+    g9.utils.setAttributes(this.el, this.get_args())
+
+    var points = [x+Math.cos(0)*size, y+Math.sin(0)*size,
+                  x+Math.cos(2*Math.PI/3)*size, y+Math.sin(2*Math.PI/3)*size,
+                  x+Math.cos(2*Math.PI*2/3)*size, y+Math.sin(2*Math.PI*2/3)*size]
+    this.el.setAttributeNS(null, 'points', points.join(' '))
+}
+
+g9.shapes.equilateral_triangle = equilateral_triangle
+```
+
+After which you can use it like so: 
+```javascript
+g9({
+    x: 0,
+    y: 0
+}, function render(data, ctx){
+    ctx.equilateral_triangle(ctx.x, ctx.y, 50)
+})
+```

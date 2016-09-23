@@ -1,45 +1,60 @@
-import {makeDraggable, setAttributes} from '../utils'
+import {addDragHandler, setAttributes} from '../utils'
 
-export const type = "image"
-export const base = {}
-export const options = ['href', 'x', 'y', 'width', 'height', 'affects']
-export function cost(renderable, x, y){
-    var dx = renderable.x - x
-    var dy = renderable.y - y
-    return dx*dx + dy*dy
-}
+export default class rect {
+    static argNames = ['href', 'x', 'y', 'width', 'height', 'affects'];
 
-export class renderer {
-
-	constructor(id, container, desire){
-        this.el = document.createElementNS("http://www.w3.org/2000/svg", "image")
-        container.appendChild(this.el)
-
-        makeDraggable(
-            this.el,
-            this.getPos.bind(this),
-            (x, y) => desire(id, x, y)
-        )
+    constructor(get_args, minimize_args){
+        this.minimize_args = minimize_args
+        this.get_args = get_args
     }
 
-    remove(){
-        this.el.parentNode.removeChild(this.el)
-        delete this.el
+    mount(container){
+        this.container = container
+        this.el = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        this.container.appendChild(this.el)
+
+        var drag_start = e => {
+            var {x, y, width, height} = this.get_args()
+            
+            var cx = e.clientX  - this.container.g9Offset.left
+            var cy = e.clientY - this.container.g9Offset.top
+
+            var rx = (cx - x) / width
+            var ry = (cy - y) / height
+
+            return (dcx, dcy) => {
+
+                var {affects} = this.get_args()
+
+                this.minimize_args(args => {
+
+                    var dx = args.x + args.width*rx - (cx+dcx)
+                    var dy = args.y + args.height*ry - (cy+dcy)
+                    return dx*dx + dy*dy
+
+                }, affects)
+            }
+        }
+
+        addDragHandler(this.el, drag_start)
     }
 
-    getPos(){
-        return [this.renderable.x, this.renderable.y]   
+    unmount() {
+        this.container.removeChild(this.el)
     }
 
-    render(renderable){
-        this.renderable = renderable
-        setAttributes(this.el, renderable.attributes)
-        setAttributes(this.el,{'href': c.href}, "http://www.w3.org/1999/xlink")
-        setAttributes(this.el, {
-            x:renderable.x - renderable.width/2,
-            y:renderable.y - renderable.height/2,
-			width:renderable.width,
-            height:renderable.height,
-   		})
+    update() {
+        var args = this.get_args()
+        let {x,y,width,height} = args
+        if(width < 0){
+            args.x += width
+            args.width = -width
+        }
+        if(height < 0){
+            args.y+=height
+            args.height = -height
+        }
+        setAttributes(this.el, args)
+        setAttributes(this.el, {'href': args.href}, "http://www.w3.org/1999/xlink")
     }
 }

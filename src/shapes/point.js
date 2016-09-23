@@ -3,13 +3,13 @@ import {addDragHandler, setAttributes} from '../utils'
 export default class point {
     static argNames = ['cx', 'cy', 'affects'];
 
-    constructor(container, minimize, get_args){
-        this.container = container
-        this.minimize = minimize
+    constructor(get_args, minimize_args){
+        this.minimize_args = minimize_args
         this.get_args = get_args
     }
 
-    mount(){
+    mount(container){
+        this.container = container
         this.el = document.createElementNS("http://www.w3.org/2000/svg", "circle")
         this.container.appendChild(this.el)
         setAttributes(this.el, {r:5})
@@ -18,11 +18,13 @@ export default class point {
             var {cx, cy} = this.get_args()
 
             return (dx, dy) => {
-                this.minimize(this.get_args().affects, r => {
-                    var drx = r.cx - (cx + dx)
-                    var dry = r.cy - (cy + dy)
+                var {affects} = this.get_args()
+
+                this.minimize_args(args => {
+                    var drx = args.cx - (cx + dx)
+                    var dry = args.cy - (cy + dy)
                     return drx*drx + dry*dry
-                })
+                }, affects)
             }
         }
 
