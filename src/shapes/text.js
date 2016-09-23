@@ -3,7 +3,7 @@ import {addDragHandler, setAttributes} from '../utils'
 export default class text {
     static argNames = ['text', 'x', 'y', 'affects'];
 
-    constructor(minimize_args, get_args){
+    constructor(get_args, minimize_args){
         this.minimize_args = minimize_args
         this.get_args = get_args
     }
