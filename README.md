@@ -65,6 +65,32 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 
 # Docs
 
+
+* [g9(initialData, render[, onRender]): g9Canvas](#g9initialdata#initialdata-render#render-onrender#onrender-g9canvas#g9canvas)
+  + [initialData](#initialdata)
+  + [render(data, ctx: g9Context)](#renderdata-ctx-g9context#g9context)
+  + [onRender(data, renderedObjects)](#onrenderdata-renderedobjects)
+* [g9Canvas](#g9canvas)
+  + [g9Canvas.insertInto(selectorOrDOMNode)](#g9canvasinsertintoselectorordomnode)
+  + [g9Canvas.align(xAlign, yAlign)](#g9canvasalignxalign-yalign)
+  + [g9Canvas.node](#g9canvasnode)
+  + [g9Canvas.setData(data)](#g9canvassetdatadata)
+  + [g9Canvas.resize()](#g9canvasresize)
+  + [g9Canvas.desire(id, ...desires)](#g9canvasdesireid-desires)
+* [g9Context](#g9context)
+  + [g9Context.[drawingMethod]](#g9contextdrawingmethod)
+    - [g9Context.point(x, y[, affects])](#g9contextpointx-y-affects)
+    - [g9Context.circle(x, y, radius[, affects])](#g9contextcirclex-y-radius-affects)
+    - [g9Context.line(x1, y1, x2, y2[, affects])](#g9contextlinex1-y1-x2-y2-affects)
+    - [g9Context.rect(x, y, width, height[, affects])](#g9contextrectx-y-width-height-affects)
+    - [g9Context.text(text, x, y[, affects])](#g9contexttexttext-x-y-affects)
+    - [g9Context.image(href, x, y, width, height[, affects])](#g9contextimagehref-x-y-width-height-affects)
+  + [g9Context.width](#g9contextwidth)
+  + [g9Context.height](#g9contextheight)
+  + [g9Context.pure(pureFn)](#g9contextpurepurefn)
+* [Adding new shapes](#adding-new-shapes)
+  + [g9.shapes.myNewShape = shape](#g9shapesmynewshape--shape)
+
 ## g9([initialData](#initialdata), [render](#render)[, [onRender](#onrender)]): [g9Canvas](#g9canvas)
 This is the main g9 function, which returns a [g9Canvas](#g9Canvas) which you can mount in your page with the `g9Canvas.insertInto(selectorOrDOMNode)` method. For example: 
 
