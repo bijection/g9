@@ -50,9 +50,9 @@
 
 .input {
 	display: flex;
-	flex: 1;
     // border-right: 1px solid #e1e8ed;
     flex-direction: column;
+    width: 50%;
 }
 
 .user {
@@ -106,6 +106,7 @@
 
     .input {
     	// min-height: 600px;
+        width: auto;
     }
 
     .sidebar {

@@ -19,7 +19,8 @@ function inViewPort(el) {
        var cm = CodeMirror.fromTextArea(i.querySelector('textarea'), {
             theme: 'solarized',
             indentUnit: 4,
-            keyMap: 'sublime'
+            keyMap: 'sublime',
+            lineWrapping: true
         })
 
         var _graphics;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>g9 Gallery| Automatically Interactive Graphics</title>
+    <title>g9 Gallery | Automatically Interactive Graphics</title>
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.css">
@@ -41,7 +41,7 @@
 
 <div class='page'>
 <h1>Basic</h1>
-<p>A minimal example with only two circles.</p>
+<p>A minimal example with only two points.</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -53,12 +53,12 @@ var initialData = {
     y: 0
 }
 
-var data2graphics = function(data, ctx){
-    ctx.circle(data.x, data.y)
-    ctx.circle(data.y, data.x)
+var render = function(data, ctx){
+    ctx.point(data.x, data.y)
+    ctx.point(data.y, data.x)
 }         
 
-g9(initialData, data2graphics)
+g9(initialData, render)
     .align('center', 'center')
     .insertInto('#demo-basic')</textarea>
     </div>
@@ -77,8 +77,8 @@ g9(initialData, data2graphics)
 
 
 <div class='page'>
-<h1>Lines</h1>
-<p>Two concentric rings</p>
+<h1>The effects option</h1>
+<p>Three different line behaviors.</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -102,16 +102,26 @@ var initialData = {
     l3_end_y: 50,
 }
 
-var data2graphics = function(data, ctx){
-    ctx.line( data.l1_start_x, data.l1_start_y, data.l1_end_x, data.l1_end_y )
-    //if we provide a `affects` option, the line will only change the parameters in it.
-    ctx.line( data.l2_start_x, data.l2_start_y, data.l2_end_x, data.l2_end_y, {
-        affects: []
+var render = function(data, ctx){
+    ctx.line( data.l1_start_x, data.l1_start_y,
+             data.l1_end_x, data.l1_end_y ,
+             {'stroke-width': 10})
+    //if we provide an `affects` option, this line will only change the parameters we name.
+    ctx.line( data.l2_start_x, data.l2_start_y,
+             data.l2_end_x, data.l2_end_y, {
+        affects: ['l2_start_x', 'l2_start_y'],
+        stroke: 'red',
+        'stroke-width': 10
     })
-    ctx.line( data.l3_start_x, data.l3_start_y, data.l3_end_x, data.l3_end_y )
+    ctx.line( data.l3_start_x, data.l3_start_y,
+             data.l3_end_x, data.l3_end_y, {
+        affects: ['l3_start_x', 'l3_end_y'],
+        'stroke':'blue',
+        'stroke-width': 10
+    })
 }         
 
-g9(initialData, data2graphics)
+g9(initialData, render)
     .align('center', 'center')
     .insertInto('#demo-lines')</textarea>
     </div>
@@ -142,19 +152,19 @@ var initialData = {
     angle: 0
 }
 
-var data2graphics = function(data, ctx){
+var render = function(data, ctx){
     var sides = 10
     for(var i=0; i&lt;sides; i++){
         var a = data.angle + i/sides * Math.PI * 2
         var r1 = data.radius
         var r2 = r1/2
-        ctx.circle(r1 * Math.cos(a), r1 * Math.sin(a))
-        ctx.circle(r2 * Math.cos(-a), r2 * Math.sin(-a))
+        ctx.point(r1 * Math.cos(a), r1 * Math.sin(a))
+        ctx.point(r2 * Math.cos(-a), r2 * Math.sin(-a))
     }
 
 }         
 
-g9(initialData, data2graphics)
+g9(initialData, render)
     .align('center', 'center')
     .insertInto('#demo-rings')</textarea>
     </div>
