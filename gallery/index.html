@@ -103,18 +103,21 @@ var initialData = {
 }
 
 var render = function(data, ctx){
-    ctx.line( data.l1_start_x, data.l1_start_y,
-             data.l1_end_x, data.l1_end_y ,
+    ctx.line(data.l1_start_x, data.l1_start_y,
+             data.l1_end_x,   data.l1_end_y,
              {'stroke-width': 10})
-    //if we provide an `affects` option, this line will only change the parameters we name.
-    ctx.line( data.l2_start_x, data.l2_start_y,
-             data.l2_end_x, data.l2_end_y, {
+
+    // if we provide an `affects` option, this
+    // line will only change the parameters we name.
+    ctx.line(data.l2_start_x, data.l2_start_y,
+             data.l2_end_x,   data.l2_end_y, {
         affects: ['l2_start_x', 'l2_start_y'],
         stroke: 'red',
         'stroke-width': 10
     })
-    ctx.line( data.l3_start_x, data.l3_start_y,
-             data.l3_end_x, data.l3_end_y, {
+
+    ctx.line(data.l3_start_x, data.l3_start_y,
+             data.l3_end_x,   data.l3_end_y, {
         affects: ['l3_start_x', 'l3_end_y'],
         'stroke':'blue',
         'stroke-width': 10
@@ -170,6 +173,1503 @@ g9(initialData, render)
     </div>
     <div class='display' id='demo-rings'></div>
 </div>
+
+ 
+
+
+
+<div class='page'>
+<h1>bars</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    x: -300,
+    t: 1  
+}
+
+var wolo = []
+
+for (var i = 0; i < 50; i++) {
+    wolo.push(Math.pow(Math.random(), 2))
+}
+
+function color(n){
+    return '#'+Math.floor(n).toString(16)
+}
+
+var colors1=[]
+var colors2=[]
+wolo.forEach(w => {
+    colors1.push(Math.random()*16777215)
+    colors2.push(Math.random()*16777215)
+})
+
+function tween(a, b, t){
+    return a + (b-a)*t
+}
+
+var margin = 3
+
+function center(x,y,w,h){
+    return [(x+w/2), y + h/2]
+}
+
+function data2graphics(data, ctx){
+    var w = (ctx.width - (wolo.length - 1)*margin )/ wolo.length
+    var h = (ctx.height - (wolo.length - 1)*margin )/ wolo.length
+
+    var t = Math.max(Math.min(data.t,1),0)
+
+    wolo.forEach(ctx.pure((d, i) => {
+        var x = tween(-ctx.width/2 + i * (w + margin), -ctx.width/2, t)
+        var y = tween(ctx.height/2, -ctx.height/2+ i*(h + margin), t)
+        var width = tween(w, -d * data.x, t)
+        var height = tween(-d * Math.log(-data.x)*100, -h, t)
+
+        ctx.rect(
+            x,
+            y,
+            width,
+            height,
+            {
+                fill: color(colors1[i]),//color(tween(colors1[i], colors2[i], t)),
+                affects: i ? ['t'] : ['x']
+            }
+        )
+    }))
+}
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-bars')</textarea>
+    </div>
+    <div class='display' id='demo-bars'></div>
+</div> 
+
+<div class='page'>
+<h1>ben</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    spacing: 100,
+    day1: 100,
+    day2: 200,
+    day3: 300,
+    down: 100
+}
+
+var total = 1000
+
+function data2graphics(data, ctx){
+
+    var bottom = ctx.height/2 - 40
+
+    ctx.circle(0, bottom)
+
+    var {day1, day2, day3} = data
+
+    var days = (day1+day2+day3)
+
+
+    var pymy = (total - data.down) * (1 + days*.1/365) / 3
+    
+    ctx.rect(day1, bottom, 20, -pymy, {
+        affects: ['day1'],
+    })
+    ctx.text(Math.round(day1*100)/100, day1, bottom + 20)
+    
+    ctx.rect(day2, bottom, 20, -pymy, {
+        affects: ['day2'],
+    })
+    ctx.text(Math.round(day2*100)/100, day2, bottom + 20)
+    
+    ctx.rect(day3, bottom, 20, -pymy, {
+        affects: ['day3'],
+    })
+    ctx.text(Math.round(day3*100)/100, day3, bottom + 20)
+
+    ctx.rect(0, bottom, 20, -data.down)
+
+    ctx.text(pymy, 0,0)
+}   
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-ben')</textarea>
+    </div>
+    <div class='display' id='demo-ben'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>bezier</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+
+    endx: 189.99999999995265,
+    endy: 76.99999999995309,
+    middlex: 9.000000002109623,
+    middley: -223.99999999996237,
+    startx: -139.9999999999726,
+    starty: 81.99999999698782,
+    t: 0.5066666666666662,
+
+}, ({
+
+    startx,
+    starty,
+    middlex,
+    middley,
+    endx,
+    endy,
+    t,
+
+}, {
+    circle, line, text, height
+}) => {
+
+    var tlabel = 'tween='+t.toString().slice(0,4)
+    text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
+
+    var steps = 30
+    var smooth = []
+
+    for (var i = 0; i < steps; i++) {
+        var r = t*i/steps
+
+        function tween(a,b){
+            return a + r*(b-a)
+        }
+
+        var ax = tween(startx, middlex),
+            ay = tween(starty, middley),
+            bx = tween(middlex, endx),
+            by = tween(middley, endy);
+        
+        // line('a'+i, 'b'+i, {stroke:'rgba(0,0,0,.1)'})
+        // circle(ax,ay,{id: 'a'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+        // circle(bx,by,{id: 'b'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
+
+        line(ax, ay, bx, by, {affects: ['t'], stroke:'rgba(0,0,0,.1)'})
+        smooth.push([tween(ax,bx), tween(ay,by)])
+    }
+
+    var p = smooth[0]
+    for (var i = 1; i < smooth.length; i++) {
+        line(...p, ...smooth[i], {affects: ['t'], 'stroke-width': 5})
+        p = smooth[i]
+    }
+
+    line(startx,starty, middlex,middley)
+    line(middlex,middley, endx,endy)
+
+    circle(startx,starty)
+    circle(middlex,middley)
+    circle(endx,endy)
+
+}, newdata => {
+    console.log(newdata)
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-bezier')</textarea>
+    </div>
+    <div class='display' id='demo-bezier'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>carbide_logo</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    angle: 0,
+    s1: 100,
+    s2: 100,
+}
+
+function data2graphics(data, ctx){
+    var {angle, s1,s2,s3 ,x,y} = data;
+
+    function forward(n, c){
+        ctx.line(x,y, x+=n*Math.cos(angle), y+=n*Math.sin(angle),{'stroke-linecap': 'round', 'stroke-width':10})
+    }
+
+    function turn(n){
+        angle -= n * Math.PI/180
+    }
+
+    var x = y =0
+
+    var a = angle * 180 / Math.PI
+
+    for(var i = 0; i< 6; i++){
+        forward(s1, ['s1', 'a'])
+        turn(a)
+        forward(s2, ['s2'])
+        turn(60 - (a-90))
+        forward(s2, ['s2'])
+        turn(-90)
+    }
+
+}
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-carbide_logo')</textarea>
+    </div>
+    <div class='display' id='demo-carbide_logo'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>circle</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var data = {
+    x1: 100,
+    y1: 100,
+    x2: -100,
+    y2: 100,
+    x3: 0,
+    y3: -50,
+}
+
+function invert(m){
+    var [[a,b], [c,d]] = m
+    var det = a*d - b*c
+    return [[d/det, -b/det], [-c/det, a/det]]
+}
+
+function multiply(A, x){
+    var [[a,b], [c,d]] = A
+    var [x, y] = x
+    return [a*x + b*y, c*x+d*y]
+}
+
+
+function data2graphics(data, ctx){
+    
+    var mx1 = (data.x1 + data.x2)/2
+    var my1 = (data.y1 + data.y2)/2
+    var dy1 = data.y1 - data.y2
+    var dx1 = -(data.x1 - data.x2)
+
+    var mx2 = (data.x3 + data.x2)/2
+    var my2 = (data.y3 + data.y2)/2
+    var dy2 = data.y2 - data.y3
+    var dx2 = -(data.x2 - data.x3)
+
+    var I = invert([[dy1, -dy2], 
+                    [dx1, -dx2]])
+    var [a,b] = multiply(I, [mx2-mx1, my2-my1])
+
+    ctx.line(
+        data.x1,
+        data.y1,
+        data.x2,
+        data.y2,
+        {stroke: 'red'})
+
+    ctx.line(
+        data.x3,
+        data.y3,
+        data.x2,
+        data.y2,
+        {stroke: 'blue'})
+
+    ctx.line(
+        mx1,
+        my1,
+        mx1 + 2 * a * dy1,
+        my1 + 2 * a * dx1,
+        {stroke: 'red'})
+
+    ctx.line(
+        mx2,
+        my2,
+        mx2 + 2 * b * dy2,
+        my2 + 2 * b * dx2,
+        {stroke: 'blue'})
+
+    var cx = mx1 + a*dy1
+    var cy = my1 + a*dx1
+
+    var dx = cx - data.x1
+    var dy = cy - data.y1
+
+    ctx.point(cx, cy)
+
+    ctx.circle(cx, cy, Math.sqrt(dx*dx + dy*dy), {
+        fill: 'none',
+        stroke: 'green',
+        'stroke-width': 3
+    })
+    ctx.point(data.x1, data.y1)
+    ctx.point(data.x2, data.y2)
+
+    ctx.point(data.x3, data.y3)
+}
+
+var demo = g9(data, data2graphics) 
+  .align('center', 'center')
+    .insertInto('#demo-circle')</textarea>
+    </div>
+    <div class='display' id='demo-circle'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>colorwheel</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    a: 0,
+    b: 0,
+    k:100,
+}
+
+function rotate(x,y, a){
+    return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
+}
+
+function rgb(r,g,b){
+    r = Math.round(r * 255)
+    g = Math.round(g * 255)
+    b = Math.round(b * 255)
+    return 'rgba('+r+','+g+','+b+',1)'
+}
+
+function data2graphics(data, ctx){
+    var x = 0, y1 = 0, y2 = -100*Math.sin(data.b)
+
+    function inner(r,n,a,j){
+        ctx.circle(...rotate(0, r, j / n * Math.PI*2 + a), {
+            r:data.k,
+            fill: rgb(
+                Math.abs(Math.sin(j/n*Math.PI*2*3)),
+                Math.abs(Math.sin(j/n*Math.PI*2*5)),
+                Math.abs(Math.sin(j/n*Math.PI*2*7))
+            )
+        })        
+    }
+
+    inner = ctx.pure(inner)
+
+    function ring(r, n, a) {
+        for (var j = 0; j < n; j++) {
+            inner(r,n,a,j)
+        }
+    }
+
+    ring = ctx.pure(ring)
+
+
+
+    for (var i = 1; i < 40; i++) {
+
+        ring(i*2*data.k, i*6, i%2 ? data.a : - data.a)
+        
+    }    
+    // ctx.circle(100*Math.cos(data.a - data.b), 100*Math.sin(data.a - data.b))
+}   
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-colorwheel')</textarea>
+    </div>
+    <div class='display' id='demo-colorwheel'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>cube</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    az: 0,
+    ax: 0,
+    ay: 0,
+    ez: 1,
+    ex: 100,
+    ey: 100,
+}
+
+var {sin, cos} = Math;
+
+
+function mul(m,v){
+    return m.map(row => row.reduce((a,b,i) => a + b*v[i], 0))
+}
+
+function rx(v, theta){
+    return mul([
+        [1,          0,           0],
+        [0, cos(theta), -sin(theta)],
+        [0, sin(theta),  cos(theta)],
+    ], v)
+}
+
+function ry(v, theta){
+    return mul([
+        [cos(theta),          0,           sin(theta)],
+        [0, 1, 0],
+        [-sin(theta), 0,  cos(theta)],
+    ], v)
+}
+
+function rz(v, theta){
+    return mul([
+        [cos(theta), -sin(theta), 0],
+        [sin(theta),  cos(theta), 0],
+        [0, 0, 1],
+    ], v)
+}
+
+function rotate(v, ax, ay, az) {
+    return rx(ry(rz(v,az),ay),ax)
+}
+
+function translate([x,y,z], dx, dy, dz) {
+    return [x+dx,y+dy,z+dz]
+}
+
+function project([x,y,z]){
+    return [300*x/z, 300*y/z]
+}
+
+console.log(project)
+
+// mul([[1,0,0],[1,2,0],[0,0,1]], [1,2,3])
+
+// function rotate(x,y,z, ){
+//     return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
+// }
+
+var points= []
+for (var x = 0; x < 2; x++) {
+    for (var y = 0; y < 2; y++) {
+        for (var z = 0; z < 2; z++) {
+            points.push([x -.5,y -.5, z - .5])
+        }
+    }
+}
+
+console.log(points)
+
+var edges = []
+
+for (var i = 0; i < points.length; i++) {
+    var pi = points[i]
+    for (var j = i+1; j < points.length; j++) {
+        var pj = points[j]
+        if(pi.reduce((a,c,k)=> a + (c!= pj[k]), 0) === 1){
+            edges.push([pi, pj])
+        }
+    }
+}
+
+
+function data2graphics(data, ctx){
+    var {ax,ay,az} = data
+
+    var drawedge = ctx.pure(function([p1,p2]){
+        ctx.line(
+            ...project(
+                translate(rotate(p1, ax,ay,0), 0,0,2)),
+            ...project(
+                translate(rotate(p2, ax,ay,0), 0,0,2)), {
+            affects: ['ax', 'ay'],
+            "stroke-width": 10,
+            "stroke-linecap": "round"
+        })
+    })
+
+    edges.forEach(drawedge)
+}   
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-cube')</textarea>
+    </div>
+    <div class='display' id='demo-cube'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>curvemax</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ function Cot(x){ return 1 / Math.tan(x) }
+function Csc(x){ return 1 / Math.sin(x) }
+
+function f(x, y, z){
+    return 2*Math.sqrt((Math.pow(y - z, 2)*Math.pow(Math.sin(x/2), 2))/
+        ((2 + (-2 + y)*y + 2*(-1 + y)*Math.cos(x))*(2 + (-2 + z)*z + 2*(-1 + z)*Math.cos(x))))
+}
+function g(x, y, z){ // dfdx
+return ((6*(-1 + z) + y*(6 + z*(-6 + y*z)) + 8*(-1 + y)*(-1 + z)*Math.cos(x) - 
+      2*(-1 + y)*(-1 + z)*Math.cos(2*x))*Cot(x/2.)*   Math.pow(Csc(x/2.),2)   *
+    Math.pow((    Math.pow(y - z, 2)      *   Math.pow(Math.sin(x/2.),2)   )/
+       ((2 + (-2 + y)*y + 2*(-1 + y)*Math.cos(x))*(2 + (-2 + z)*z + 2*(-1 + z)*Math.cos(x)))
+       ,1.5))/    Math.pow(y - z,2)      
+}
+function dgdx(x, y, z){
+    return (   Math.pow(Csc(x/2.),2)  *Math.sqrt((Math.pow(y-z,2)*Math.pow(Math.sin(x/2),2))/
+      ((2 - 2*y + Math.pow(y,2) + 2*(-1 + y)*Math.cos(x))*(2 - 2*z + Math.pow(z,2) + 2*(-1 + z)*Math.cos(x))))
+     *((-2 + 2*y - Math.pow(y,2) - 2*(-1 + y)*Math.cos(x))*(2 - 2*z + Math.pow(z,2) + 2*(-1 + z)*Math.cos(x))*
+       (-6 + 6*y + 6*z - 6*y*z + Math.pow(y,2)*Math.pow(z,2) + 8*(-1 + y)*(-1 + z)*Math.cos(x) - 
+         2*(-1 + y)*(-1 + z)*Math.cos(2*x)) - 
+      2*Math.pow(Math.cos(x/2),2)*(2 - 2*y + Math.pow(y,2) + 2*(-1 + y)*Math.cos(x))*
+       (2 - 2*z + Math.pow(z,2) + 2*(-1 + z)*Math.cos(x))*
+       (-6 + 6*y + 6*z - 6*y*z + Math.pow(y,2)*Math.pow(z,2) + 8*(-1 + y)*(-1 + z)*Math.cos(x) - 
+         2*(-1 + y)*(-1 + z)*Math.cos(2*x)) + 
+      3*Math.pow(Math.cos(x/2),2)*   Math.pow(-6 + 6*y + 6*z - 6*y*z + Math.pow(y,2)*Math.pow(z,2) + 
+          8*(-1 + y)*(-1 + z)*Math.cos(x) - 2*(-1 + y)*(-1 + z)*Math.cos(2*x), 2) - 
+      16*(-1 + y)*(-1 + z)*(2 - 2*y + Math.pow(y,2) + 2*(-1 + y)*Math.cos(x))*
+       (2 - 2*z + Math.pow(z,2) + 2*(-1 + z)*Math.cos(x))*Math.pow(Math.sin(x/2),2)*   Math.pow(Math.sin(x),2)  ))/
+  (2.*  Math.pow(2 - 2*y + Math.pow(y,2) + 2*(-1 + y)*Math.cos(x),2)*
+    Math.pow(2 - 2*z + Math.pow(z,2) + 2*(-1 + z)*Math.cos(x),2)   )
+
+}
+
+
+var demo = g9({
+    a: .17,
+    b: .15,
+}, function(data, draw){
+
+    var steps = 30
+    for (var x = 1; x < steps; x++) {
+        
+        draw.line(x+'low', (x-1)+'low', 'l'+x)
+
+    }
+
+
+    for (var x = 0; x < steps; x++) {
+
+        var y = f(x*Math.PI/(steps-1), data.a, data.b)
+        
+        draw.circle(x*10, y*400, x+'low')
+            .attr({r: 10})
+            .attr({class: 'bar-end-bottom', fill: 'rgba(0,0,0,0)'})
+
+    }
+
+    var maxx = 0
+    var maxy = 0
+    for (var x = 0; x < steps; x++) {
+
+        var y = f(x*Math.PI/(steps-1), data.a, data.b)
+
+        if(y > maxy){
+            maxx = x/10
+            maxy = y
+        }
+    }
+
+    maxx -= g(maxx*Math.PI/(steps-1), data.a, data.b) / dgdx(maxx*Math.PI/(steps-1), data.a, data.b)
+
+    maxy = f(maxx*Math.PI/(steps-1), data.a, data.b)
+
+    draw.circle(maxx*10, maxy*400, 'handle')
+        .attr({fill: 'blue', r: 8})
+
+    
+}, function(newdata, c){
+
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-curvemax')</textarea>
+    </div>
+    <div class='display' id='demo-curvemax'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>dm_spiral</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    x1: 100,
+    y1: 0,
+
+    x2: -100,
+    y2: 0,
+
+    a1: 0,
+    r1: 100,
+
+    a2: 0,
+    r2: 100,
+}
+
+function data2graphics(data, ctx){
+    
+    ctx.circle(data.x1,data.y1)
+    ctx.circle(data.x2,data.y2)
+
+    var dx = data.x1 - data.x2
+    var dy = data.y1 - data.y2
+    var d = Math.sqrt(dx*dx+dy*dy)
+
+    var x1 = data.x1
+    var y1 = data.y1
+    var x2 = data.x2
+    var y2 = data.y2
+
+    dx += Math.cos(data.a1)*data.r1 - Math.cos(data.a2)*data.r2
+    dy += Math.sin(data.a1)*data.r1 - Math.sin(data.a2)*data.r2
+
+    var attenuation = Math.sqrt(dx*dx+dy*dy) / d
+    var scale = 1
+    var a1 = 0
+    var a2 = 0
+
+    for (var i = 0; i < 10; i++) {
+        ctx.circle(x1 += Math.cos(a1+=data.a1)*data.r1*scale, y1 += Math.sin(a1+=data.a1)*data.r1*scale, {affects: ['a1', 'r1']})
+        ctx.circle(x2 += Math.cos(a2+=data.a2)*data.r2*scale, y2 += Math.sin(a2+=data.a2)*data.r2*scale, {affects: ['a2', 'r2']})
+        scale *= attenuation
+    }
+
+}
+
+function log(x, y){
+    console.log(x,y)
+}
+
+var demo = new g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-dm_spiral')</textarea>
+    </div>
+    <div class='display' id='demo-dm_spiral'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>dragon</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var data = {
+    "squareness": 0.8,
+    "fromX": 175,
+    "fromY": 96,
+    "toX": -220,
+    "toY": 39
+}
+
+function data2graphics(data, ctx){
+    var lineoptions = {
+        'stroke-width': 4,
+        'stroke-linecap':'round',
+        affects:['squareness']
+    }
+
+    function dragon(x1,y1, x2,y2, dir, level){
+        if(level == 0){
+            ctx.line(x1, y1,x2, y2, lineoptions)
+        } else {
+            var midx = (x1 + x2 + data.squareness*dir*(y2 - y1))/2
+            var midy = (y1 + y2 - data.squareness*dir*(x2 - x1))/2
+
+            dragon(x1,y1, midx,midy, -1,level-1)
+            dragon(midx,midy, x2,y2,  1,level-1)
+        }
+    }
+    
+    dragon = ctx.pure(dragon)
+    
+    dragon(data.fromX, data.fromY, data.toX, data.toY, -1, 9)
+    
+    ctx.circle(data.fromX, data.fromY, {r:5})
+    ctx.circle(data.toX, data.toY, {r:5})
+}
+
+var demo = g9(data, data2graphics) 
+  .align('center', 'center')
+    .insertInto('#demo-dragon')</textarea>
+    </div>
+    <div class='display' id='demo-dragon'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>hi</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    x: 0,
+    y: 0
+}
+
+function render(data, ctx){
+    ctx.circle(data.x, data.y)
+    ctx.circle(data.y, data.x)
+}
+
+function log(x, y){
+    console.log(x,y)
+}
+
+var demo = g9(initial, render, log) 
+  .align('center', 'center')
+    .insertInto('#demo-hi')</textarea>
+    </div>
+    <div class='display' id='demo-hi'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>image</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+
+    x: 148.00000000002743,
+    y: 232.000000002497,
+
+    width: 299.00000000255926,
+    height: 21.000000000037627,
+
+}, ({
+
+    x, y, width, height
+
+}, draw) => {
+
+    draw.image('http://i.imgur.com/LQIsf.jpg', x, y, width,width,'nasa').attr({preserveAspectRatio: false})
+    draw.circle(x+width,y+width, 'resizer')
+    draw.circle(x+width/2,y+width/2, 'mover')
+        
+}, newdata => {
+    console.log(newdata)
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-image')</textarea>
+    </div>
+    <div class='display' id='demo-image'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>jocelyn</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+    s1: 10,
+    s2: 10,
+    s3: 10,
+    s4: 10,
+}, function({s1, s2, s3, s4}, draw){
+    
+    draw.line('bee', 'apple')
+
+    draw.circle(s1, s2, 'bee').attr({fill:"blue"})
+    draw.circle(s3, s4, 'apple').attr({fill:"green"})
+    draw.circle(s3+s1, s4-s1).attr({fill:"orange"})
+
+}, function(newdata, renderees){
+
+    console.log('changed data to', newdata)
+
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-jocelyn')</textarea>
+    </div>
+    <div class='display' id='demo-jocelyn'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>leo</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    size: 100,
+}
+
+function data2graphics(data, ctx){
+    ctx.line(0, -100, 0, data.size, {
+        "stroke-width": 10})
+    ctx.circle(0, data.size)
+    if (data.size>100) {
+        var left
+        if (Math.random() > 0.5) {
+            left = 1
+        } else {
+            left = -1
+        }
+        ctx.line(0, 100, (data.size-100)*left, 100)
+    }
+    
+}  
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-leo')</textarea>
+    </div>
+    <div class='display' id='demo-leo'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>omar</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var data = {
+    a: 1,
+    b: 1,
+    c: 1
+}
+
+
+function data2graphics(data, ctx){
+    var f = function(t) {
+        return data.a*t*t + data.b*t + data.c*t;
+    }
+
+    var render = ctx.pure(function(t) {
+        ctx.circle({x:t,y:f(t),r:2})
+    })
+
+    for (var t = -5; t <= 5; t += 0.01) {
+        render(t)
+    }
+}
+
+
+function log(data) {
+    console.log(data)
+}
+
+var demo = g9(data, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-omar')</textarea>
+    </div>
+    <div class='display' id='demo-omar'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>pattern</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ // var sides = 10
+var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d')
+
+var {width, height} = document.body.getBoundingClientRect()
+canvas.width = width
+canvas.height = height
+
+document.body.appendChild(canvas)
+
+var sides = 8
+
+var demo = g9({
+    a1:1.1766056921521546,
+    a2:1.7616329673543354,
+    a3l:1.771046902387237,
+    a3r:1.773369450703567,
+    a4:2.179060679068228,
+    a5:1.9025018735966257,
+    a6:2.0894741821951284,
+    s1:16.81648142644239,
+    s2:66.11645862405204,
+    s3:80.42611430671244,
+    s4l:167.48943570957016,
+    s4r:129.08696284678717,
+    s5:192.05638885088797,
+    s6:262.8228682272902,
+    s7:316.13699803710614,
+}, function({x, y, s1, s2, s3, s4l, s4r, s5, s6, s7, a1, a2, a3l, a3r, a4, a5, a6}, draw){
+
+    var rsides = Math.round(sides)
+    var a = 2*Math.PI/rsides
+
+    // var cx = 400
+    // var cy = 200
+
+    draw.circle(40*sides, 200, 'wolo')
+
+
+    function doff(cx, cy, ext){
+        function rcircle(angle, radius, options){
+            angle -= Math.PI/8
+
+            if(typeof options.id != 'undefined'){
+                options.id += ext
+            } else {
+                options += ext
+            }
+
+            return draw.circle(cx+radius*Math.cos(angle), cy+radius*Math.sin(angle), options)
+                .attr({fill:'rgba(0,0,0,.05)', r: 10})
+        }
+
+
+        for (var i = 0; i < sides; i+=1) {
+
+            var pl = []
+            var pr = []
+
+            var base = rcircle(i*a, s1, i)
+            
+            // left side
+            var l = i
+            pl.push(base)
+            pl.push(rcircle((l+ a1)*a, s2, i+'l'))
+            pl.push(rcircle((l+a2)*a, s3, {id:i+'lr', affects:['s3', 'a2']}))
+            
+            // right side
+            var r = i
+            pr.push(base)
+            pr.push(rcircle((r- a1)*a,s2, i+'r'))
+            pr.push(rcircle((r-a2)*a,s3, {id:i+'rl', affects:['s3', 'a2']}))
+
+            if(i%2){
+                pl.push(rcircle((l+a3l)*a, s4l, {id:i+'lr1', affects:['s4l', 'a3l']}))
+                
+
+                pr.push(rcircle((r-a3r)*a,s4r, {id:i+'rl1', affects:['s4r', 'a3r']}))
+                
+
+                pr.push(rcircle((r-a4)*a,s5, {id:i+'rl2', affects:['s5', 'a4']}))
+
+
+                pr.push(rcircle((r-a5)*a,s6, {id:i+'rl3', affects:['s6', 'a5']}))
+
+
+                pr.push(rcircle((r-a6)*a,s7, {id:i+'rl4', affects:['s7', 'a6']}))
+            } else {
+
+
+                pl.push(rcircle((l+a3r)*a, s4r, {id:i+'lr1', affects:['s4r', 'a3r']}))
+                
+                pr.push(rcircle((r-a3l)*a,s4l, {id:i+'rl1', affects:['s4l', 'a3l']}))   
+                
+
+                pl.push(rcircle((l+a4)*a, s5, {id:i+'lr2', affects:['s5', 'a4']}))
+                
+
+                pl.push(rcircle((l+a5)*a, s6, {id:i+'lr3', affects:['s6', 'a5']}))
+                
+
+                pl.push(rcircle((l+a6)*a, s7, {id:i+'lr4', affects:['s7', 'a6']}))
+            }
+
+            // lines
+            draw.polyline(pl, i+'pl'+ext)
+            draw.polyline(pr, i+'pr'+ext)
+        }       
+    }
+
+    var tile = 200
+
+    doff(0*tile, 0*tile, 'z')
+    doff(1*tile, 1*tile, 'a')
+    doff(1*tile, 3*tile, 'b')
+    doff(3*tile, 1*tile, 'c')
+    doff(2*tile, 2*tile, 'd')
+    doff(3*tile, 3*tile, 'e')
+    doff(0*tile, 2*tile, 'f')
+    doff(4*tile, 2*tile, 'g')
+    doff(2*tile, 0*tile, 'h')
+    doff(4*tile, 0*tile, 'i')
+    doff(0*tile, 4*tile, 'j')
+    doff(2*tile, 4*tile, 'k')
+    doff(4*tile, 4*tile, 'l')
+    
+}, function(newdata, renderees){
+
+    Object.keys(renderees).forEach((k) => {
+        var renderee = renderees[k]
+        
+        var {type, id} = renderee
+
+        if(type === 'circle'){
+            var {x, y} = renderee
+            ctx.beginPath()
+            ctx.arc(x,y,5,0,2*Math.PI)
+            ctx.closePath()
+            ctx.fill()
+
+        // console.log(id, x, y)
+
+        } else if (type === 'line') {
+            var {d1, d2} = renderee
+            var {x: x1, y: y1} = renderees[d1]
+            var {x: x2, y: y2} = renderees[d2]
+            ctx.beginPath()
+            ctx.moveTo(x1,y1)
+            ctx.lineTo(x2,y2)
+            ctx.closePath()
+            ctx.stroke()
+        }
+    })
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-pattern')</textarea>
+    </div>
+    <div class='display' id='demo-pattern'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>pop</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+    x:130,
+    y:415,
+}, function({x,y}, draw){
+    
+    draw.circle(x,y,"hello")
+    draw.circle(y,x,"asdfe")
+
+}, function(newdata, renderees){
+
+    console.log('changed data to', newdata)
+
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-pop')</textarea>
+    </div>
+    <div class='display' id='demo-pop'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>scratch</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    x1: -100,
+    x2: 0,
+    x3: 100,
+}
+
+function data2graphics(data, ctx){
+    var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
+    ctx.circle(m,0, {affects: ['x2']})
+    ctx.circle(data.x2,20, {affects: ['x2']})
+    ctx.circle(data.x1,0, {fill: 'red'})
+    ctx.circle(data.x3,0, {fill: 'red'})
+}
+
+function log(x, y){
+    console.log(x,y)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-scratch')</textarea>
+    </div>
+    <div class='display' id='demo-scratch'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>snake</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+    r1: 6.259436678879225,
+    r2: 12.539682642803488,
+    r3: 12.707953163637603,
+    r4: 6.018393351961019,
+    x: 490.853355091885,
+    y: 162.09610769932087,
+}, function(data, draw){
+
+    var dots = [[data.x, data.y]];
+
+    var r0 = 0;
+    [data.r1, data.r2, data.r3, data.r4].forEach(function(r){
+        var last = dots[dots.length-1]
+        var x = last[0], y = last[1];
+        r0+=r
+        dots.push([x+50*Math.cos(r0), y+50*Math.sin(r0)])
+    })
+
+    var id = 0
+    dots.map(function(d){
+        return draw.circle(d[0], d[1], id++)
+    }).reduce(function(a,b){
+        draw.line(a,b,id++)//.css({pointerEvents: 'none'})
+        return b
+    })
+
+}, function(newdata){
+    console.log('kevin sucks', newdata)
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-snake')</textarea>
+    </div>
+    <div class='display' id='demo-snake'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>tangent</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var radius = 100
+var invisible = 'rgba(0,0,0,0)'
+
+function arrow(draw, fromx, fromy, angle, length, id){
+    draw.line(id+'from', id+'to', id+'body')
+    draw.line(id+'to', id+'head1', id+'headbody1')
+    draw.line(id+'to', id+'head2', id+'headbody2')
+
+
+    draw.circle(fromx, fromy, id+'from')
+    draw.circle(fromx+length*Math.cos(angle), fromy + length*Math.sin(angle), id+'to')
+        .attr({fill: invisible})
+
+    var head = .9, wau = .05
+    draw.circle(fromx + length*head*Math.cos(angle+wau), fromy + length*head*Math.sin(angle+wau), id+'head1')
+        .attr({fill: invisible})
+    draw.circle(fromx + length*head*Math.cos(angle-wau), fromy + length*head*Math.sin(angle-wau), id+'head2')
+        .attr({fill: invisible})
+
+}
+
+var demo = g9({
+
+    angle: 0,
+    x: 0, 
+    y: 0,
+
+}, ({
+
+    angle, x, y
+
+}, draw) => {
+
+    draw.circle(600,200,'circle').attr({r: 200, stroke: 'red', fill: 'none'})
+    arrow(draw, 600, 200, angle, 200, 'wau')
+            
+}, newdata => {
+    console.log(newdata)
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-tangent')</textarea>
+    </div>
+    <div class='display' id='demo-tangent'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>test</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9(
+    
+    {x: 257, y: 343, z: 188},
+
+function(data, draw){
+    
+    var merp = draw.circle(10, 10, 'stillness')
+
+    var wolo = draw.circle(data.x, data.y, 'p1')
+    var molo = draw.circle(data.x, data.y/2, 'p3')
+    
+    var moisture = draw.circle(data.x-20, data.y, 'p2')
+    var zthing = draw.circle(data.z, data.z, 'coolzdot')
+
+    var last = draw.circle(data.x, 60+50*Math.sin(data.x/30), 's'+i)
+    for (var i = 1; i < 10; i++) {
+        var cur = draw.circle(data.x+i*10, 60+50*Math.sin((data.x +i*10)/30), 's'+i)
+        draw.line(cur, last, 'l'+i)
+        last = cur
+    }
+
+    draw.line(last, zthing, 'aslkdfjl')
+    draw.line(wolo, molo, 'coolassline')
+    draw.line(moisture, merp, 'mertle')
+
+
+}, function(newdata){
+
+    console.log('we changed our data',newdata)
+
+}) 
+  .align('center', 'center')
+    .insertInto('#demo-test')</textarea>
+    </div>
+    <div class='display' id='demo-test'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>tongs</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    a: 18,
+    b: 1,
+}
+
+function rotate(x,y, a){
+    return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
+}
+
+function data2graphics(data, ctx){
+    var x = 0, y1 = 0, y2 = -100*Math.sin(data.b)
+    for (var i = 0; i < 4; i++) {
+
+        var dir = (i%2)*2 - 1
+
+        var nextx = x + 100*Math.cos(data.b)
+        var nexty1 = y1 + dir*100*Math.sin(data.b)
+        var nexty2 = y2 - dir*100*Math.sin(data.b)
+
+        ctx.line(...rotate(x,y1,data.a), ...rotate(nextx,nexty1,data.a), {"stroke-width":10, "stroke-linecap":"round"})
+        ctx.line(...rotate(x,y2,data.a), ...rotate(nextx,nexty2,data.a), {"stroke-width":10, "stroke-linecap":"round"})
+        
+        x = nextx
+        y1 = nexty1
+        y2 = nexty2
+
+    }    
+    // ctx.circle(100*Math.cos(data.a - data.b), 100*Math.sin(data.a - data.b))
+}   
+
+function log(x){
+    console.log(x)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-tongs')</textarea>
+    </div>
+    <div class='display' id='demo-tongs'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>tree</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var demo = g9({
+    deltaAngle:33,
+    attenuation:0.7,
+    startLength:189
+}, function({deltaAngle,attenuation,startLength}, ctx){
+    
+    var drawTree = ctx.pure(function (x1, y1, length, angle, n){
+        var x2 = x1 + length * Math.cos(angle*Math.PI/180);
+        var y2 = y1 + length * Math.sin(angle*Math.PI/180);
+     
+        ctx.circle(x2, y2, {affects:['deltaAngle', 'attenuation']})
+        
+        ctx.line(x1,y1,x2,y2)
+
+        if(n > 0) {
+            drawTree(x2, y2, length*attenuation, angle+deltaAngle, n-1);
+            drawTree(x2, y2, length*attenuation, angle-deltaAngle, n-1);
+        }
+
+    })
+
+    ctx.circle(0, ctx.height/2 - 30)
+
+    drawTree(0, ctx.height/2 - 30, startLength, -90, 9)
+
+}, function(newdata, renderees){
+
+    console.log('changed data to', newdata)
+
+})
+
+
+// demo.getRenderer()
+//     .insertInto('.demo .display')
+//     .xAlign('center')
+//     .yAlign('bottom') 
+  .align('center', 'center')
+    .insertInto('#demo-tree')</textarea>
+    </div>
+    <div class='display' id='demo-tree'></div>
+</div> 
+
+
+
+<div class='page'>
+<h1>zero_gradients</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+ var initial = {
+    x1: -100,
+    x2: 0,
+    x3: 100,
+}
+
+function data2graphics(data, ctx){
+    var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
+    ctx.point(m,0, {affects: ['x2']})
+    ctx.point(data.x2,20, {affects: ['x2']})
+    ctx.point(data.x1,0, {fill: 'red'})
+    ctx.point(data.x3,0, {fill: 'red'})
+}
+
+function log(x, y){
+    console.log(x,y)
+}
+
+var demo = g9(initial, data2graphics, log) 
+  .align('center', 'center')
+    .insertInto('#demo-zero_gradients')</textarea>
+    </div>
+    <div class='display' id='demo-zero_gradients'></div>
+</div> 
+
+
+
+
 
 
 

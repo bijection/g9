@@ -3,6 +3,7 @@
     box-shadow: none !important;
     background: #fdf6e3;
     font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
+    font-size: 15px;
 }
 
 .CodeMirror-lines {
