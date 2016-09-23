@@ -10,7 +10,7 @@ export default class rect {
 
     mount(container){
         this.container = container
-        this.el = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+        this.el = document.createElementNS("http://www.w3.org/2000/svg", "image")
         this.container.appendChild(this.el)
 
         var drag_start = e => {
