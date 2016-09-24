@@ -75,10 +75,12 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
   + [g9Canvas.align(xAlign, yAlign)](#g9canvasalignxalign-yalign)
   + [g9Canvas.node](#g9canvasnode)
   + [g9Canvas.setData(data)](#g9canvassetdatadata)
+  + [g9Canvas.getData()](#g9canvasgetdata)
+  + [g9Canvas.isManipulating](#g9canvasismanipulating)
   + [g9Canvas.resize()](#g9canvasresize)
   + [g9Canvas.desire(id, ...desires)](#g9canvasdesireid-desires)
 * [g9Context](#g9context)
-  + [g9Context.[drawingMethod]](#g9contextdrawingmethod)
+  + [g9Context.[shape]](#g9contextshape)
     - [g9Context.point(x, y[, affects])](#g9contextpointx-y-affects)
     - [g9Context.circle(x, y, radius[, affects])](#g9contextcirclex-y-radius-affects)
     - [g9Context.line(x1, y1, x2, y2[, affects])](#g9contextlinex1-y1-x2-y2-affects)
@@ -217,10 +219,25 @@ setInterval(function(){
 ```
 
 
+### g9Canvas.getData()
+Get the data currently being visualized by a g9Canvas. For example:
+
+```javascript
+var graphics = g9({foo: 10}, function(data, ctx){
+    ctx.point(data.foo, 17)
+})
+.insertInto('#container')
+
+alert(JSON.stringify(graphics.getData()))
+```
+
+
+###g9Canvas.isManipulating
+A boolean property that's true when a user is manupulating a shape on the g9 canvas.
+
+
 ### g9Canvas.resize()
 Invalidates the g9 display. Usually a noop, but should be called after programmatically resizing the g9 DOM node or its container.
-
-
 
 
 ### g9Canvas.desire(id, ...desires)
@@ -245,7 +262,7 @@ Internal method, genreally safe to ignore, but useful for complex animation. For
 A new, immutable g9Context object `ctx` is passed as the second argument to `render` each time `render` is called. It has a variety of drawing methods and some read-only properties that the render function uses to create a drawing.
 
 
-### g9Context.[drawingMethod]
+### g9Context.[shape]
 When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies futher arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
 
 ```javascript

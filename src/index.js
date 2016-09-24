@@ -197,11 +197,7 @@ function g9(initialData, populateRenderables, onChange=()=>{}) {
         return {...curData}
     }
 
-    function isManipulating(){
-        return draggingCount > 0;
-    }
-
-    return {setData, desire, align, insertInto, resize, node, remove, getData, isManipulating}
+    return {setData, desire, align, insertInto, resize, node, remove, getData, get isManipulating(){return draggingCount > 0;}}
 }
 
 g9.shapes = shapes;
