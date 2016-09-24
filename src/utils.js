@@ -23,9 +23,8 @@ export function addDragHandler(el, startDrag){
         startey = e.clientY
 
         var onmove = function(e){
+            e.preventDefault()
             e = e.touches ? e.touches[0] : e
-
-            console.log(e.clientX - startex, e.clientY - startey)
 
             onDrag(
                 e.clientX - startex,
