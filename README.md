@@ -416,7 +416,7 @@ A live version of this example is on [the examples page](https://omrelli.ug/g9/g
 
 ### g9.shapes.myNewShape = shape
 
-    This is an experimental API and may be subject to change. That said, pull requests with particularly good new shapes are welcome.
+    This is an experimental API and may be subject to change. That said, pull requests with particularly good new shapes are encouraged!
 
 g9 allows you to go beyond basic shapes like circles and rectangles by adding your own shapes, which will then be available as drawing methods on g9Context objects. 
 
