@@ -257,8 +257,7 @@ g9(initialData, render)
     <div class='input'>
         <div class='run-button'>Run</div>
         <textarea class='user'>
- var demo = g9({
-
+ var initialData = {
     endx: 189.99999999995265,
     endy: 76.99999999995309,
     middlex: 9.000000002109623,
@@ -266,23 +265,23 @@ g9(initialData, render)
     startx: -139.9999999999726,
     starty: 81.99999999698782,
     t: 0.5066666666666662,
+}
 
-}, ({
 
-    startx,
-    starty,
-    middlex,
-    middley,
-    endx,
-    endy,
-    t,
+function render(data, ctx){
 
-}, {
-    point, line, text, height
-}) => {
+    var endx = data.endx,
+        endy = data.endy,
+        middlex = data.middlex,
+        middley = data.middley,
+        startx = data.startx,
+        starty = data.starty,
+        width = ctx.width,
+        height = ctx.height,
+        t = data.t;
 
     var tlabel = 'tween='+t.toString().slice(0,4)
-    text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
+    ctx.text(tlabel, (t- .5)*300, height/2 - 30, {alignmentBaseline: "middle"})
 
     var steps = 30
     var smooth = []
@@ -299,31 +298,29 @@ g9(initialData, render)
             bx = tween(middlex, endx),
             by = tween(middley, endy);
         
-        // line('a'+i, 'b'+i, {stroke:'rgba(0,0,0,.1)'})
-        // point(ax,ay,{id: 'a'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
-        // point(bx,by,{id: 'b'+i, affects: ['middlex', 'middley']}, {fill:'rgba(0,0,0,.1)'})
 
-        line(ax, ay, bx, by, {affects: ['t'], stroke:'rgba(0,0,0,.1)'})
+        ctx.line(ax, ay, bx, by, {affects: ['t'], stroke:'rgba(0,0,0,.1)'})
         smooth.push([tween(ax,bx), tween(ay,by)])
     }
 
     var p = smooth[0]
     for (var i = 1; i < smooth.length; i++) {
-        line(...p, ...smooth[i], {affects: ['t'], 'stroke-width': 5})
+        ctx.line(p[0], p[1], smooth[i][0], smooth[i][1], {affects: ['t'], 'stroke-width': 5})
         p = smooth[i]
     }
 
-    line(startx,starty, middlex,middley)
-    line(middlex,middley, endx,endy)
+    ctx.line(startx,starty, middlex,middley)
+    ctx.line(middlex,middley, endx,endy)
 
-    point(startx,starty)
-    point(middlex,middley)
-    point(endx,endy)
+    ctx.point(startx,starty)
+    ctx.point(middlex,middley)
+    ctx.point(endx,endy)
 
-}, newdata => {
-    console.log(newdata)
-}) 
-  .align('center', 'center')
+}
+
+
+g9(initialData, render) 
+    .align('center', 'center')
     .insertInto('#demo-bezier')</textarea>
     </div>
     <div class='display' id='demo-bezier'></div>
@@ -442,59 +439,53 @@ var demo = g9(data, render)
     <div class='input'>
         <div class='run-button'>Run</div>
         <textarea class='user'>
- var initial = {
+'use strict';
+
+var initial = {
     az: 0,
     ax: 0,
     ay: 0,
     ez: 1,
     ex: 100,
-    ey: 100,
+    ey: 100
+};
+
+var sin = Math.sin,
+    cos = Math.cos;
+
+function mul(m, v) {
+    return m.map(function (row) {
+        return row.reduce(function (a, b, i) {
+            return a + b * v[i];
+        }, 0);
+    });
 }
 
-var {sin, cos} = Math;
-
-
-function mul(m,v){
-    return m.map(row => row.reduce((a,b,i) => a + b*v[i], 0))
+function rx(v, theta) {
+    return mul([[1, 0, 0], [0, cos(theta), -sin(theta)], [0, sin(theta), cos(theta)]], v);
 }
 
-function rx(v, theta){
-    return mul([
-        [1,          0,           0],
-        [0, cos(theta), -sin(theta)],
-        [0, sin(theta),  cos(theta)],
-    ], v)
+function ry(v, theta) {
+    return mul([[cos(theta), 0, sin(theta)], [0, 1, 0], [-sin(theta), 0, cos(theta)]], v);
 }
 
-function ry(v, theta){
-    return mul([
-        [cos(theta),          0,           sin(theta)],
-        [0, 1, 0],
-        [-sin(theta), 0,  cos(theta)],
-    ], v)
-}
-
-function rz(v, theta){
-    return mul([
-        [cos(theta), -sin(theta), 0],
-        [sin(theta),  cos(theta), 0],
-        [0, 0, 1],
-    ], v)
+function rz(v, theta) {
+    return mul([[cos(theta), -sin(theta), 0], [sin(theta), cos(theta), 0], [0, 0, 1]], v);
 }
 
 function rotate(v, ax, ay, az) {
-    return rx(ry(rz(v,az),ay),ax)
+    return rx(ry(rz(v, az), ay), ax);
 }
 
-function translate([x,y,z], dx, dy, dz) {
-    return [x+dx,y+dy,z+dz]
+function translate(p, dx, dy, dz) {
+    return [p[0] + dx, p[1] + dy, p[2] + dz];
 }
 
-function project([x,y,z]){
-    return [300*x/z, 300*y/z]
+function project(p) {
+    return [300 * p[0] / p[2], 300 * p[1] / p[2]];
 }
 
-console.log(project)
+console.log(project);
 
 // mul([[1,0,0],[1,2,0],[0,0,1]], [1,2,3])
 
@@ -502,55 +493,54 @@ console.log(project)
 //     return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
 // }
 
-var points= []
+var points = [];
 for (var x = 0; x < 2; x++) {
     for (var y = 0; y < 2; y++) {
         for (var z = 0; z < 2; z++) {
-            points.push([x -.5,y -.5, z - .5])
+            points.push([x - .5, y - .5, z - .5]);
         }
     }
 }
 
-console.log(points)
+console.log(points);
 
-var edges = []
+var edges = [];
 
 for (var i = 0; i < points.length; i++) {
-    var pi = points[i]
-    for (var j = i+1; j < points.length; j++) {
-        var pj = points[j]
-        if(pi.reduce((a,c,k)=> a + (c!= pj[k]), 0) === 1){
-            edges.push([pi, pj])
+    var pi = points[i];
+    for (var j = i + 1; j < points.length; j++) {
+        var pj = points[j];
+        if (pi.reduce(function (a, c, k) {
+            return a + (c != pj[k]);
+        }, 0) === 1) {
+            edges.push([pi, pj]);
         }
     }
 }
 
+function render(data, ctx) {
+    var ax = data.ax,
+        ay = data.ay,
+        az = data.az;
 
-function render(data, ctx){
-    var {ax,ay,az} = data
-
-    var drawedge = ctx.pure(function([p1,p2]){
-        var [x1, y1] = project(
-                translate(rotate(p1, ax,ay,0), 0,0,2))
-        var [x2, y2] = project(
-                translate(rotate(p2, ax,ay,0), 0,0,2))
-        ctx.line( x1, y1, x2, y2, {
+    var drawedge = ctx.pure(function (ps) {
+        var p1 = project(translate(rotate(ps[0], ax, ay, 0), 0, 0, 2));
+        var p2 = project(translate(rotate(ps[1], ax, ay, 0), 0, 0, 2));
+        ctx.line(p1[0], p1[1], p2[0], p2[1], {
             affects: ['ax', 'ay'],
             "stroke-width": 10,
             "stroke-linecap": "round"
-        })
-    })
+        });
+    });
 
-    edges.forEach(drawedge)
-}   
-
-function log(x){
-    console.log(x)
+    edges.forEach(drawedge);
 }
 
-var demo = g9(initial, render, log) 
-  .align('center', 'center')
-    .insertInto('#demo-cube')</textarea>
+function log(x) {
+    console.log(x);
+}
+
+var demo = g9(initial, render, log).align('center', 'center').insertInto('#demo-cube');</textarea>
     </div>
     <div class='display' id='demo-cube'></div>
 </div> 
@@ -619,23 +609,19 @@ var demo = g9(data, render)
     <div class='input'>
         <div class='run-button'>Run</div>
         <textarea class='user'>
- var demo = g9({
+var initial = {
 
     x: -100,
-    y: -100,
+    y: -100
 
-}, ({
+}
 
-    x, y, width, height
+function render (data, ctx){
+    ctx.image('http://i.imgur.com/LQIsf.jpg', data.x, data.y, 200, 200)        
+}
 
-}, draw) => {
-
-    draw.image('http://i.imgur.com/LQIsf.jpg', x, y, 200, 200)
-        
-}, newdata => {
-    console.log(newdata)
-}) 
-  .align('center', 'center')
+g9(initial,render) 
+    .align('center', 'center')
     .insertInto('#demo-image')</textarea>
     </div>
     <div class='display' id='demo-image'></div>
@@ -654,7 +640,7 @@ var demo = g9(data, render)
     <div class='input'>
         <div class='run-button'>Run</div>
         <textarea class='user'>
- var initial = {
+var initial = {
     a: 18,
     b: 1,
 }
@@ -673,15 +659,17 @@ function render(data, ctx){
         var nexty1 = y1 + dir*100*Math.sin(data.b)
         var nexty2 = y2 - dir*100*Math.sin(data.b)
 
-        ctx.line(...rotate(x,y1,data.a), ...rotate(nextx,nexty1,data.a), {"stroke-width":10, "stroke-linecap":"round"})
-        ctx.line(...rotate(x,y2,data.a), ...rotate(nextx,nexty2,data.a), {"stroke-width":10, "stroke-linecap":"round"})
+        var r1 = rotate(x,y1,data.a), r2 = rotate(nextx,nexty1,data.a)
+        var r3 = rotate(x,y2,data.a), r4 = rotate(nextx,nexty2,data.a)
+
+        ctx.line(r1[0], r1[1], r2[0], r2[1], {"stroke-width":10, "stroke-linecap":"round"})
+        ctx.line(r3[0], r3[1], r4[0], r4[1], {"stroke-width":10, "stroke-linecap":"round"})
         
         x = nextx
         y1 = nexty1
         y2 = nexty2
 
     }    
-    // ctx.point(100*Math.cos(data.a - data.b), 100*Math.sin(data.a - data.b))
 }   
 
 function log(x){
@@ -689,7 +677,7 @@ function log(x){
 }
 
 var demo = g9(initial, render, log) 
-  .align('center', 'center')
+    .align('center', 'center')
     .insertInto('#demo-tongs')</textarea>
     </div>
     <div class='display' id='demo-tongs'></div>
@@ -705,7 +693,7 @@ var demo = g9(initial, render, log)
     <div class='input'>
         <div class='run-button'>Run</div>
         <textarea class='user'>
- var demo = g9({
+  var demo = g9({
     deltaAngle:33,
     attenuation:0.7,
     startLength:189
@@ -715,8 +703,11 @@ var demo = g9(initial, render, log)
         var x2 = x1 + length * Math.cos(angle*Math.PI/180);
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
-        ctx.point(x2, y2, {affects:['deltaAngle', 'attenuation']})
-        ctx.line(x1,y1,x2,y2, {'stroke-width': 5, affects:['deltaAngle', 'attenuation']})
+        ctx.point(x2, y2, {affects:['deltaAngle', 'attenuation'],
+                          fill: 'green'})
+        ctx.line(x1,y1,x2,y2, {'stroke-width': 5, 
+                               stroke: n>3?'brown':'green',
+                               affects:['deltaAngle', 'attenuation']})
 
         if(n > 0) {
             drawTree(x2, y2, length*attenuation, angle+deltaAngle, n-1);
@@ -863,9 +854,9 @@ function render(data, ctx){
 function make_turtle(ctx){
     var t = 0, x = 0, y = 0;
     return {
-        turn(angle){ t += angle },
-        dturn(deg){ t += deg / (180 / Math.PI)},
-        forward(amount, options = {}){
+        turn: function(angle){ t += angle },
+        dturn: function(deg){ t += deg / (180 / Math.PI)},
+        forward: function(amount, options){
             var new_x = x + amount * Math.cos(t),
                 new_y = y + amount * Math.sin(t);
             if(options) ctx.line(x, y, new_x, new_y, options);
