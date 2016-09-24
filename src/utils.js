@@ -33,6 +33,8 @@ export function addDragHandler(el, startDrag){
         }
 
         var onend = function(e){
+            e.preventDefault()
+            
             draggingCount--
             document.removeEventListener('mousemove', onmove)
             document.removeEventListener('touchmove', onmove)
