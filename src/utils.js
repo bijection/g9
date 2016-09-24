@@ -12,7 +12,9 @@ export function addDragHandler(el, startDrag){
     function onstart(e){
         draggingCount++
 
+        e.stopPropagation()
         e.preventDefault()
+
         e = e.touches ? e.touches[0] : e
 
         var onDrag = startDrag(e)
