@@ -1,6 +1,6 @@
 body, html {
 	margin: 0;
-	height: 100%;
+	min-height: 100%;
 }
 body {
     font-family: Zombocom, sans-serif;
@@ -13,6 +13,9 @@ body {
     align-items: baseline;
     // padding: 15px;
     flex-wrap: wrap;
+}
+.header a {
+    text-decoration: none;
 }
 .splash {
     font-size: 60px;
@@ -144,7 +147,7 @@ li > a {
 }
 .nav-wrap {
     flex: 1;
-    text-align: center;
+    text-align: right;
 }
 .nav, .npm {
     margin-left: 10px
@@ -153,4 +156,8 @@ li > a {
     color: #222;
     text-decoration: none;
     font-weight: bold;
+}
+.tagline {
+    margin-left: 10px;
+    color: #a5a5a5;
 }

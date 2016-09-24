@@ -31,6 +31,13 @@ function data2graphics(data, ctx){
     
     ctx.circle(data.fromX, data.fromY, {r:5})
     ctx.circle(data.toX, data.toY, {r:5})
+
+    // display the data
+    // Object.keys(data).forEach(function(key, i){
+    //     ctx.text(key + ': '+ data[key].toFixed(3), 
+    //         10 - ctx.width/2,
+    //         20 - ctx.height/2 + i * 20)
+    // })
 }
 
 var demo = g9(data, data2graphics)

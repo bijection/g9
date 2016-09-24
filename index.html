@@ -9,105 +9,72 @@
     <!-- <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/components/prism-javascript.min.js'></script> -->
 </head>
 <body class='language-js'>
+
+<a href="https://github.com/bijection/g9"><img style="width: 150px; position: absolute; top: 0; right: 0; border: 0;" src="./github.png" alt="Spoon me on GitHub" ></a>
+
 <div class='page'>
     <div class='header'>
-        <div class='splash'>
+        <a href="./"><div class='splash'>
             g9.js
-        </div>
-        <div class='npm'>npm install g9</div>
-        <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js"><div class='npm'>Download</div></a>
+        </div></a>
+        <div class='tagline'>automatically interactive graphics</div>
+
+        <!-- <div class='npm'>Getting Started</div> -->
         <div class='nav-wrap'>
-            <a href='./gallery' class='nav'>Gallery</a>
+            <a href='#installation' class='nav'>Get Started</a>
+            <a href='./gallery' class='nav'>Examples</a>
             <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
-            <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
-    <p>A JavaScript library for creating <b>automatically interactive graphics</b>.
+
     
-    <p><b>Example:</b> We can make an interactive dragon curve in under <b>40 lines of code</b> (<a href="#dragon">included below</a>).
-    Try dragging the curve to change its parameters.
-    <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
-    <span class='gallery-plug'>For more examples, see the <a href="./gallery">Gallery</a>.</span>
+
+    <p>With <b>g9</b>, making an <b>interactive visualization</b> is as easy as making a visualization that isn't.</p>
+
+    <p>Just write a function which <b>draws shapes</b> based on data, and g9 will <b>automatically</b> figure out how to manipulate that data when you <b>drag the shapes</b> around.</p>
+
+    <p><b>Example:</b> An interactive dragon curve in under <a href="./gallery/#demo-dragon">40 lines of code</a>.
+    Try <b>dragging the curve</b>!</p>
+    
     <div class='demo'>
         <div class='display'></div>
     </div>
-    <h2>How It Works</h2>
-    <p>
-    g9.js exposes a single function, <a href="https://github.com/bijection/g9#g9initialdata-data2graphics-onchange"><span class='literal'>g9(initialData, data2graphics[, onChange])</span></a>. This represents the following flow: 
-    <ol>
-    
-    <li>
-        You create some initial data as key-value pairs with numeric values. For example:
-<pre><code>var initialData = {
-    foo: 10
-}</code></pre>
-    <a href='https://github.com/bijection/g9#initialdata'>initialData in the docs</a>
-    </li>
 
-    <li>
-        This data is fed into a function that uses it to decide how to draw the graphics.
-<pre><code>function data2graphics(data, ctx){
-    ctx.circle(data.foo, 17)
-}</code></pre>
-    <a href='https://github.com/bijection/g9#data2graphicsdata-ctx'>data2graphics in the docs</a>
-    </li>
+
+    <!-- There are a bunch of other examples in the <a href="">Gallery</a>, or you can scroll down to read through the code. -->
+    <p class='gallery-plug'>For more examples, and "how g9 works??", see the <a href="./gallery">Examples</a>.</p>
+
+
+    <a id="installation"></a>
+    <h2>Getting Started</h2>
     
-    <li>When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for your data to find a set of values that comes closest to creating the change. If you tried to drag the circle to the left, g9 might come up with 
-<pre><code>{
-    foo: 8
-}</code></pre></li>
-    
-    <li>g9 rerenders the entire scene with the new data, so that everything is consistent. If you've provided one, g9 calls your onChange callback with the new data, so you can update other parts of your page.</li>
-    
-    </ol>
+    <p>The easiest way to get started with g9 is to play around with the <b>live programming environment</b> built into the <a href="./gallery">examples page</a>. </p>
+
+<h3>CDN</h3>
+
+<p>You can just include the following snippet of code to start using g9 in your web pages</p>
+
+<pre><code>&lt;script src='https://cdn.rawgit.com/bijection/g9/master/dist/g9.js'>&lt;/script></code></pre>
+
+
+<h3>Local Installation</h3>
+<p>To install a copy of g9 locally, first <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js" download>download g9.js</a> and then copy the file to your source directory. Then include the following snippet and you're all set. </p>
+
+<pre><code>&lt;script src='path/to/g9.js'>&lt;/script></code></pre>
+
+    <h3>Browserify/Webpack</h3>
+    <p>
+    If you're using something like Browserify or Webpack, you can install g9 with npm. 
+
+    <pre><code>npm install g9</code></pre>
+<pre><code>var g9 = require('g9')
+// or 
+import g9 from 'g9'    
+</code></pre>
+
     </p>
-    <p>You can play aroung with basic examples like this (and slightly crazier ones), <a href='./gallery'>in the gallery</a>.</p>
-    <p>For a complete treatment of the g9 API, <a href="https://github.com/bijection/g9#docs">head to the Docs</a>.</p>
 
-    <h2 id='dragon'>Making the Dragon Curve</h2>
     
-    <p>
-    <pre><code class='data'>var data = {
-    "squareness": 0.8,
-    "fromX": 175,
-    "fromY": 96,
-    "toX": -220,
-    "toY": 39
-}
-
-function data2graphics(data, ctx){
-    var lineoptions = {
-        'stroke-width': 4,
-        'stroke-linecap':'round',
-        affects:['squareness']
-    }
-
-    function dragon(x1,y1, x2,y2, dir, level){
-        if(level == 0){
-            ctx.line(x1, y1,x2, y2, lineoptions)
-        } else {
-            var midx = (x1 + x2 + data.squareness*dir*(y2 - y1))/2
-            var midy = (y1 + y2 - data.squareness*dir*(x2 - x1))/2
-
-            dragon(x1,y1, midx,midy, -1,level-1)
-            dragon(midx,midy, x2,y2,  1,level-1)
-        }
-    }
-    
-    dragon = ctx.pure(dragon)
-    
-    dragon(data.fromX, data.fromY, data.toX, data.toY, -1, 9)
-    
-    ctx.circle(data.fromX, data.fromY, {r:5})
-    ctx.circle(data.toX, data.toY, {r:5})
-}
-
-g9(initdata, data2graphics)
-    .insertInto('.demo .display')</code></pre>
-
-    <h2>Finally</h2>
-
-    You might want to try more <a href="./gallery">interactive examples</a>
 
     <div class='editor'></div>
     <div class='lead'></div>

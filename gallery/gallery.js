@@ -24,14 +24,20 @@ function inViewPort(el) {
         })
 
         var _graphics;
+        var _intervals = [];
 
         function run(){
             var _g9 = window.g9
+            var _setInterval = window.setInterval
             var g9 = function(a,b,c) {
-                if(_graphics) {_graphics.remove()}
                 _graphics = _g9(a,b,c)
                 return _graphics
             }
+            var setInterval = function(a,b){
+                _intervals.push(_setInterval(a,b))
+            }
+            if(_graphics && _graphics.remove) {_graphics.remove()}
+            var _interval; while(_interval = _intervals.pop()) clearInterval(_interval);
             eval(cm.getValue())
         }
 

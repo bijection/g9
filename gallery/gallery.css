@@ -1,3 +1,7 @@
+body {
+    padding-bottom: 20px;
+}
+
 .CodeMirror {
     box-shadow: none !important;
     background: #fdf6e3;

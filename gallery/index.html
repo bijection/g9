@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.css">
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/addon/edit/matchbrackets.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/theme/solarized.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-solarizedlight.min.css">
 
     <link rel="stylesheet" type="text/css" href="https://antimatter15.com/style/temp/test.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -14,24 +15,68 @@
 
 
 </head>
-<body>
+<body class='language-js'>
 <div class='page'>
     <div class='header'>
-        <a href='/' class='splash'>
+        <a href="../"><div class='splash'>
             g9.js
-        </a>
-        <div class='npm'>npm install g9</div>
-        <a href="https://raw.githubusercontent.com/bijection/g9/master/dist/g9.js"><div class='npm'>Download</div></a>
+        </div></a>
+        <div class='tagline'>automatically interactive graphics</div>
+
+        <!-- <div class='npm'>Getting Started</div> -->
         <div class='nav-wrap'>
-            <a href='/' class='nav'>Home</a>
+            <a href='#installation' class='nav'>Get Started</a>
+            <a href='./gallery' class='nav'>Examples</a>
             <a href='https://github.com/bijection/g9#docs' class='nav'>Docs</a>
-            <a href='https://github.com/bijection/g9' class='nav'>Github</a>
         </div>        
     </div>
+
     <p>Welcome to the g9 gallery! <b>Drag all the graphics!</b></p>
     <p>I've tried to organize stuff from basic to advanced, so you can scroll from the top to get an intuitive feel for g9. It's worth mentioning, of course, that intuitive feeling is no match for <a href='https://github.com/bijection/g9#docs'>reading the docs</a>.</p>
-    <p>In order to avoid repetion, every example gets a special function <span class='literal'>_special_log</span> that shows its arguments somewhere.</p>
+
+    <p>Before you dive in, here's a brief explanation of how g9 works (scroll down to skip):</p>
+
+
+    <h2>How It Works</h2>
+    <p>
+    g9.js exposes a single function, <a href="https://github.com/bijection/g9#g9initialdata-render-onrender-g9canvas"><span class='literal'>g9(initialData, render[, onChange])</span></a>. This represents the following flow: 
+    <ol>
+    
+    <li>
+        You create some initial data as key-value pairs with numeric values. For example:
+<pre><code>var initialData = {
+    foo: 10
+}</code></pre>
+    <a href='https://github.com/bijection/g9#initialdata'>initialData in the docs</a>
+    </li>
+
+    <li>
+        This data and a drawing context are fed into a function that uses the data to decide what to draw.
+<pre><code>function render(data, ctx){
+    ctx.point(data.foo, 17)
+}</code></pre>
+    <a href='https://github.com/bijection/g9#renderdata-ctx-g9context'>render in the docs</a>
+    </li>
+    
+    <li>When someone interacts with the graphics, for example by trying to drag an element to a new position, g9 optimizes over the space of possible values for your data to find a set of values that comes closest to creating the change. If you tried to drag the circle to the left, g9 might come up with the new data <span class='literal'>{foo: 8 }</span>.</li>
+    
+    <li>g9 rerenders the entire scene with the new data, so that everything is consistent. If you've provided one, g9 calls your <span class='literal'>onChange</span> callback with the new data, so you can update other parts of your page.</li>
+    
+    </ol>
+    </p>
+    <p>For a complete treatment of the g9 API, <a href="https://github.com/bijection/g9#docs">head to the Docs</a>.</p>
+
+
+
+    <p>In order to avoid repetion, every example gets a special function <span class='literal'>_special_log</span> that shows its arguments in a floating box.</p>
+
+
+
 </div>
+
+
+
+
 
 
 
@@ -41,7 +86,7 @@
 
 <div class='page'>
 <h1>Basic</h1>
-<p>A minimal example with only two points.</p>
+<p>A minimal example with only two points. Our render function always draws one point at (x, y), and the other point at (y, x), so when you drag one of the points, the other kind of mirrors it. Try adding a minus sign before the first argument of the first point. What happens?</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -49,7 +94,7 @@
         <div class='run-button'>Run</div>
         <textarea class='user'>
 var initialData = {
-    x: 0,
+    x: 10,
     y: 0
 }
 
@@ -76,9 +121,63 @@ g9(initialData, render)
 
 
 
+
+
+
 <div class='page'>
-<h1>The effects option</h1>
-<p>Three different line behaviors.</p>
+<h1>Rings</h1>
+<p>Lets add a few more points and use a bit or trigonometry to arrange them into two circles. Just for fun, we make the inner points red. Try dragging the points!</p>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initialData = {
+    radius: 100,
+    angle: 0
+}
+
+function render(data, ctx){
+    var sides = 10
+    for(var i=0; i&lt;sides; i++){
+        var a = data.angle + i/sides * Math.PI * 2
+        var r1 = data.radius
+        var r2 = r1/2
+        ctx.point(r1 * Math.cos( a), r1 * Math.sin( a))
+        ctx.point(r2 * Math.cos(-a), r2 * Math.sin(-a), {fill: 'red'})
+
+        /* uncomment this following line to make this
+           drawing more exciting! */
+
+        /*ctx.line(r1 * Math.cos( a), r1 * Math.sin( a),
+                   r2 * Math.cos(-a), r2 * Math.sin(-a)) */
+
+    }
+}         
+
+g9(initialData, render)
+    .align('center', 'center')
+    .insertInto('#demo-rings')</textarea>
+    </div>
+    <div class='display' id='demo-rings'></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>The affects option</h1>
+<p>All of the default shapes in g9 accept an <span class='literal'>affects</span> option, which tells them what parts of the data they can change. Here are three lines with different values of <span class='literal'>affects</span>.</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -139,187 +238,15 @@ g9(initialData, render)
 
 
 
-
-
-<div class='page'>
-<h1>Rings</h1>
-<p>Two concentric rings</p>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
-var initialData = {
-    radius: 100,
-    angle: 0
-}
-
-var render = function(data, ctx){
-    var sides = 10
-    for(var i=0; i&lt;sides; i++){
-        var a = data.angle + i/sides * Math.PI * 2
-        var r1 = data.radius
-        var r2 = r1/2
-        ctx.point(r1 * Math.cos(a), r1 * Math.sin(a))
-        ctx.point(r2 * Math.cos(-a), r2 * Math.sin(-a))
-    }
-
-}         
-
-g9(initialData, render)
-    .align('center', 'center')
-    .insertInto('#demo-rings')</textarea>
-    </div>
-    <div class='display' id='demo-rings'></div>
-</div>
-
  
 
 
 
-<div class='page'>
-<h1>bars</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    x: -300,
-    t: 1  
-}
-
-var wolo = []
-
-for (var i = 0; i < 50; i++) {
-    wolo.push(Math.pow(Math.random(), 2))
-}
-
-function color(n){
-    return '#'+Math.floor(n).toString(16)
-}
-
-var colors1=[]
-var colors2=[]
-wolo.forEach(w => {
-    colors1.push(Math.random()*16777215)
-    colors2.push(Math.random()*16777215)
-})
-
-function tween(a, b, t){
-    return a + (b-a)*t
-}
-
-var margin = 3
-
-function center(x,y,w,h){
-    return [(x+w/2), y + h/2]
-}
-
-function data2graphics(data, ctx){
-    var w = (ctx.width - (wolo.length - 1)*margin )/ wolo.length
-    var h = (ctx.height - (wolo.length - 1)*margin )/ wolo.length
-
-    var t = Math.max(Math.min(data.t,1),0)
-
-    wolo.forEach(ctx.pure((d, i) => {
-        var x = tween(-ctx.width/2 + i * (w + margin), -ctx.width/2, t)
-        var y = tween(ctx.height/2, -ctx.height/2+ i*(h + margin), t)
-        var width = tween(w, -d * data.x, t)
-        var height = tween(-d * Math.log(-data.x)*100, -h, t)
-
-        ctx.rect(
-            x,
-            y,
-            width,
-            height,
-            {
-                fill: color(colors1[i]),//color(tween(colors1[i], colors2[i], t)),
-                affects: i ? ['t'] : ['x']
-            }
-        )
-    }))
-}
-
-function log(x){
-    console.log(x)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-bars')</textarea>
-    </div>
-    <div class='display' id='demo-bars'></div>
-</div> 
-
-<div class='page'>
-<h1>ben</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    spacing: 100,
-    day1: 100,
-    day2: 200,
-    day3: 300,
-    down: 100
-}
-
-var total = 1000
-
-function data2graphics(data, ctx){
-
-    var bottom = ctx.height/2 - 40
-
-    ctx.point(0, bottom)
-
-    var {day1, day2, day3} = data
-
-    var days = (day1+day2+day3)
-
-
-    var pymy = (total - data.down) * (1 + days*.1/365) / 3
-    
-    ctx.rect(day1, bottom, 20, -pymy, {
-        affects: ['day1'],
-    })
-    ctx.text(Math.round(day1*100)/100, day1, bottom + 20)
-    
-    ctx.rect(day2, bottom, 20, -pymy, {
-        affects: ['day2'],
-    })
-    ctx.text(Math.round(day2*100)/100, day2, bottom + 20)
-    
-    ctx.rect(day3, bottom, 20, -pymy, {
-        affects: ['day3'],
-    })
-    ctx.text(Math.round(day3*100)/100, day3, bottom + 20)
-
-    ctx.rect(0, bottom, 20, -data.down)
-
-    ctx.text(pymy, 0,0)
-}   
-
-function log(x){
-    console.log(x)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-ben')</textarea>
-    </div>
-    <div class='display' id='demo-ben'></div>
-</div> 
-
 
 
 <div class='page'>
-<h1>bezier</h1>
+<h1>Bézier Curve</h1>
+<p>Here's an interactive version of the quadratic bézier curve animation on <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Quadratic_curves">the bézier curve wikipedia page</a>.</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -401,60 +328,7 @@ var demo = g9(initial, data2graphics, log)
 
 
 <div class='page'>
-<h1>carbide_logo</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    angle: 0,
-    s1: 100,
-    s2: 100,
-}
-
-function data2graphics(data, ctx){
-    var {angle, s1,s2,s3 ,x,y} = data;
-
-    function forward(n, c){
-        ctx.line(x,y, x+=n*Math.cos(angle), y+=n*Math.sin(angle),{'stroke-linecap': 'round', 'stroke-width':10})
-    }
-
-    function turn(n){
-        angle -= n * Math.PI/180
-    }
-
-    var x = y =0
-
-    var a = angle * 180 / Math.PI
-
-    for(var i = 0; i< 6; i++){
-        forward(s1, ['s1', 'a'])
-        turn(a)
-        forward(s2, ['s2'])
-        turn(60 - (a-90))
-        forward(s2, ['s2'])
-        turn(-90)
-    }
-
-}
-
-function log(x){
-    console.log(x)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-carbide_logo')</textarea>
-    </div>
-    <div class='display' id='demo-carbide_logo'></div>
-</div> 
-
-
-
-<div class='page'>
-<h1>point</h1>
+<h1>Three points define a circle</h1>
 </div>
 
 <div class='gallery-wrap'>
@@ -483,7 +357,7 @@ function multiply(A, x){
 }
 
 
-function data2graphics(data, ctx){
+function render(data, ctx){
     
     var mx1 = (data.x1 + data.x2)/2
     var my1 = (data.y1 + data.y2)/2
@@ -546,84 +420,13 @@ function data2graphics(data, ctx){
     ctx.point(data.x3, data.y3)
 }
 
-var demo = g9(data, data2graphics) 
+var demo = g9(data, render) 
   .align('center', 'center')
     .insertInto('#demo-point')</textarea>
     </div>
     <div class='display' id='demo-point'></div>
 </div> 
 
-
-
-<div class='page'>
-<h1>colorwheel</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    a: 0,
-    b: 0,
-    k:100,
-}
-
-function rotate(x,y, a){
-    return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
-}
-
-function rgb(r,g,b){
-    r = Math.round(r * 255)
-    g = Math.round(g * 255)
-    b = Math.round(b * 255)
-    return 'rgba('+r+','+g+','+b+',1)'
-}
-
-function data2graphics(data, ctx){
-    var x = 0, y1 = 0, y2 = -100*Math.sin(data.b)
-
-    function inner(r,n,a,j){
-        ctx.point(...rotate(0, r, j / n * Math.PI*2 + a), {
-            r:data.k,
-            fill: rgb(
-                Math.abs(Math.sin(j/n*Math.PI*2*3)),
-                Math.abs(Math.sin(j/n*Math.PI*2*5)),
-                Math.abs(Math.sin(j/n*Math.PI*2*7))
-            )
-        })        
-    }
-
-    inner = ctx.pure(inner)
-
-    function ring(r, n, a) {
-        for (var j = 0; j < n; j++) {
-            inner(r,n,a,j)
-        }
-    }
-
-    ring = ctx.pure(ring)
-
-
-
-    for (var i = 1; i < 40; i++) {
-
-        ring(i*2*data.k, i*6, i%2 ? data.a : - data.a)
-        
-    }    
-    // ctx.point(100*Math.cos(data.a - data.b), 100*Math.sin(data.a - data.b))
-}   
-
-function log(x){
-    console.log(x)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-colorwheel')</textarea>
-    </div>
-    <div class='display' id='demo-colorwheel'></div>
-</div> 
 
 
 
@@ -719,7 +522,7 @@ for (var i = 0; i < points.length; i++) {
 }
 
 
-function data2graphics(data, ctx){
+function render(data, ctx){
     var {ax,ay,az} = data
 
     var drawedge = ctx.pure(function([p1,p2]){
@@ -741,7 +544,7 @@ function log(x){
     console.log(x)
 }
 
-var demo = g9(initial, data2graphics, log) 
+var demo = g9(initial, render, log) 
   .align('center', 'center')
     .insertInto('#demo-cube')</textarea>
     </div>
@@ -749,70 +552,6 @@ var demo = g9(initial, data2graphics, log)
 </div> 
 
 
-
-
-<div class='page'>
-<h1>dm_spiral</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    x1: 100,
-    y1: 0,
-
-    x2: -100,
-    y2: 0,
-
-    a1: 0,
-    r1: 100,
-
-    a2: 0,
-    r2: 100,
-}
-
-function data2graphics(data, ctx){
-    
-    ctx.point(data.x1,data.y1)
-    ctx.point(data.x2,data.y2)
-
-    var dx = data.x1 - data.x2
-    var dy = data.y1 - data.y2
-    var d = Math.sqrt(dx*dx+dy*dy)
-
-    var x1 = data.x1
-    var y1 = data.y1
-    var x2 = data.x2
-    var y2 = data.y2
-
-    dx += Math.cos(data.a1)*data.r1 - Math.cos(data.a2)*data.r2
-    dy += Math.sin(data.a1)*data.r1 - Math.sin(data.a2)*data.r2
-
-    var attenuation = Math.sqrt(dx*dx+dy*dy) / d
-    var scale = 1
-    var a1 = 0
-    var a2 = 0
-
-    for (var i = 0; i < 10; i++) {
-        ctx.point(x1 += Math.cos(a1+=data.a1)*data.r1*scale, y1 += Math.sin(a1+=data.a1)*data.r1*scale, {affects: ['a1', 'r1']})
-        ctx.point(x2 += Math.cos(a2+=data.a2)*data.r2*scale, y2 += Math.sin(a2+=data.a2)*data.r2*scale, {affects: ['a2', 'r2']})
-        scale *= attenuation
-    }
-
-}
-
-function log(x, y){
-    console.log(x,y)
-}
-
-var demo = new g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-dm_spiral')</textarea>
-    </div>
-    <div class='display' id='demo-dm_spiral'></div>
-</div> 
 
 
 
@@ -832,7 +571,7 @@ var demo = new g9(initial, data2graphics, log)
     "toY": 39
 }
 
-function data2graphics(data, ctx){
+function render(data, ctx){
     var lineoptions = {
         'stroke-width': 4,
         'stroke-linecap':'round',
@@ -859,7 +598,7 @@ function data2graphics(data, ctx){
     ctx.point(data.toX, data.toY, {r:5})
 }
 
-var demo = g9(data, data2graphics) 
+var demo = g9(data, render) 
   .align('center', 'center')
     .insertInto('#demo-dragon')</textarea>
     </div>
@@ -878,11 +617,8 @@ var demo = g9(data, data2graphics)
         <textarea class='user'>
  var demo = g9({
 
-    x: 148.00000000002743,
-    y: 232.000000002497,
-
-    width: 299.00000000255926,
-    height: 21.000000000037627,
+    x: -100,
+    y: -100,
 
 }, ({
 
@@ -890,9 +626,7 @@ var demo = g9(data, data2graphics)
 
 }, draw) => {
 
-    draw.image('http://i.imgur.com/LQIsf.jpg', x, y, width,width)
-    draw.point(x+width,y+width)
-    draw.point(x+width/2,y+width/2)
+    draw.image('http://i.imgur.com/LQIsf.jpg', x, y, 200, 200)
         
 }, newdata => {
     console.log(newdata)
@@ -904,171 +638,6 @@ var demo = g9(data, data2graphics)
 </div> 
 
 
-
-
-
-<div class='page'>
-<h1>leo</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    size: 100,
-}
-
-function data2graphics(data, ctx){
-    ctx.line(0, -100, 0, data.size, {
-        "stroke-width": 10})
-    ctx.point(0, data.size)
-    if (data.size>100) {
-        var left
-        if (Math.random() > 0.5) {
-            left = 1
-        } else {
-            left = -1
-        }
-        ctx.line(0, 100, (data.size-100)*left, 100)
-    }
-    
-}  
-
-function log(x){
-    console.log(x)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-leo')</textarea>
-    </div>
-    <div class='display' id='demo-leo'></div>
-</div> 
-
-
-
-<div class='page'>
-<h1>omar</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var data = {
-    a: 1,
-    b: 1,
-    c: 1
-}
-
-
-function data2graphics(data, ctx){
-    var f = function(t) {
-        return data.a*t*t + data.b*t + data.c*t;
-    }
-
-    var render = ctx.pure(function(t) {
-        ctx.point({x:t,y:f(t),r:2})
-    })
-
-    for (var t = -5; t <= 5; t += 0.01) {
-        render(t)
-    }
-}
-
-
-function log(data) {
-    console.log(data)
-}
-
-var demo = g9(data, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-omar')</textarea>
-    </div>
-    <div class='display' id='demo-omar'></div>
-</div> 
-
-
-
-<div class='page'>
-<h1>scratch</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var initial = {
-    x1: -100,
-    x2: 0,
-    x3: 100,
-}
-
-function data2graphics(data, ctx){
-    var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
-    ctx.point(m,0, {affects: ['x2']})
-    ctx.point(data.x2,20, {affects: ['x2']})
-    ctx.point(data.x1,0, {fill: 'red'})
-    ctx.point(data.x3,0, {fill: 'red'})
-}
-
-function log(x, y){
-    console.log(x,y)
-}
-
-var demo = g9(initial, data2graphics, log) 
-  .align('center', 'center')
-    .insertInto('#demo-scratch')</textarea>
-    </div>
-    <div class='display' id='demo-scratch'></div>
-</div> 
-
-
-
-<div class='page'>
-<h1>snake</h1>
-</div>
-
-<div class='gallery-wrap'>
-    <div class='input'>
-        <div class='run-button'>Run</div>
-        <textarea class='user'>
- var demo = g9({
-    r1: 6.259436678879225,
-    r2: 12.539682642803488,
-    r3: 12.707953163637603,
-    r4: 6.018393351961019,
-    x: 490.853355091885,
-    y: 162.09610769932087,
-}, function(data, draw){
-
-    var dots = [[data.x, data.y]];
-
-    var r0 = 0;
-    [data.r1, data.r2, data.r3, data.r4].forEach(function(r){
-        var last = dots[dots.length-1]
-        var x = last[0], y = last[1];
-        r0+=r
-        dots.push([x+50*Math.cos(r0), y+50*Math.sin(r0)])
-    })
-
-    var id = 0
-    dots.map(function(d){
-        return draw.point(d[0], d[1], id++)
-    }).reduce(function(a,b){
-        draw.line(a,b,id++)//.css({pointerEvents: 'none'})
-        return b
-    })
-
-}, function(newdata){
-    console.log('kevin sucks', newdata)
-}) 
-  .align('center', 'center')
-    .insertInto('#demo-snake')</textarea>
-    </div>
-    <div class='display' id='demo-snake'></div>
-</div> 
 
 
 
@@ -1090,7 +659,7 @@ function rotate(x,y, a){
     return [Math.cos(a)*x - Math.sin(a)*y, Math.sin(a)*x + Math.cos(a)*y]
 }
 
-function data2graphics(data, ctx){
+function render(data, ctx){
     var x = 0, y1 = 0, y2 = -100*Math.sin(data.b)
     for (var i = 0; i < 4; i++) {
 
@@ -1115,7 +684,7 @@ function log(x){
     console.log(x)
 }
 
-var demo = g9(initial, data2graphics, log) 
+var demo = g9(initial, render, log) 
   .align('center', 'center')
     .insertInto('#demo-tongs')</textarea>
     </div>
@@ -1143,8 +712,7 @@ var demo = g9(initial, data2graphics, log)
         var y2 = y1 + length * Math.sin(angle*Math.PI/180);
      
         ctx.point(x2, y2, {affects:['deltaAngle', 'attenuation']})
-        
-        ctx.line(x1,y1,x2,y2)
+        ctx.line(x1,y1,x2,y2, {'stroke-width': 5, affects:['deltaAngle', 'attenuation']})
 
         if(n > 0) {
             drawTree(x2, y2, length*attenuation, angle+deltaAngle, n-1);
@@ -1155,20 +723,13 @@ var demo = g9(initial, data2graphics, log)
 
     ctx.point(0, ctx.height/2 - 30)
 
-    drawTree(0, ctx.height/2 - 30, startLength, -90, 9)
+    drawTree(0, ctx.height/2 - 30, startLength, -90, 8)
 
 }, function(newdata, renderees){
 
     console.log('changed data to', newdata)
 
-})
-
-
-// demo.getRenderer()
-//     .insertInto('.demo .display')
-//     .xAlign('center')
-//     .yAlign('bottom') 
-  .align('center', 'center')
+}).align('center', 'center')
     .insertInto('#demo-tree')</textarea>
     </div>
     <div class='display' id='demo-tree'></div>
@@ -1177,7 +738,7 @@ var demo = g9(initial, data2graphics, log)
 
 
 <div class='page'>
-<h1>zero_gradients</h1>
+<h1>Using Max and Min to limit a point's range of motion.</h1>
 </div>
 
 <div class='gallery-wrap'>
@@ -1190,7 +751,7 @@ var demo = g9(initial, data2graphics, log)
     x3: 100,
 }
 
-function data2graphics(data, ctx){
+function render(data, ctx){
     var m = Math.max(Math.min(data.x2, data.x3 - 20), data.x1 + 20)
     ctx.point(m,0, {affects: ['x2']})
     ctx.point(data.x2,20, {affects: ['x2']})
@@ -1202,7 +763,7 @@ function log(x, y){
     console.log(x,y)
 }
 
-var demo = g9(initial, data2graphics, log) 
+var demo = g9(initial, render, log) 
   .align('center', 'center')
     .insertInto('#demo-zero_gradients')</textarea>
     </div>
@@ -1215,7 +776,161 @@ var demo = g9(initial, data2graphics, log)
 
 
 
+<div class='page'>
+<h1>Kevin Clock</h1>
+</div>
 
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initial = {
+    "time": 72
+}
+
+function render(data, ctx){
+    var r = 100,
+        m = 70;
+    
+    // minute hand
+    ctx.line(0, 0, Math.cos(data.time / 60) * m, Math.sin(data.time / 60) * m, {
+        'stroke-width': 10,
+        'stroke-linecap': 'round',
+        'stroke': 'gray'
+    })
+    
+    // second hand
+    ctx.line(0, 0, Math.cos(data.time) * r, Math.sin(data.time) * r, {
+        'stroke-width': 10,
+        'stroke-linecap': 'round'
+    })
+    
+    ctx.circle(0, 0, { r: 120, fill: 'none', stroke: 'black' })
+}
+
+var graphics = g9(initial, render)
+    .insertInto('#demo-clock')
+
+setInterval(function(){
+    if(!graphics.isManipulating()){
+        var data = graphics.getData()
+        data.time += 0.01
+        graphics.setData(data)
+    }
+}, 50)</textarea>
+    </div>
+    <div class='display' id='demo-clock'></div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>LOGO Turtle simulator</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initial = {
+    r: 20,
+    theta: 123
+}
+
+
+function render(data, ctx){
+    var t = make_turtle(ctx)
+    for(var i = 0; i < 30; i++){
+        t.forward(i * data.r, { 'stroke-width': 5 })
+        t.dturn(data.theta)
+    }
+}
+
+
+function make_turtle(ctx){
+    var t = 0, x = 0, y = 0;
+    return {
+        turn(angle){ t += angle },
+        dturn(deg){ t += deg / (180 / Math.PI)},
+        forward(amount, options = {}){
+            var new_x = x + amount * Math.cos(t),
+                new_y = y + amount * Math.sin(t);
+            if(options) ctx.line(x, y, new_x, new_y, options);
+            x = new_x; y = new_y;
+        }
+    }
+}
+
+g9(initial, render)
+    .insertInto('#demo-star')</textarea>
+    </div>
+    <div class='display' id='demo-star'></div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>Grid Warp</h1>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initial = {
+    "spin": 0,
+    "scale": 1
+}
+
+function render(data, ctx){
+    function warp(dx, dy){
+        var r  = Math.sqrt(dx * dx + dy * dy)
+        var theta = Math.atan2(dy, dx)
+        return [
+            data.scale * r * Math.cos(theta + data.spin * r),
+            data.scale * r * Math.sin(theta + data.spin * r)
+        ]
+    }
+    
+    var drawWarpedPoint = ctx.pure(function(i, j){
+        var out = warp(i, j)
+        ctx.point(30 * out[0], 30 * out[1])
+    })
+    for(var i = -10; i <= 10; i++){
+        for(var j = -10; j <= 10; j++){
+            drawWarpedPoint(i, j)    
+        }
+    }
+}
+
+var graphics = g9(initial, render)
+    .insertInto('#demo-warp')</textarea>
+    </div>
+    <div class='display' id='demo-warp'></div>
+</div> 
+
+
+
+<div id='floating-box'></div>
+
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/prism.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/mode/javascript/javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/keymap/sublime.min.js"></script>
