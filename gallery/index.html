@@ -808,7 +808,7 @@ var graphics = g9(initial, render)
     .insertInto('#demo-clock')
 
 setInterval(function(){
-    if(!graphics.isManipulating()){
+    if(!graphics.isManipulating){
         var data = graphics.getData()
         data.time += 0.01
         graphics.setData(data)
@@ -981,7 +981,7 @@ var graphics = g9(initial, render)
     .insertInto('#demo-crank')
 
 /*setInterval(function(){
-    if(!graphics.isManipulating()){
+    if(!graphics.isManipulating){
         var data = graphics.getData()
         data.time += 0.05
         graphics.setData(data)    
