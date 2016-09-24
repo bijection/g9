@@ -161,3 +161,11 @@ li > a {
     margin-left: 10px;
     color: #a5a5a5;
 }
+
+@media (max-width: 900px) {
+
+#github {
+    display: none;
+}
+
+}
