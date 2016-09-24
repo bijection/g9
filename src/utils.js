@@ -12,16 +12,19 @@ export function addDragHandler(el, startDrag){
     function onstart(e){
         draggingCount++
 
-        var onDrag = startDrag(e)
-
         e.preventDefault()
         e = e.touches ? e.touches[0] : e
+
+        var onDrag = startDrag(e)
 
         startex = e.clientX
         startey = e.clientY
 
         var onmove = function(e){
             e = e.touches ? e.touches[0] : e
+
+            console.log(e.clientX - startex, e.clientY - startey)
+
             onDrag(
                 e.clientX - startex,
                 e.clientY - startey
