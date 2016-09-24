@@ -782,6 +782,7 @@ var demo = g9(initial, render, log)
 
 <div class='page'>
 <h1>Kevin Clock</h1>
+<p>Try dragging the hands!</p>
 </div>
 
 <div class='gallery-wrap'>
@@ -927,6 +928,80 @@ var graphics = g9(initial, render)
     </div>
     <div class='display' id='demo-warp'></div>
 </div> 
+
+
+
+
+
+
+
+
+<div class='page'>
+<h1>Crank and Piston</h1>
+<p>Try uncommenting the animation block for extra fun!</p>
+</div>
+
+<div class='gallery-wrap'>
+    <div class='input'>
+        <div class='run-button'>Run</div>
+        <textarea class='user'>
+var initial = {
+    "time": 72
+}
+
+function render(data, ctx){
+    var crank = 40;
+    var shaft = 120
+    
+    // housing
+    var fill = 'hsl('+ (Math.cos(data.time) * 60 + 300) +', 100%, 90%)'
+    ctx.rect(-40, 0, 80, -235, { fill: fill, stroke: 'black' })
+    ctx.circle(0, 0, { r: 70, fill: 'white', stroke: 'black' })
+    
+    
+    var CrankAngle = Math.asin(crank * Math.cos(data.time) / shaft)
+    var OppositeAngle = Math.PI - (CrankAngle + data.time);
+    var Y = shaft * Math.cos(OppositeAngle) / Math.cos(data.time)
+    
+    // shaft
+    ctx.line(Math.cos(data.time) * crank, Math.sin(data.time) * crank, 0, Y, {
+        'stroke-width': 10,
+        'stroke': 'gray',
+        'stroke-linecap': 'round'
+    })
+    
+    
+    // crank
+    ctx.line(0, 0, Math.cos(data.time) * crank, Math.sin(data.time) * crank, {
+        'stroke-width': 40,
+        'stroke': 'black',
+        'stroke-linecap': 'round'
+    })
+    
+    
+    // piston
+    ctx.line(0, Y, 0, Y - 70, {
+        'stroke-width': 70,
+        'stroke': 'gray',
+    })   
+}
+
+var graphics = g9(initial, render)
+    .insertInto('#demo-crank')
+
+/*setInterval(function(){
+    if(!graphics.isManipulating()){
+        var data = graphics.getData()
+        data.time += 0.05
+        graphics.setData(data)    
+    }
+}, 10)*/
+</textarea>
+    </div>
+    <div class='display' id='demo-crank'></div>
+</div> 
+
+
 
 
 

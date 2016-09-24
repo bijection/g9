@@ -164,8 +164,8 @@ li > a {
 
 @media (max-width: 900px) {
 
-#github {
-    display: none;
-}
+    #github {
+        display: none;
+    }
 
 }
