@@ -263,7 +263,7 @@ A new, immutable g9Context object `ctx` is passed as the second argument to `ren
 
 
 ### g9Context.[shape]
-When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies futher arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
+When calling a drawing method, you can include any number of ordered arguments, optionally followed by an object that specifies further arguments by name, and / or includes svg properties. For example, all of the following are equivalent: 
 
 ```javascript
 ctx.point(30, 50, ['a'])
