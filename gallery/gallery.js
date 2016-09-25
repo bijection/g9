@@ -36,7 +36,7 @@ function inViewPort(el) {
             var setInterval = function(a,b){
                 _intervals.push(_setInterval(a,b))
             }
-            if(_graphics && _graphics.remove) {_graphics.remove()}
+            if(_graphics && _graphics.remove) {try{_graphics.remove()}catch(e){}}
             var _interval; while(_interval = _intervals.pop()) clearInterval(_interval);
             eval(cm.getValue())
         }
