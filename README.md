@@ -178,7 +178,7 @@ g9({foo: 10}, function(data, ctx){
 .insertInto('#container')
 ```
 
-> Note: You can change the size of the mounted svg node with javascript, e.g `g9Canvas.node.style.height = '500px'`, or css, e.g. `#g9NodesParentElement > svg {width: 100%; height: 300px}`.
+> Note: You can change the size of the mounted svg node with javascript, e.g `g9Canvas.node.style.height = '500px'; g9Canvas.resize()`, or css, e.g. `#g9NodesParentElement > svg {width: 100%; height: 300px}`.
 
 
 ### g9Canvas.align(xAlign, yAlign)
