@@ -27,7 +27,7 @@ This **automatic interactivity** makes it trivial to manipulable complex visuali
 
 ![dragon demo](dragon.gif)
 
-You can see (and play with!) more examples [on the website](http://omrelli.ug/g9), or [head to the docs](#docs) for a full treatment of the API.
+You can see (and play with!) more examples [on the website](http://omrelli.ug/g9/gallery), or [head to the docs](#docs) for a full treatment of the API.
 
 
 # Installation
