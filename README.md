@@ -167,7 +167,7 @@ After optimization, g9 rerenders the entire scene with the new data, so that eve
 A `g9Canvas` is the object returned by a call to g9(initialData, render, onRender)
 
 ### g9Canvas.insertInto(selectorOrDOMNode)
-Mounts the graphics' svg node as a child of `selectorOrDOMNode`, which can be either a selector or a DOM node, and returns the graphics object to enable chaining. You can change the size of the mounted svg node with javascript, via `g9Canvas.node.style.height` an similar, or css, via `#g9NodesParentElement > svg {width: 100%; height: 300px}` or similar.
+Mounts the graphics' svg node as a child of `selectorOrDOMNode`, which can be either a selector or a DOM node, and returns the graphics object to enable chaining.
 
 For example:
 
@@ -177,6 +177,8 @@ g9({foo: 10}, function(data, ctx){
 })
 .insertInto('#container')
 ```
+
+> Note: You can change the size of the mounted svg node with javascript, e.g `g9Canvas.node.style.height = '500px'`, or css, e.g. `#g9NodesParentElement > svg {width: 100%; height: 300px}`.
 
 
 ### g9Canvas.align(xAlign, yAlign)
