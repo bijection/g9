@@ -164,7 +164,7 @@ After optimization, g9 rerenders the entire scene with the new data, so that eve
 
 
 ## g9Canvas
-A `g9Canvas` is the obect returned by a call to g9(initialData, render, onRender)
+A `g9Canvas` is the object returned by a call to g9(initialData, render, onRender)
 
 ### g9Canvas.insertInto(selectorOrDOMNode)
 Mounts the graphics as a child of `selectorOrDOMNode`, which can be either a selector or a DOM node, and returns the graphics object to enable chaining.
