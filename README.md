@@ -298,6 +298,19 @@ ctx.point({
 
 All g9 shapes take an optional argument `affects`, a list of key names. When you drag a shape with an `affects` list, g9 will only change the values of the keys in the `affects` list.
 
+For example, dragging the following point will only change the value of `data.x`, and thus the point will only move horizontally:
+```javascript
+g9({
+    x: 0,
+    y: 0
+}, function(data, ctx){
+    
+    ctx.point(data.x, data.y, {affects: ['x']})
+    
+})
+```
+
+
 Currently, the built-in shapes are
 
 #### g9Context.point(x, y[, affects])
