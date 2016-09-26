@@ -90,6 +90,7 @@ You can also hotlink a copy of g9 from a CDN:
   + [g9Canvas.desire(id, ...desires)](#g9canvasdesireid-desires)
 * [g9Context](#g9context)
   + [g9Context.[shape]](#g9contextshape)
+    - [The Affects Argument](#the-affects-argument)
     - [g9Context.point(x, y[, affects])](#g9contextpointx-y-affects)
     - [g9Context.circle(x, y, radius[, affects])](#g9contextcirclex-y-radius-affects)
     - [g9Context.line(x1, y1, x2, y2[, affects])](#g9contextlinex1-y1-x2-y2-affects)
@@ -293,9 +294,11 @@ ctx.point({
 })
 ```
 
-> Note: The optional argument `affects` is a list of keys whose corresponding value g9 is allowed to change when a user drags the shape.
+#### The Affects Argument
 
-Currently, the built-in drawing methods are
+All g9 shapes take an optional argument `affects`, a list of key names. When you drag a shape with an `affects` list, g9 will only change the values of the keys in the `affects` list.
+
+Currently, the built-in shapes are
 
 #### g9Context.point(x, y[, affects])
   
