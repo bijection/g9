@@ -64,7 +64,7 @@ First download a copy of g9 [here](https://raw.githubusercontent.com/bijection/g
 
 You can also hotlink a copy of g9 from a CDN:
 ```html
-<script src='https://cdn.rawgit.com/bijection/g9/6af0adf/dist/g9.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/g9/1.0.16/g9.js'></script>
  
 <script>
 	// g9 is now defined 
