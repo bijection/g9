@@ -91,8 +91,8 @@ You can also hotlink a copy of g9 from a CDN:
 * [g9Context](#g9context)
   + [g9Context.[shape]](#g9contextshape)
     - [The Affects Argument](#the-affects-argument)
-    - [g9Context.point(x, y[, affects])](#g9contextpointx-y-affects)
-    - [g9Context.circle(x, y, radius[, affects])](#g9contextcirclex-y-radius-affects)
+    - [g9Context.point(cx, cy[, affects])](#g9contextpointcx-cy-affects)
+    - [g9Context.circle(cx, cy, r[, affects])](#g9contextcirclecx-cy-r-affects)
     - [g9Context.line(x1, y1, x2, y2[, affects])](#g9contextlinex1-y1-x2-y2-affects)
     - [g9Context.rect(x, y, width, height[, affects])](#g9contextrectx-y-width-height-affects)
     - [g9Context.text(text, x, y[, affects])](#g9contexttexttext-x-y-affects)
@@ -313,7 +313,7 @@ g9({
 
 Currently, the built-in shapes are
 
-#### g9Context.point(x, y[, affects])
+#### g9Context.point(cx, cy[, affects])
   
 A point. Useful svg properties are `r` (radius), and `fill`. For example:
 
@@ -321,7 +321,7 @@ A point. Useful svg properties are `r` (radius), and `fill`. For example:
 ctx.point(30, 50, {r: 40, 	fill: 'red'	})
 ```
 
-#### g9Context.circle(x, y, radius[, affects])
+#### g9Context.circle(cx, cy, r[, affects])
   
 A circle. As opposed to the point, circles can rotate around your mouse as you drag them. Useful svg properties are `stroke` (a color), and `fill`. For example:
 
