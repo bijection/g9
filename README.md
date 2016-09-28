@@ -326,7 +326,7 @@ ctx.point(30, 50, {r: 40, 	fill: 'red'	})
 A circle. As opposed to the point, circles can rotate around your mouse as you drag them. Useful svg properties are `stroke` (a color), and `fill`. For example:
 
 ```javascript
-ctx.circle(30, 50, 40, {r: 40, stroke: 'blue' })
+ctx.circle(30, 50, 40, { stroke: 'blue' })
 ```
 
 
