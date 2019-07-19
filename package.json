@@ -9,7 +9,7 @@
     "build": "webpack --config webpack.config.prod.js"
   },
   "author": "bijection",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/bijection/g9"
