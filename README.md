@@ -17,7 +17,7 @@ g9({
 .insertInto('#container')
 ```
 
-draws two dots at (x,y) and (y,x), as you might expect, but with no additional effort, it's interactive, so dragging either of the dots changes the value of x and y, and moves the other dot: 
+draws two dots at (x,y) and (y,x). With no additional effort, it's interactive - dragging either of the dots changes the value of x and y, and moves the other dot: 
 
 ![basic demo](basic.gif)
 
