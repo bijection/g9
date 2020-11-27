@@ -8,13 +8,11 @@ With g9, interactive visualization is as easy as visualization that isn't. Just 
 For example, the following code:
 ```javascript
 g9({
-	x: 0,
-	y: 0
+    x: 0,
+    y: 0
 }, function(data, ctx){
-	
-	ctx.point(data.x, data.y)
-	ctx.point(data.y, data.x)
-	
+    ctx.point(data.x, data.y)
+    ctx.point(data.y, data.x)
 })
 .insertInto('#container')
 ```
