@@ -367,10 +367,10 @@ ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
 ```
 
 ### g9Context.width
-Read only. The current width of the svg container, as dertermined by page size and / or css.
+Read only. The current width of the svg container, as determined by page size and / or css.
 
 ### g9Context.height
-Read only. The current height of the svg container, as dertermined by page size and / or css.
+Read only. The current height of the svg container, as determined by page size and / or css.
 
 ### g9Context.pure(pureFn)
 `ctx.pure(pureFn)` is a decorator that speeds up deterministic, stateless (and usually recursive) functions. Internally, `ctx.pure` tells g9 that it doesn't have to execute certain branches when it is optimizing. For recursive funtions, this can make optimization take `O(log(n))` time, instead of `O(n)` time, where `n` is the number of objects drawn by `pureFn`. For example: 
