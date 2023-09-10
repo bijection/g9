@@ -257,7 +257,7 @@ One usecase for this is to minimize with respect to a different cost function. F
 
 Sample usage: `g9Canvas.desire("auto00", ['i0x', 'i0y'], (b)=>{return (b.cx-g9Canvas.getData().radius0) ** 2;})`
 
-- `auto00` is the name of the invisible node in the svg.
+- `auto00` is the name of the invisible node in the svg. Rendering it first helps to get a consistent ID.
 - `i0x` is the id of a variable that should wiggle during minimization.
 - The third function is a cost function, forcing the x coordinate of the invisible node to `radius0`. It doesn't always succeed (the optimizer isn't so robust). Performance may not be amazing. As far as I know, quadratic error is a good cost function here.
 
