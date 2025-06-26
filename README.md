@@ -29,7 +29,7 @@ You can see (and play with!) more examples [on the website](http://omrelli.ug/g9
 
 
 # Installation
-You can use g9 with npm (if your're using webpack or browserify) or with a script tag:
+You can use g9 with npm (if you're using webpack or browserify) or with a script tag:
 
 
 
@@ -172,7 +172,7 @@ After optimization, g9 rerenders the entire scene with the new data, so that eve
 
 
 ## g9Canvas
-A `g9Canvas` is the object returned by a call to g9(initialData, render, onRender)
+A `g9Canvas` is the object returned by a call to `g9(initialData, render, onRender)`.
 
 ### g9Canvas.insertInto(selectorOrDOMNode)
 Mounts the graphics' svg node as a child of `selectorOrDOMNode`, which can be either a selector or a DOM node, and returns the graphics object to enable chaining.
@@ -242,7 +242,7 @@ alert(JSON.stringify(graphics.getData()))
 ```
 
 
-###g9Canvas.isManipulating
+### g9Canvas.isManipulating
 A boolean property that's true when a user is manupulating a shape on the g9 canvas.
 
 
@@ -251,22 +251,17 @@ Invalidates the g9 display. Usually a noop, but should be called after programma
 
 
 ### g9Canvas.desire(id, ...desires)
-Internal method, genreally safe to ignore, but useful for complex animation. For now, the best way to use this is to read the source.
+Internal method, generally safe to ignore, but useful for complex animation. For now, the best way to use this is to read the source.
 
+One usecase for this is to minimize with respect to a different cost function. For example, if the control points are derived from other variables through some hard-to-invert formula, rather than being independent variables, then wiggling a control point will wiggle all of the other control points. This can be unpleasant, as you want the control points to wiggle independently. To solve this, you can set the control point's desired value directly in the data, then use the calculation for the control point to render an invisible node, use your browser's Inpsector to see the id of that invisible node, then specify an `onRender` function that calls `desire()`, forcing that invisible node to match the desired value. So the optimizer will wiggle the other variables, and leave the control points fixed!
 
+Sample usage: `g9Canvas.desire("auto00", ['i0x', 'i0y'], (b)=>{return (b.cx-g9Canvas.getData().radius0) ** 2;})`
 
+- `auto00` is the name of the invisible node in the svg. Rendering it first helps to get a consistent ID.
+- `i0x` is the id of a variable that should wiggle during minimization.
+- The third function is a cost function, forcing the x coordinate of the invisible node to `radius0`. It doesn't always succeed (the optimizer isn't so robust). Performance may not be amazing. As far as I know, quadratic error is a good cost function here.
 
-
-
-
-
-
-
-
-
-
-
-
+Using an invisible line instead of an invisible point will let you set 4 numbers instead of 2.
 
 ## g9Context
 A new, immutable g9Context object `ctx` is passed as the second argument to `render` each time `render` is called. It has a variety of drawing methods and some read-only properties that the render function uses to create a drawing.
@@ -372,10 +367,10 @@ ctx.image('http://placehold.it/350x150', 0, 0, 350, 150, {
 ```
 
 ### g9Context.width
-Read only. The current width of the svg container, as dertermined by page size and / or css.
+Read only. The current width of the svg container, as determined by page size and / or css.
 
 ### g9Context.height
-Read only. The current height of the svg container, as dertermined by page size and / or css.
+Read only. The current height of the svg container, as determined by page size and / or css.
 
 ### g9Context.pure(pureFn)
 `ctx.pure(pureFn)` is a decorator that speeds up deterministic, stateless (and usually recursive) functions. Internally, `ctx.pure` tells g9 that it doesn't have to execute certain branches when it is optimizing. For recursive funtions, this can make optimization take `O(log(n))` time, instead of `O(n)` time, where `n` is the number of objects drawn by `pureFn`. For example: 
